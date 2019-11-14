@@ -1,0 +1,297 @@
+openapi: 3.0.1
+info:
+  title: CFDE Project Metadata Dashboard API
+  description: A proposed specification for the Deriva project metadata API.
+  contact:
+    email: cfde@deriva.org
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 0.1.0
+servers:
+  - url: https://dashboard-api.deriva.org/
+paths:
+  /project/:
+    get:
+      summary: Returns a listing of the projects the authenticated user has access to.
+      description: 'For users to access other endpoints in the API, a listing of the project monikers they have access to is necessary, as other methods require the project moniker as a URL paramater.'
+      operationId: getProjects
+      responses:
+        200:
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectListingResponse'
+        401:
+          description: Authorization information is missing or invalid.
+        5XX:
+          description: An unexpected error occurred.
+          headers:
+            X-Deriva-Error:
+              schema:
+                type: string
+              description: Human friendly reason for the error or exception.
+      security:
+      - dashboard_auth: []
+  /project/{projectName}/storage:
+    get:
+      summary: Returns a breakdown of storage consumption for the specified project by sub-project.
+      description: 'Major projects are typically broken down into sub-projects. This endpoint yields the latest storage consumption levels for a project, where the keys are the names of any sub-projects, and the values are the integer consumption values expressed in bytes.'
+      operationId: getStorage
+      parameters:
+      - name: projectName
+        in: path
+        description: The project moniker for which storage data is requested.
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectStorageResponse'
+        401:
+          description: Authorization information is missing or invalid.
+        404:
+          description: A project with the specified moniker was not found.
+        5XX:
+          description: An unexpected error occurred.
+          headers:
+            X-Deriva-Error:
+              schema:
+                type: string
+              description: Human friendly reason for the error or exception.
+      security:
+      - dashboard_auth: []
+  /project/{projectName}/storage_by_modality:
+    get:
+      summary: Returns a breakdown of storage consumption for the specified project by modality/assay type.
+      description: 'This endpoint yields the latest storage consumption levels for a project but unlike the "storage" endpoint, here the data is broken down by modaility/assay type. The keys in the response are the modalities and the values are their storage consumptions expressed in bytes.'
+      operationId: getStorageByModality
+      parameters:
+      - name: projectName
+        in: path
+        description: The project moniker for which the storage data is requested.
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectStorageByModalityResponse'
+        401:
+          description: Authorization information is missing or invalid.
+        404:
+          description: A project with the specified moniker was not found.
+        5XX:
+          description: An unexpected error occurred.
+          headers:
+            X-Deriva-Error:
+              schema:
+                type: string
+              description: Human friendly reason for the error or exception.
+      security:
+      - dashboard_auth: []
+  /project/{projectName}/filecount:
+    get:
+      summary: Returns the number of files associated with a particular project broken down by sub-project.
+      description: 'Major projects are typically broken down into sub-projects. This endpoint yields the latest counts of files in a project, where the keys are the names of sub-projects, and the values are the number of files associated with them.'
+      operationId: getFileCount
+      parameters:
+      - name: projectName
+        in: path
+        description: The project moniker for which a file count is requested.
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectFileCountResponse'
+        401:
+          description: Authorization information is missing or invalid.
+        404:
+          description: A project with the specified moniker was not found.
+        5XX:
+          description: An unexpected error occurred.
+          headers:
+            X-Deriva-Error:
+              schema:
+                type: string
+              description: Human friendly reason for the error or exception.
+      security:
+      - dashboard_auth: []
+  /project/{projectName}/filecount_by_modality:
+    get:
+      summary: Returns the number of files associated with a particular project broken down by modality.
+      description: 'This endpoint yields the latest counts of files of files in a project but unlike the "filecount" endpoint, here the data is broken down by modaility/assay type. The keys in the response are the modalities and the values are the number of files associated with them.'
+      operationId: getFileCountByModality
+      parameters:
+      - name: projectName
+        in: path
+        description: The project moniker for which a file count is requested.
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectFileCountByModalityResponse'
+        401:
+          description: Authorization information is missing or invalid.
+        404:
+          description: A project with the specified moniker was not found.
+        5XX:
+          description: An unexpected error occurred.
+          headers:
+            X-Deriva-Error:
+              schema:
+                type: string
+              description: Human friendly reason for the error or exception.
+      security:
+      - dashboard_auth: []
+  /project/{projectName}/storage_trend:
+    get:
+      summary: Returns storage consumption data over time for the specified project.
+      description: 'A useful metric for funding agencies, program officers and principal investigators to have access to, is the amount of storage consumed by a project and any associated sub-projects over time.'
+      operationId: getProjectStorageTrend
+      parameters:
+      - name: projectName
+        in: path
+        description: The project moniker for which a file count is requested.
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectStorageTrendResponse'
+        401:
+          description: Authorization information is missing or invalid.
+        404:
+          description: A project with the specified moniker was not found.
+        5XX:
+          description: An unexpected error occurred.
+          headers:
+            X-Deriva-Error:
+              schema:
+                type: string
+              description: Human friendly reason for the error or exception.
+      security:
+      - dashboard_auth: []
+  /project/{projectName}/storage_trend_by_modality:
+    get:
+      summary: Returns storage consumption data over time for the specified project broken down by modality/assay type.
+      description: 'Similar to the "storage_trend" endpoint, but broken down by modality/assay type instead of sub-project.'
+      operationId: getProjectStorageTrendByModality
+      parameters:
+      - name: projectName
+        in: path
+        description: The project moniker for which a file count is requested.
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectStorageTrendByModalityResponse'
+        401:
+          description: Authorization information is missing or invalid.
+        404:
+          description: A project with the specified moniker was not found.
+        5XX:
+          description: An unexpected error occurred.
+          headers:
+            X-Deriva-Error:
+              schema:
+                type: string
+              description: Human friendly reason for the error or exception.
+      security:
+      - dashboard_auth: []
+components:
+  schemas:
+    ProjectListingResponse:
+      type: array
+      description: A mapping of string sub-project monikers to their amount of storage in bytes.
+      items:
+        type: string
+    ProjectStorageResponse:
+      type: object
+      description: A mapping of string sub-project monikers to their amount of storage in bytes.
+      additionalProperties:
+        description: The number of bytes associated with the sub-project key/moniker.
+        type: integer
+        minLength: 3
+        maxLength: 32
+        minimum: 0
+    ProjectStorageByModalityResponse:
+      type: object
+      description: A mapping of modalities to their storage amounts in bytes.
+      additionalProperties:
+        description: The number of bytes associated with the modality.
+        type: integer
+        minLength: 3
+        maxLength: 32
+        minimum: 0
+    ProjectFileCountResponse:
+      type: object
+      description: A mapping of string sub-project monikers to the file counts associated with them.
+      additionalProperties:
+        type: integer
+        description: The number of files associated with the sub-project key/moniker.
+        minimum: 0
+    ProjectFileCountByModalityResponse:
+      type: object
+      description: A mapping of the specified project's modalities (assay types, data types, etc) to the file counts associated with them.
+      additionalProperties:
+        type: integer
+        description: The number of files associated with the project's modality/assay type.
+        minimum: 0
+    ProjectStorageTrendResponse:
+      type: object
+      description: A mapping of string sub-project monikers to time series storage consumption data for them.
+      additionalProperties:
+        type: array
+        items:
+          type: array
+          items:
+            description: Each array element is an array of 2 integers. The first integer is the timestamp expressed as seconds from the Unix epoch. The second integer is the amount of storage (in bytes) at that point in time.
+            type: integer
+            maxItems: 2
+            minItems: 2
+            minimum: 0
+    ProjectStorageTrendByModalityResponse:
+      type: object
+      description: A mapping of modalities/assay types to time series storage consumption data for them.
+      additionalProperties:
+        type: array
+        items:
+          type: array
+          items:
+            description: Each array element is an array of 2 integers. The first integer is the timestamp expressed as seconds from the Unix epoch. The second integer is the amount of storage (in bytes) at that point in time.
+            type: integer
+            maxItems: 2
+            minItems: 2
+            minimum: 0
+  securitySchemes:
+    dashboard_auth:
+      type: http
+      scheme: basic
