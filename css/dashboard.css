@@ -1,0 +1,54 @@
+#chart-container {
+  height: 350px;
+  margin: auto;
+}
+
+svg {
+  height: 100%;
+  width: 100%;
+}
+
+.bar-total {
+  font-family: sans-serif;
+  font-size: .8em;
+}
+
+.export-row {
+  margin-bottom: 20px;
+}
+
+#sbc1-form-controls {
+  margin: 0 auto;
+  margin-bottom: 20px;
+  position: relative;
+  width: 600px;
+}
+
+#sbc2-form-controls {
+  margin: 0 auto;
+  margin-bottom: 20px;
+  position: relative;
+  width: 600px;
+}
+
+#dc1-form-controls {
+  margin: 0 auto;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  position: relative;
+}
+
+#dc2-form-controls {
+  margin: 0 auto;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  position: relative;
+}
+
+#dc1-title {
+  min-height: 2.5em;
+}
+
+#dc2-title {
+  min-height: 2.5em;
+}

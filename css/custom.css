@@ -1,0 +1,89 @@
+/**
+ * Caution: This file is used to resolve CSS conflicts between the
+ * portal/dashboard and the Chaise navbar. However, any styles here also affect
+ * the Chaise UI.
+ */
+
+body {
+  overflow-x: hidden;
+}
+
+navbar {
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+
+navbar header {
+  background: none;
+  padding: 0px;
+}
+
+navbar header.row {
+  display: block;
+}
+
+navbar .navbar {
+  display: block;
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+navbar .navbar-brand {
+  margin-right: 0px;
+}
+
+navbar .navbar-nav {
+  -ms-flex-direction: unset;
+  flex-direction: unset;
+}
+
+navbar .navbar-nav .dropdown-menu {
+  position: absolute;
+  float: left;
+}
+
+navbar .dropdown-toggle::after {
+  content: none;
+}
+
+.navbar-inverse {
+  background-color: #FFF;
+  border-color: #e6e6e6;
+}
+
+.navbar-inverse .navbar-nav>li>a, 
+.navbar-inverse .navbar-nav.navbar-right>li>a {
+    color: #232323;
+}
+
+.navbar-inverse .navbar-nav>li>a:hover,
+.navbar-inverse .navbar-nav>li>a:focus, 
+.navbar-inverse .navbar-nav.navbar-right>li>a:hover {
+    color: #3046a4;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.navbar-inverse .navbar-nav>.open>a, 
+.navbar-inverse .navbar-nav>.open>a:focus, 
+.navbar-inverse .navbar-nav>.open>a:hover,
+.navbar-inverse .navbar-nav.navbar-right>.open>a:hover {
+    color: #fff;
+    background-color: #3046a4;
+}
+
+.navbar-brand {
+  padding: 5px 15px;
+}
+
+#brand-image {
+  height: 40px;
+  width: auto;
+}
+
+#form-controls .container,
+#sbc1-form-controls .container,
+#sbc2-form-controls .container,
+#dc1-form-controls .container,
+#dc2-form-controls .container {
+  width: 100%;
+}

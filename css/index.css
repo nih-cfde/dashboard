@@ -1,0 +1,25 @@
+#chart-container {
+  height: 350px;
+  margin: auto;
+}
+
+svg {
+  height: 100%;
+  width: 100%;
+}
+
+.bar-total {
+  font-family: sans-serif;
+  font-size: .8em;
+}
+
+.export-row {
+  margin-bottom: 20px;
+}
+
+#form-controls {
+  margin: 0 auto;
+  margin-bottom: 20px;
+  margin-top: 30px;
+  width: 600px;
+}

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>CFDE Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <script src="./chaise/lib/navbar/navbar.app.js"></script>
+    <link rel="stylesheet" href="./css/components/normalize.css"
+      type="text/css">
+    <link rel="stylesheet" href="./css/components/bootstrap.min.css"
+      type="text/css">
+    <link rel="shortcut icon" type="image/png"
+      href="./images/icons/CFDE-icon-1.png?v=2" />
+    <link rel="stylesheet" href="./css/fonts.css" type="text/css" />
+    <link rel="stylesheet" href="./css/style.css" type="text/css" />
+    <link rel="stylesheet" href="./css/dashboard.css" type="text/css" />
+  </head>
+  <body>
+    <div id="wrap-navbar">
+        <navbar></navbar>
+    </div>
+    <div class="subheader">
+      <div class="subheader__content">
+        <h1>Common Fund Data Ecosystem</h1>
+      </div>
+    </div>
+    <main class="main">
+      <div class="content">
+        <div class="content__top--alt">
+
+          <div class="chart__top">
+            <h4 id="sbc1-title">Chart 1</h4>
+            <div id="chart-container-1" style="height:100%;">
+              <svg id="sbc1"/>
+              </div>
+              <div id="sbc1-form-controls">
+                <form>
+                  <div class="container">
+                    <div class="row" style="flex-wrap:nowrap">
+                      <div class="col-md-4" id="sbc1-x-axis-container">
+                        <label for="sbc1-x-axis">X-axis</label>
+                        <select class="custom-select" id="sbc1-x-axis"
+                          name="x-axis">
+                          <option selected value="dcc">CF Program</option>
+                          <option value="data_type">Data Type</option>
+                          <option value="assay">Assay</option>
+                          <option value="species">Species</option>
+                          <option value="anatomy">Anatomy</option>
+                        </select>
+                      </div>
+                      <div class="col-md-4" id="sbc1-y-axis-container">
+                        <label for="sbc1-y-axis">Y-axis</label>
+                        <select class="custom-select" id="sbc1-y-axis"
+                          name="y-axis">
+                          <option selected value="files">File count</option>
+                          <option value="volume">Data volume</option>
+                          <option value="samples">Sample count</option>
+                          <option value="subjects">Subject count</option>
+                        </select>
+                      </div>
+                      <div class="col-md-4" id="sbc1-group-by-container">
+                        <label for="sbc1-group-by">Stack by</label>
+                        <select class="custom-select" id="sbc1-group-by"
+                          name="groupby">
+                          <option value="dcc">CF Program</option>
+                          <option value="data_type">Data Type</option>
+                          <option selected value="assay">Assay</option>
+                          <option value="species">Species</option>
+                          <option value="anatomy">Anatomy</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div><!--end chart top-->
+
+        <div class="chart__bottom">
+          <h5 id="sbc2-title">Chart 2</h5>
+          <div id="chart-container-2" style="height:100%;">
+            <svg id="sbc2" />
+            </div>
+            <div id="sbc2-form-controls">
+              <form>
+                <div class="container">
+                  <div class="row" style="flex-wrap:nowrap">
+                    <div class="col-md-4" id="sbc2-x-axis-container">
+                      <label for="sbc2-x-axis">X-axis</label>
+                      <select class="custom-select" id="sbc2-x-axis"
+                        name="x-axis">
+                        <option value="dcc">CF Program</option>
+                        <option selected value="data_type">Data Type</option>
+                        <option value="assay_type">Assay</option>
+                        <option value="species">Species</option>
+                        <option value="anatomy">Anatomy</option>
+                      </select>
+                    </div>
+                    <div class="col-md-4" id="sbc2-y-axis-container">
+                      <label for="sbc2-y-axis">Y-axis</label>
+                      <select class="custom-select" id="sbc2-y-axis"
+                        name="y-axis">
+                        <option value="files">File count</option>
+                        <option value="volume">Data volume</option>
+                        <option value="samples">Sample count</option>
+                        <option selected value="subjects">Subject
+                          count</option>
+                      </select>
+                    </div>
+                    <div class="col-md-4" id="sbc2-group-by-container">
+                      <label for="sbc2-group-by">Stack by</label>
+                      <select class="custom-select" id="sbc2-group-by"
+                        name="groupby">
+                        <option selected value="dcc">CF Program</option>
+                        <option value="data_type">Data Type</option>
+                        <option value="assay_type">Assay</option>
+                        <option value="species">Species</option>
+                        <option value="anatomy">Anatomy</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div><!--end chart bottom-->
+
+        </div><!--End content top--alt-->
+
+            <div class="content__bottom--alt">
+
+        <div class="chart__bottom--left">
+          <h5 id="dc1-title">Chart 3</h5>
+          <div id="dc1-form-controls">
+            <form>
+              <div class="container">
+                <div class="row" style="flex-wrap:nowrap">
+                  <div class="col-md-10" id="dc1-data_type-container">
+                    <label for="dc1-data_type">Assay</label>
+                    <select class="custom-select" id="dc1-data_type" name="data_type">
+		      <option value="16s ribosomal gene sequencing assay">16s ribosomal gene sequencing assay</option>
+		      <option value="Hi-C assay">Hi-C assay</option>
+		      <option value="RNA sequencing assay">RNA sequencing assay</option>
+		      <option value="cytokine assay">cytokine assay</option>
+		      <option value="epigenetic modification assay">epigenetic modification assay</option>
+		      <option value="fluorescence detection assay">fluorescence detection assay</option>
+		      <option value="mass spectrometry assay">mass spectrometry assay</option>
+		      <option value="metabolite profiling assay">metabolite profiling assay</option>
+		      <option value="protein expression profiling assay">protein expression profiling assay</option>
+		      <option selected value="transcription profiling assay">transcription profiling assay</option>
+		      <option value="whole genome sequencing assay">whole genome sequencing assay</option>
+		      <option value="whole metagenome sequencing assay">whole metagenome sequencing assay</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div id="chart-container-3">
+            <svg id="dc1" style="overflow: visible;" />
+          </div>
+        </div><!--end chart bottom left -->
+         
+        <div class="chart__bottom--right">
+            <h5 id="dc2-title">Chart 4</h5>
+            <div id="dc2-form-controls">
+              <form>
+                <div class="container">
+                  <div class="row" style="flex-wrap:nowrap">
+                    <div class="col-md-10" id="dc2-dcc-container">
+                      <label for="dc2-dcc">CF Program</label>
+                      <select class="custom-select" id="dc2-dcc" name="dcc">
+                        <option value="4DN">4DN</option>
+                        <option selected value="HMP">HMP</option>
+<!--                        <option value="GTEx">GTEx</option> -->
+<!--                        <option value="KidsFirst">KidsFirst</option> -->
+                        <option value="LINCS">LINCS</option>
+			<option value="Metabolomics">Metabolomics</option>
+<!--                        <option value="MoTrPAC">MoTrPAC</option> -->
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+
+            <div id="chart-container-4">
+              <svg id="dc2" style="overflow: visible;" />
+            </div>
+
+          </div><!--end chart bottom right-->
+        </div><!--end content bottom-->
+      </div><!--end content-->
+    </main>
+
+    <div id="export-modal" class="modal fade">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5>Choose how you wish to export this chart</h5>
+            <button type="button" class="close" data-dismiss="modal"
+              aria-label="close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="row justify-content-center export-row">
+              <button id="export-png" type="button" class="btn
+                btn-primary">Export as PNG</button>
+            </div>
+            <div class="row justify-content-center export-row">
+              <button id="export-svg" type="button" class="btn
+                btn-primary">Export as SVG</button>
+            </div>
+            <div class="row justify-content-center export-row">
+              <button id="export-csv" type="button" class="btn
+                btn-primary">Export data as CSV</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer><!-- Footer text/content --></footer>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async
+      src="https://www.googletagmanager.com/gtag/js?id=UA-168435864-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-168435864-1');
+    </script>
+    <script src="./js/components/jquery.min.js"></script>
+    <script src="./js/components/bootstrap.min.js"></script>
+    <script src="./js/components/d3.min.js"></script>
+    <script src="./js/components/saveSvgAsPng.js"></script>
+    <script src="./js/components/d3-save-svg.min.js"></script>
+    <script src="./js/stacked-bar-graph.js"></script>
+    <script src="./js/donut-chart.js"></script>
+    <script src="./js/dashboard.js"></script>
+  </body>
+</html>

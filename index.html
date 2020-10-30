@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>CFDE Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <script src="./chaise/lib/navbar/navbar.app.js"></script>
+    <link rel="stylesheet" href="./css/components/normalize.css" type="text/css">
+    <link rel="stylesheet" href="./css/components/bootstrap.min.css" type="text/css">
+    <link rel="shortcut icon" type="image/png" href="./images/icons/CFDE-icon-1.png?v=2"/>
+    <link rel="stylesheet" href="./css/fonts.css" type="text/css"/>
+    <link rel="stylesheet" href="./css/style.css" type="text/css"/>
+    <link rel="stylesheet" href="./css/index.css" type="text/css"/>
+  </head>
+  <body>
+    <div id="wrap-navbar">
+      <navbar></navbar>
+    </div>
+
+     <div class="subheader">
+      <div class="subheader__content">
+        <h1>Common Fund Data Ecosystem</h1>
+      </div>
+    </div>
+
+    <main class="main">
+      <div class="content">
+        <div class="content__top">
+          <div class="content__left">
+            <div class="data_header">
+              <p>Explore our Repository</p>
+            </div>
+            <p>Search over 100,000 datasets from across the Common Fund</p>
+            <button id="search-collections" type="button" class="btn btn-primary">SEARCH ALL COLLECTIONS</button>
+
+            <div class="browse_by_feature">
+              <h5>Or browse by feature:</h5>
+              <ul>
+                <li><a href="/chaise/recordset/#1/CFDE:collection" target="_blank">Collection</a></li>
+                <li><a href="/chaise/recordset/#1/CFDE:biosample" target="_blank">Biosample</a></li>
+                <li><a href="/chaise/recordset/#1/CFDE:subject" target="_blank">Subject</a></li>
+                <li><a href="/chaise/recordset/#1/CFDE:file" target="_blank">File</a></li>
+              </ul>
+              <div style="clear: both"></div>
+            </div>
+          </div>
+
+          <div class="content__right">
+            <div id="chart-container">
+              <svg id="sbc1"/>
+            </div>
+            <div id="form-controls">
+              <form>
+                <div class="container">
+                  <div class="row" style="flex-wrap:nowrap">
+                    <div class="col-md-4" id="sbc1-x-axis-container">
+                      <label for="x-axis">X-axis</label>
+                      <select class="custom-select" id="sbc1-x-axis" name="x-axis">
+                        <option selected value="dcc">CF Program</option>
+                        <option value="data_type">Data Type</option>
+                        <option value="assay">Assay</option>
+                        <option value="species">Species</option>
+                        <option value="anatomy">Anatomy</option>
+                      </select>
+                    </div>
+                    <div class="col-md-4" id="sbc1-y-axis-container">
+                      <label for="y-axis">Y-axis</label>
+                      <select class="custom-select" id="sbc1-y-axis" name="y-axis">
+                        <option selected value="files">File count</option>
+                        <option value="volume">Data volume</option>
+                        <option value="samples">Sample count</option>
+                        <option value="subjects">Subject count</option>
+                      </select>
+                    </div>
+                    <div class="col-md-4" id="sbc1-group-by-container">
+                      <label for="group-by">Stack by</label>
+                      <select class="custom-select" id="sbc1-group-by" name="groupby">
+                        <option value="dcc">CF Program</option>
+                        <option value="data_type">Data Type</option>
+                        <option selected value="assay">Assay</option>
+                        <option value="species">Species</option>
+                        <option value="anatomy">Anatomy</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+        </div>
+        <div class="content__bottom">
+          <div class="content__col left">
+            <h4>About this website</h4>
+            <ul>
+              <li><a href="https://cfde-published-documentation.readthedocs-hosted.com/en/latest/" target="_blank" title="Documentation">Documentation</a></li>
+              <li><a href="https://app.nih-cfde.org/chaise/recordset/#1/CFDE:id_namespace@sort(RID)" target="_blank" title="Data Contributors">Data Contributors</a></li>
+            </ul>
+          </div>
+          <div class="content__col right">
+            <h4>What's New?</h4>
+            <p>On June 22nd, 2020 we released version 1.0 of the new database.</p>
+            <p>Learn more about the CFDE at <a href="https://www.nih-cfde.org" target="_blank">https://www.nih-cfde.org</a></p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div id="export-modal" class="modal">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5>Choose how you wish to export this chart</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="row justify-content-center export-row">
+              <button id="export-png" type="button" class="btn btn-primary">Export as PNG</button>
+            </div>
+            <div class="row justify-content-center export-row">
+              <button id="export-svg" type="button" class="btn btn-primary">Export as SVG</button>
+            </div>
+            <div class="row justify-content-center export-row">
+              <button id="export-csv" type="button" class="btn btn-primary">Export data as CSV</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer><!-- Footer text/content --></footer>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-168435864-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-168435864-1');
+    </script>
+
+    <script src="./js/components/jquery.min.js"></script>
+    <script src="./js/components/bootstrap.min.js"></script>
+    <script src="./js/components/d3.min.js"></script>
+    <script src="./js/components/saveSvgAsPng.js"></script>
+    <script src="./js/components/d3-save-svg.min.js"></script>
+    <script src="./js/stacked-bar-graph.js"></script>
+    <script src="./js/index.js"></script>
+  </body>
+</html>
