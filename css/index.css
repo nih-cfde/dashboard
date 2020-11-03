@@ -1,3 +1,22 @@
+.data_header {
+	padding:10px 10px 10px 20px;
+	background: #C3E1E6;
+	font-size: 21px;
+}
+
+.data_header p {
+	padding:0;
+	margin:0;
+}
+
+.data_content {
+    padding: 30px;
+}
+
+.data_content>p {
+    font-size: 1.25rem;
+}
+
 #chart-container {
   height: 350px;
   margin: auto;
