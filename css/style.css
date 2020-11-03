@@ -260,20 +260,6 @@ main {
   width: 100%;
 }
 
-.content__bottom .left {
-  flex: 1 0 400px;
-  margin-right: 20px;
-}
-
-.content__bottom .middle {
-  flex: 1 0 400px;
-  margin-right: 20px;
-}
-
-.content__bottom .right {
-  flex: 1 0 400px;
-}
-
 @media (min-width:768px) {
   .content__bottom {
     flex-wrap: nowrap;

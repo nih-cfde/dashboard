@@ -42,3 +42,18 @@ svg {
   margin-top: 30px;
   width: 600px;
 }
+
+/* 3 content boxes shown at bottom now */
+.content__bottom .left {
+  flex: 1 0 400px;
+  margin-right: 20px;
+}
+
+.content__bottom .middle {
+  flex: 1 0 400px;
+  margin-right: 20px;
+}
+
+.content__bottom .right {
+  flex: 1 0 400px;
+}
