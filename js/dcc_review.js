@@ -66,8 +66,8 @@ function get_formatted_date(d) {
 function get_time_zone_diff(d) {
 
     var timezone_offset_minutes = d.getTimezoneOffset();
-	var offset_hrs = parseInt(Math.abs(timezone_offset_minutes/60));
-	var offset_min = Math.abs(timezone_offset_minutes%60);
+    var offset_hrs = parseInt(Math.abs(timezone_offset_minutes/60));
+    var offset_min = Math.abs(timezone_offset_minutes%60);
 
     if(offset_hrs < 10)
         offset_hrs = '0' + offset_hrs;
@@ -127,12 +127,23 @@ function add_summary_data(DCC) {
     var data_breakdown_table = $('#data_breakdown_table');
     $.getJSON(linkcount_data_url, function(data) {
         // iterate over keys like "subject_count" and "subject_with_biosample_count"
-        // remove "_count", append an 's' at the end, replace "_" with " ", and make title case
+        // remove "_count", append an 's' at the end of the first word, make first and last words title case, and replace "_" with " "
         Object.keys(data).forEach(function(key) {
             if (key.endsWith("_count")) {
-                var name = key.slice(0,key.length - "_count".length) + "s";
+                var name = key.slice(0,key.length - "_count".length);
+                name = name.charAt(0).toUpperCase() + name.slice(1);
+                var idx = name.indexOf("_");
+                if (idx == -1) {
+                    name = name + "s";
+                }
+                else {
+                    name = name.replace("_","s_");
+                }
+                var idx = name.lastIndexOf("_");
+                if (idx > 0) {
+                    name = name.slice(0,idx+1) + name.charAt(idx+1).toUpperCase() + name.slice(idx+2);
+                }
                 name = name.replace(/_/g," ");
-                name = titleCase(name);
                 var markup = "<tr><td>" + name + "</td><td>" + data[key].toLocaleString() + "</td></tr>";
                 data_breakdown_table.append(markup);
             }
