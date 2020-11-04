@@ -8,6 +8,11 @@ body {
   overflow-x: hidden;
 }
 
+/* remove style defined from chaise */
+body .content {
+    padding-top: 0px;
+}
+
 navbar {
   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 }
@@ -15,6 +20,17 @@ navbar {
 navbar header {
   background: none;
   padding: 0px;
+}
+
+/* banner at top of page */
+navbar header.row::before {
+    content: "The data displayed on this page is not official and only for testing purposes.";
+    height: 30px;
+    background-color: #7e4544;
+    color: white;
+    padding: 10px 0px;
+    width: 100%;
+    text-align: center;
 }
 
 navbar header.row {
@@ -36,35 +52,65 @@ navbar .navbar-nav {
   flex-direction: unset;
 }
 
-navbar .navbar-nav .dropdown-menu {
-  position: absolute;
-  float: left;
+/* external link icon to use in navbar */
+navbar a span.external-link-icon:not(:empty):not(.external-link-no-icon)::after {
+    display: inline-block;
+    font-size: .85rem;
+    font-family: 'Glyphicons Halflings';
+    content: "\e164";
+    padding-left: 2px;
 }
 
-navbar .dropdown-toggle::after {
-  content: none;
+/* lock icon to use in navbar */
+navbar a.disable-link::after {
+    display: inline-block;
+    font-size: .85rem;
+    font-family: 'Glyphicons Halflings';
+    content: "\e033";
+    padding-left: 2px;
+}
+
+/* patches a style for submenu positions */
+navbar .navbar-nav .dropdown-menu {
+    position: absolute;
+}
+
+/* patches a style for submenu positions */
+.navbar-nav .dropdown-submenu>.dropdown-menu {
+    position: fixed;
+}
+
+/* disable the | navbar menu option */
+navbar .navbar-nav .dropdown:nth-child(5) a {
+    pointer-events: none;
+}
+
+/* hide caret shown from other stylesheet */
+navbar .navbar-nav .dropdown>.dropdown-toggle::after {
+    content: none;
 }
 
 .navbar-inverse {
-  background-color: #FFF;
-  border-color: #e6e6e6;
+  background-color: #336699;
+  border: none;
 }
 
-.navbar-inverse .navbar-nav>li>a, 
+.navbar-inverse .navbar-brand,
+.navbar-inverse .navbar-nav>li>a,
 .navbar-inverse .navbar-nav.navbar-right>li>a {
-    color: #232323;
+    color: #FFF;
 }
 
 .navbar-inverse .navbar-nav>li>a:hover,
-.navbar-inverse .navbar-nav>li>a:focus, 
+.navbar-inverse .navbar-nav>li>a:focus,
 .navbar-inverse .navbar-nav.navbar-right>li>a:hover {
-    color: #3046a4;
+    color: #C1C1C1;
     background-color: transparent;
     cursor: pointer;
 }
 
-.navbar-inverse .navbar-nav>.open>a, 
-.navbar-inverse .navbar-nav>.open>a:focus, 
+.navbar-inverse .navbar-nav>.open>a,
+.navbar-inverse .navbar-nav>.open>a:focus,
 .navbar-inverse .navbar-nav>.open>a:hover,
 .navbar-inverse .navbar-nav.navbar-right>.open>a:hover {
     color: #fff;

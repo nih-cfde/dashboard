@@ -17,11 +17,15 @@
       <navbar></navbar>
     </div>
 
-     <div class="subheader">
-      <div class="subheader__content">
-        <h1>Common Fund Data Ecosystem</h1>
-      </div>
-    </div>
+    <div class="top_content">
+        <div class="top_content_section_left">
+            <div class="section_left_page_info">
+                <h1>Common Fund Data Ecosystem</h1>
+                <h2>Access and Work Across Multiple Common Fund (CF) program data sets</h2>
+                <p>More at: <a href="https://www.nih-cfde.org/" target="_blank">https://www.nih-cfde.org/ <i class="fas fa-external-link-alt"></i></a></p>
+            </div>
+        </div>
+    </div><!-- End Top Content-->
 
     <main class="main">
       <div class="content">
@@ -30,22 +34,34 @@
             <div class="data_header">
               <p>Explore our Repository</p>
             </div>
-            <p>Search over 100,000 datasets from across the Common Fund</p>
-            <button id="search-collections" type="button" class="btn btn-primary">SEARCH ALL COLLECTIONS</button>
+            <div class="data_content">
+              <p>Search over 100,000 datasets from across the Common Fund</p>
+              <button id="search-collections" type="button" class="btn btn-primary">SEARCH ALL COLLECTIONS</button>
 
-            <div class="browse_by_feature">
-              <h5>Or browse by feature:</h5>
-              <ul>
-                <li><a href="/chaise/recordset/#1/CFDE:collection" target="_blank">Collection</a></li>
-                <li><a href="/chaise/recordset/#1/CFDE:biosample" target="_blank">Biosample</a></li>
-                <li><a href="/chaise/recordset/#1/CFDE:subject" target="_blank">Subject</a></li>
-                <li><a href="/chaise/recordset/#1/CFDE:file" target="_blank">File</a></li>
-              </ul>
+              <div class="browse_by_feature">
+                <h4>View Data By</h4>
+                <ul>
+                  <li><a href="/chaise/recordset/#1/CFDE:collection" target="_blank">Collection</a></li>
+                  <li><a href="/chaise/recordset/#1/CFDE:biosample" target="_blank">Biosample</a></li>
+                  <li><a href="/chaise/recordset/#1/CFDE:subject" target="_blank">Subject</a></li>
+                  <li><a href="/chaise/recordset/#1/CFDE:file" target="_blank">File</a></li>
+                </ul>
+
+                <h4>Popular Data Views</h4>
+                <ul>
+                  <li><a href="#" target="_blank">All RNA seq files from blood</a></li>
+                  <li><a href="#" target="_blank">All data from 4DN</a></li>
+                </ul>
               <div style="clear: both"></div>
+              </div>
             </div>
           </div>
 
           <div class="content__right">
+            <div class="data_header">
+              <p>Summary View</p>
+            </div>
+            <div class="data_content">
             <div id="chart-container">
               <svg id="sbc1"/>
             </div>
@@ -86,21 +102,35 @@
                 </div>
               </form>
             </div>
+            </div> <!--end data_content-->
           </div>
 
         </div>
         <div class="content__bottom">
           <div class="content__col left">
-            <h4>About this website</h4>
-            <ul>
-              <li><a href="https://cfde-published-documentation.readthedocs-hosted.com/en/latest/" target="_blank" title="Documentation">Documentation</a></li>
-              <li><a href="https://app.nih-cfde.org/chaise/recordset/#1/CFDE:id_namespace@sort(RID)" target="_blank" title="Data Contributors">Data Contributors</a></li>
-            </ul>
+            <div class="data_header">
+              <p>Participating Common Fund Programs</p>
+            </div>
+            <div class="data_content">
+              <!--nothing in wireframe, grey background-->
+            </div>
+          </div>
+          <div class="content__col middle">
+            <div class="data_header">
+              <p>Social Media</p>
+            </div>
+            <div class="data_content">
+              <!--insert tweet image-->
+            </div>
           </div>
           <div class="content__col right">
-            <h4>What's New?</h4>
-            <p>On June 22nd, 2020 we released version 1.0 of the new database.</p>
-            <p>Learn more about the CFDE at <a href="https://www.nih-cfde.org" target="_blank">https://www.nih-cfde.org</a></p>
+              <div class="data_header">
+                <p>Funding</p>
+              </div>
+              <div class="data_content">
+                <!--insert NIH logo-->
+                <!--other logos-->
+              </div>
           </div>
         </div>
       </div>
