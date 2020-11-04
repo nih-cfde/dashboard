@@ -239,13 +239,13 @@ main {
 
 @media (min-width:500px) {
   .content__left {
-    flex: 0 0 310px;
+    flex: 0 0 280px;
   }
 }
 
 .content__right {
   border: 1px solid #cccccc;
-  flex: 1 0 auto;
+  flex: 0 0 940px;
   margin-bottom: 20px;
   min-height: 400px;
 }
@@ -277,7 +277,7 @@ main {
   }
 
   .left {
-    flex: 1 0 310px;
+    flex: 1 0 280px;
     margin-right: 20px;
   }
 
