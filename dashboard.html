@@ -19,19 +19,25 @@
     <div id="wrap-navbar">
         <navbar></navbar>
     </div>
-    <div class="subheader">
-      <div class="subheader__content">
-        <h1>Common Fund Data Ecosystem</h1>
-      </div>
-    </div>
+    <div class="top_content">
+        <div class="top_content_section_left">
+            <div class="section_left_page_info">
+                <h1>Common Fund Data Ecosystem</h1>
+                <h2>Dashboard</h2>
+            </div>
+        </div>
+    </div><!-- End Top Content-->
     <main class="main">
       <div class="content">
         <div class="content__top--alt">
 
           <div class="chart__top">
-            <h4 id="sbc1-title">Chart 1</h4>
-            <div id="chart-container-1" style="height:100%;">
-              <svg id="sbc1"/>
+            <div class="data_header">
+              <p id="sbc1-title">Chart 1</p>
+            </div>
+            <div class="data_content">
+              <div id="chart-container-1" style="height:100%;">
+                <svg id="sbc1"/>
               </div>
               <div id="sbc1-form-controls">
                 <form>
@@ -73,12 +79,16 @@
                   </div>
                 </form>
               </div>
+            </div><!--end data_contet-->
             </div><!--end chart top-->
 
         <div class="chart__bottom">
-          <h5 id="sbc2-title">Chart 2</h5>
-          <div id="chart-container-2" style="height:100%;">
-            <svg id="sbc2" />
+          <div class="data_header">
+            <p id="sbc2-title">Chart 2</p>
+          </div>
+          <div class="data_content">
+            <div id="chart-container-2" style="height:100%;">
+              <svg id="sbc2" />
             </div>
             <div id="sbc2-form-controls">
               <form>
@@ -121,14 +131,18 @@
                 </div>
               </form>
             </div>
-          </div><!--end chart bottom-->
+          </div><!--end data_contet-->
+        </div><!--end chart bottom-->
 
-        </div><!--End content top--alt-->
+      </div><!--End content top--alt-->
 
             <div class="content__bottom--alt">
 
         <div class="chart__bottom--left">
-          <h5 id="dc1-title">Chart 3</h5>
+          <div class="data_header">
+            <p id="dc1-title">Chart 3</p>
+          </div>
+          <div class="data_content">
           <div id="dc1-form-controls">
             <form>
               <div class="container">
@@ -157,10 +171,14 @@
           <div id="chart-container-3">
             <svg id="dc1" style="overflow: visible;" />
           </div>
+        </div><!--end data_content-->
         </div><!--end chart bottom left -->
-         
+
         <div class="chart__bottom--right">
-            <h5 id="dc2-title">Chart 4</h5>
+            <div class="data_header">
+              <p id="dc2-title">Chart 4</p>
+            </div>
+            <div class="data_content">
             <div id="dc2-form-controls">
               <form>
                 <div class="container">
@@ -185,6 +203,7 @@
             <div id="chart-container-4">
               <svg id="dc2" style="overflow: visible;" />
             </div>
+            </div><!--end data_content-->
 
           </div><!--end chart bottom right-->
         </div><!--end content bottom-->

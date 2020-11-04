@@ -156,6 +156,17 @@ main {
   margin-right: auto;
 }
 
+.data_header {
+	padding:10px 10px 10px 20px;
+	background: #C3E1E6;
+	font-size: 21px;
+}
+
+.data_header p {
+	padding:0;
+	margin:0;
+}
+
 .top_content {
 	display: flex;
 	flex-direction: row;
@@ -287,14 +298,12 @@ main {
   border: 1px solid #cccccc;
   margin-bottom: 20px;
   min-height: 450px;
-  padding: 1rem;
 }
 
 .chart__bottom {
   border: 1px solid #cccccc;
   margin-bottom: 20px;
   min-height: 500px;
-  padding: 1rem;
 }
 
 .content__bottom--alt {
@@ -314,7 +323,6 @@ main {
 .chart__bottom--left {
   border: 1px solid #cccccc;
   margin-right: 10px;
-  padding: 1rem;
   width: 100%;
 }
 
@@ -332,7 +340,6 @@ main {
 .chart__bottom--right {
   border: 1px solid #cccccc;
   margin-left: 10px;
-  padding: 1rem;
   width: 100%;
 }
 
