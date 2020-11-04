@@ -9,8 +9,11 @@ var chaiseConfig = {
     navbarBrandText: "CFDE Home",
     navbarBrandImage: "/images/icons/CFDE-icon-1.png",
     dataBrowser: "/",
-    // defaultCatalog: 1,
+    defaultCatalog: 1,
     hideGoToRID: true,
+    shareCiteAcls: {
+        show: []
+    },
     "navbarMenu": {
         "children": [
             {
