@@ -65,29 +65,23 @@ var chaiseConfig = {
             }, {
                 "name": "Technical Documentation",
                 "markdownName": ":span:Technical Documentation:/span:{.external-link-icon}",
-                "url": "#"
+                "url": "https://cfde-published-documentation.readthedocs-hosted.com/en/latest/"
             }, {
                 "name": "User Guide",
-                "url": "#"
+                "markdownName": ":span:User Guide:/span:{.external-link-icon}",
+                "url": "https://cfde-published-documentation.readthedocs-hosted.com/en/latest/"
             }, {
                 "name": "About CFDE",
-                "url": "#"
+                "markdownName": ":span:About CFDE:/span:{.external-link-icon}",
+                "url": "https://cfde-published-documentation.readthedocs-hosted.com/en/latest/about/CODEOFCONDUCT/"
             }, {
                 "name": "|"
             }, {
                 "name": "Dashboard",
-                "url": "/dashboard.html",
-                "acls": {
-                    "show": ["*"],
-                    "enable": []
-                }
+                "url": "/dashboard.html"
             }, {
                 "name": "Data Review",
-                "url": "#",
-                "acls": {
-                    "show": ["*"],
-                    "enable": []
-                }
+                "url": "/dcc_review.html"
             }
         ]
     },
