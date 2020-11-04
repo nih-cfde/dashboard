@@ -2,7 +2,7 @@
 
 $(document).ready(function() {
     $('#search-collections').click(function() {
-        location.href = 'https://app.nih-cfde.org/chaise/recordset/#1/CFDE:collection';
+        location.href = '/chaise/recordset/#1/CFDE:collection';
     });
 
     // chart 1 - stacked bar graph
