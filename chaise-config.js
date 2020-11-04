@@ -72,7 +72,7 @@ var chaiseConfig = {
             }, {
                 "name": "User Guide",
                 "markdownName": ":span:User Guide:/span:{.external-link-icon}",
-                "url": "https://cfde-published-documentation.readthedocs-hosted.com/en/latest/"
+                "url": "https://cfde-published-documentation.readthedocs-hosted.com/en/latest/about/portalguide/"
             }, {
                 "name": "About CFDE",
                 "markdownName": ":span:About CFDE:/span:{.external-link-icon}",
