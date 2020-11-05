@@ -122,7 +122,7 @@ function update_dropdowns(chart_id) {
     console.log("x_axis_val = " + x_axis_val);
     console.log("y_axis_val = " + y_axis_val);
     console.log("group_by_val = " + group_by_val);
-    
+
 
     // is the current selection valid?
     var file = y_axis_val + '-' + x_axis_val + '-' + group_by_val + '.json';
@@ -539,7 +539,7 @@ function save_csv(filename, rows) {
     var processRow = function(row) {
         var finalVal = '';
         for (var j = 0; j < row.length; j++) {
-            var innerValue = row[j] === null ? '' : row[j].toString();
+            var innerValue = row[j] == null ? '' : row[j].toString();
 
             if (row[j] instanceof Date) {
                 innerValue = row[j].toLocaleString();
