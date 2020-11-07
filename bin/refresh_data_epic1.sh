@@ -16,6 +16,8 @@ DCCS=(
   4DN
   Metabolomics
   KidsFirst
+  GTEx
+  MoTrPAC
 )
 
 for DCC in "${DCCS[@]}"; do
