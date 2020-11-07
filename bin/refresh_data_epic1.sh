@@ -20,6 +20,16 @@ DCCS=(
   MoTrPAC
 )
 
+# donut chart views
+ENDPOINT=stats/subjects/assay/15/anatomy/12
+echo $API/$ENDPOINT
+curl -s -X GET $API/$ENDPOINT > ${OUTPUT_DIR}/dc-subjects-assay-anatomy.json
+
+ENDPOINT=stats/samples/dcc/15/anatomy/12
+echo $API/$ENDPOINT
+curl -s -X GET $API/$ENDPOINT > ${OUTPUT_DIR}/dc-samples-dcc-anatomy.json
+
+# per-DCC summary views
 for DCC in "${DCCS[@]}"; do
     mkdir ${OUTPUT_DIR}/${DCC}
     ENDPOINT=dcc/${DCC}
@@ -36,8 +46,7 @@ for DCC in "${DCCS[@]}"; do
     curl -s -X GET $API/$ENDPOINT > ${OUTPUT_DIR}/${DCC}/${DCC}-linkcount.json
 done
 
-# Retrieve ~80 JSON files for stacked bar graphs and donut charts
-
+# Retrieve ~80 JSON files for stacked bar graphs
 MAX1=12
 MAX2=5
 
