@@ -115,13 +115,9 @@ function register_export_buttons(chart_id, data) {
 }
 
 function update_dropdowns(chart_id) {
-    console.log('Entered update_dropdowns(' + chart_id + ')');
     var x_axis_val = $('#' + chart_id + '-x-axis option:checked').val();
     var y_axis_val = $('#' + chart_id + '-y-axis option:checked').val();
     var group_by_val = $('#' + chart_id + '-group-by option:checked').val();
-    console.log('x_axis_val = ' + x_axis_val);
-    console.log('y_axis_val = ' + y_axis_val);
-    console.log('group_by_val = ' + group_by_val);
 
     // is the current selection valid?
     var file = y_axis_val + '-' + x_axis_val + '-' + group_by_val + '.json';
@@ -196,16 +192,11 @@ function update_chart_title(chart_id) {
 }
 
 function update_chart(chart_id) {
-    console.log('Entered update_chart(' + chart_id + ')');
     update_dropdowns(chart_id);
 
     var x_axis = $('#' + chart_id + '-x-axis option:checked').val();
     var y_axis = $('#' + chart_id + '-y-axis option:checked').val();
     var group_by = $('#' + chart_id + '-group-by option:checked').val();
-
-    console.log('y_axis = ' + y_axis);
-    console.log('x_axis = ' + x_axis);
-    console.log('group_by = ' + group_by);
 
     // Given the x, y and group by information, we formulate the URL
     // to retrieve data from.
