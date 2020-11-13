@@ -7,48 +7,61 @@ var assets = require('./js/assets');
 
 var copiers = [];
 
+function make_spec(key, asset) {
+    var spec = {};
+
+    if (typeof asset === 'object') {
+        var source = asset['source'];
+        var asset_type = asset['type'];
+        var dest = null;
+
+        if (asset.hasOwnProperty('dest')) {
+            dest = asset['dest'];
+        } else {
+            dest = path.basename(source);
+        }
+
+        spec = {
+            from: path.resolve(__dirname, `./node_modules/${source}`),
+            to: path.resolve(__dirname, `./${key}/components/${dest}`)
+        };
+
+        if (asset_type === 'dir') {
+            spec['toType'] = 'dir';
+        }
+    } else {
+        spec = {
+            from: path.resolve(__dirname, `./node_modules/${asset}`),
+            to: path.resolve(__dirname, `./${key}/components/`)
+        };
+    }
+
+    return spec;
+}
+
 Object.keys(assets).forEach(function(key) {
     if (assets[key].length > 0) {
 
-        var copier = new CopyWebpackPlugin(
-            assets[key].map(asset => {
-                if (typeof asset === 'object') {
-                    var source = asset['source'];
-                    var asset_type = asset['type'];
-                    var dest = null;
+        assets[key].map(asset => {
+            var spec = make_spec(key, asset);
 
-                    if (asset.hasOwnProperty('dest')) {
-                        dest = asset['dest'];
-                    } else {
-                        dest = path.basename(source);
-                    }
+            var copier = new CopyWebpackPlugin({
+                patterns: [
+                    spec
+                ]
+            });
 
-                    var return_val = {
-                        from: path.resolve(__dirname, `./node_modules/${source}`),
-                        to: path.resolve(__dirname, `./${key}/components/${dest}`)
-                    };
-
-                    if (asset_type === 'dir') {
-                        return_val['toType'] = 'dir';
-                    }
-
-                    return return_val;
-                } else {
-                    return {
-                        from: path.resolve(__dirname, `./node_modules/${asset}`),
-                        to: path.resolve(__dirname, `./${key}/components/`)
-                    };
-                }
-            })
-        );
-
-        copiers.push(copier);
+            copiers.push(copier);
+        });
     }
 });
 
 module.exports = {
     performance: {
-        maxAssetSize: 500000
+        maxAssetSize: 1000000
+    },
+    optimization: {
+        minimize: false
     },
     entry: {
         'index': __dirname + '/js/index.js'
