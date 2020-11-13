@@ -4,87 +4,87 @@
 // remove any JSON files with errors/timeouts:
 // grep -l 'time limit' *.json
 var json_files = {
-    "files-anatomy-assay.json": true,
-    "files-anatomy-data_type.json": true,
-    "files-anatomy-dcc.json": true,
-    "files-anatomy-species.json": true,
-    "files-assay-anatomy.json": true,
-    "files-assay-data_type.json": true,
-    "files-assay-dcc.json": true,
-    "files-assay-species.json": true,
-    "files-data_type-anatomy.json": true,
-    "files-data_type-assay.json": true,
-    "files-data_type-dcc.json": true,
-    "files-data_type-species.json": true,
-    "files-dcc-anatomy.json": true,
-    "files-dcc-assay.json": true,
-    "files-dcc-data_type.json": true,
-    "files-dcc-species.json": true,
-    "files-species-anatomy.json": true,
-    "files-species-assay.json": true,
-    "files-species-data_type.json": true,
-    "files-species-dcc.json": true,
-    "samples-anatomy-assay.json": true,
-    "samples-anatomy-data_type.json": true,
-    "samples-anatomy-dcc.json": true,
-    "samples-anatomy-species.json": true,
-    "samples-assay-anatomy.json": true,
-    "samples-assay-data_type.json": true,
-    "samples-assay-dcc.json": true,
-    "samples-assay-species.json": true,
-    "samples-data_type-anatomy.json": true,
-    "samples-data_type-assay.json": true,
-    "samples-data_type-dcc.json": true,
-    "samples-data_type-species.json": true,
-    "samples-dcc-anatomy.json": true,
-    "samples-dcc-anatomy.json~": true,
-    "samples-dcc-assay.json": true,
-    "samples-dcc-data_type.json": true,
-    "samples-dcc-species.json": true,
-    "samples-species-anatomy.json": true,
-    "samples-species-assay.json": true,
-    "samples-species-data_type.json": true,
-    "samples-species-dcc.json": true,
-    "subjects-anatomy-assay.json": true,
-    "subjects-anatomy-data_type.json": true,
-    "subjects-anatomy-dcc.json": true,
-    "subjects-anatomy-species.json": true,
-    "subjects-assay-anatomy.json": true,
-    "subjects-assay-data_type.json": true,
-    "subjects-assay-dcc.json": true,
-    "subjects-assay-species.json": true,
-    "subjects-data_type-anatomy.json": true,
-    "subjects-data_type-assay.json": true,
-    "subjects-data_type-dcc.json": true,
-    "subjects-data_type-species.json": true,
-    "subjects-dcc-anatomy.json": true,
-    "subjects-dcc-assay.json": true,
-    "subjects-dcc-data_type.json": true,
-    "subjects-dcc-species.json": true,
-    "subjects-species-anatomy.json": true,
-    "subjects-species-assay.json": true,
-    "subjects-species-data_type.json": true,
-    "subjects-species-dcc.json": true,
-    "volume-anatomy-assay.json": true,
-    "volume-anatomy-data_type.json": true,
-    "volume-anatomy-dcc.json": true,
-    "volume-anatomy-species.json": true,
-    "volume-assay-anatomy.json": true,
-    "volume-assay-data_type.json": true,
-    "volume-assay-dcc.json": true,
-    "volume-assay-species.json": true,
-    "volume-data_type-anatomy.json": true,
-    "volume-data_type-assay.json": true,
-    "volume-data_type-dcc.json": true,
-    "volume-data_type-species.json": true,
-    "volume-dcc-anatomy.json": true,
-    "volume-dcc-assay.json": true,
-    "volume-dcc-data_type.json": true,
-    "volume-dcc-species.json": true,
-    "volume-species-anatomy.json": true,
-    "volume-species-assay.json": true,
-    "volume-species-data_type.json": true,
-    "volume-species-dcc.json": true,
+    'files-anatomy-assay.json': true,
+    'files-anatomy-data_type.json': true,
+    'files-anatomy-dcc.json': true,
+    'files-anatomy-species.json': true,
+    'files-assay-anatomy.json': true,
+    'files-assay-data_type.json': true,
+    'files-assay-dcc.json': true,
+    'files-assay-species.json': true,
+    'files-data_type-anatomy.json': true,
+    'files-data_type-assay.json': true,
+    'files-data_type-dcc.json': true,
+    'files-data_type-species.json': true,
+    'files-dcc-anatomy.json': true,
+    'files-dcc-assay.json': true,
+    'files-dcc-data_type.json': true,
+    'files-dcc-species.json': true,
+    'files-species-anatomy.json': true,
+    'files-species-assay.json': true,
+    'files-species-data_type.json': true,
+    'files-species-dcc.json': true,
+    'samples-anatomy-assay.json': true,
+    'samples-anatomy-data_type.json': true,
+    'samples-anatomy-dcc.json': true,
+    'samples-anatomy-species.json': true,
+    'samples-assay-anatomy.json': true,
+    'samples-assay-data_type.json': true,
+    'samples-assay-dcc.json': true,
+    'samples-assay-species.json': true,
+    'samples-data_type-anatomy.json': true,
+    'samples-data_type-assay.json': true,
+    'samples-data_type-dcc.json': true,
+    'samples-data_type-species.json': true,
+    'samples-dcc-anatomy.json': true,
+    'samples-dcc-anatomy.json~': true,
+    'samples-dcc-assay.json': true,
+    'samples-dcc-data_type.json': true,
+    'samples-dcc-species.json': true,
+    'samples-species-anatomy.json': true,
+    'samples-species-assay.json': true,
+    'samples-species-data_type.json': true,
+    'samples-species-dcc.json': true,
+    'subjects-anatomy-assay.json': true,
+    'subjects-anatomy-data_type.json': true,
+    'subjects-anatomy-dcc.json': true,
+    'subjects-anatomy-species.json': true,
+    'subjects-assay-anatomy.json': true,
+    'subjects-assay-data_type.json': true,
+    'subjects-assay-dcc.json': true,
+    'subjects-assay-species.json': true,
+    'subjects-data_type-anatomy.json': true,
+    'subjects-data_type-assay.json': true,
+    'subjects-data_type-dcc.json': true,
+    'subjects-data_type-species.json': true,
+    'subjects-dcc-anatomy.json': true,
+    'subjects-dcc-assay.json': true,
+    'subjects-dcc-data_type.json': true,
+    'subjects-dcc-species.json': true,
+    'subjects-species-anatomy.json': true,
+    'subjects-species-assay.json': true,
+    'subjects-species-data_type.json': true,
+    'subjects-species-dcc.json': true,
+    'volume-anatomy-assay.json': true,
+    'volume-anatomy-data_type.json': true,
+    'volume-anatomy-dcc.json': true,
+    'volume-anatomy-species.json': true,
+    'volume-assay-anatomy.json': true,
+    'volume-assay-data_type.json': true,
+    'volume-assay-dcc.json': true,
+    'volume-assay-species.json': true,
+    'volume-data_type-anatomy.json': true,
+    'volume-data_type-assay.json': true,
+    'volume-data_type-dcc.json': true,
+    'volume-data_type-species.json': true,
+    'volume-dcc-anatomy.json': true,
+    'volume-dcc-assay.json': true,
+    'volume-dcc-data_type.json': true,
+    'volume-dcc-species.json': true,
+    'volume-species-anatomy.json': true,
+    'volume-species-assay.json': true,
+    'volume-species-data_type.json': true,
+    'volume-species-dcc.json': true
 };
 
 var chart_data = {};
@@ -115,14 +115,13 @@ function register_export_buttons(chart_id, data) {
 }
 
 function update_dropdowns(chart_id) {
-    console.log("entered update_dropdowns(" + chart_id + ")");
+    console.log('Entered update_dropdowns(' + chart_id + ')');
     var x_axis_val = $('#' + chart_id + '-x-axis option:checked').val();
     var y_axis_val = $('#' + chart_id + '-y-axis option:checked').val();
     var group_by_val = $('#' + chart_id + '-group-by option:checked').val();
-    console.log("x_axis_val = " + x_axis_val);
-    console.log("y_axis_val = " + y_axis_val);
-    console.log("group_by_val = " + group_by_val);
-
+    console.log('x_axis_val = ' + x_axis_val);
+    console.log('y_axis_val = ' + y_axis_val);
+    console.log('group_by_val = ' + group_by_val);
 
     // is the current selection valid?
     var file = y_axis_val + '-' + x_axis_val + '-' + group_by_val + '.json';
@@ -131,44 +130,48 @@ function update_dropdowns(chart_id) {
     var y_opts = document.getElementById(chart_id + '-y-axis').options;
     var gb_opts = document.getElementById(chart_id + '-group-by').options;
 
+    var y_idx, gb_idx, is_ok;
+
     // if not, find a valid selection that includes the selected x_axis_val
     if (! is_valid) {
         var new_y = null;
         var new_gb = null;
         Object.keys(json_files).forEach(k => {
-	    var parts = k.replace('.json', '').split('-');
-	    // pick the first one in the list
-	    if ((parts[1] == x_axis_val) && (new_y == null)) {
+            var parts = k.replace('.json', '').split('-');
+
+            // pick the first one in the list
+            if ((parts[1] == x_axis_val) && (new_y == null)) {
                 new_y = parts[0];
                 new_gb = parts[2];
-	    }
+            }
         });
 
         y_axis_val = new_y;
         group_by_val = new_gb;
 
-        for (var i = 0; i < y_opts.length; ++i) {
-            y_opts[i].disabled = false;
-            y_opts[i].selected = (y_opts[i].value == new_y);
+        for (y_idx = 0; y_idx < y_opts.length; ++y_idx) {
+            y_opts[y_idx].disabled = false;
+            y_opts[y_idx].selected = (y_opts[y_idx].value == new_y);
         }
-        for (var i = 0; i < gb_opts.length; ++i) {
-            gb_opts[i].disabled = false;
-            gb_opts[i].selected = (gb_opts[i].value == new_gb);
+
+        for (gb_idx = 0; gb_idx < gb_opts.length; ++gb_idx) {
+            gb_opts[gb_idx].disabled = false;
+            gb_opts[gb_idx].selected = (gb_opts[gb_idx].value == new_gb);
         }
     }
 
     // enable y_axis choices that are valid given current x_axis, group_by
-    for (var i = 0; i < y_opts.length; ++i) {
-        var file = y_opts[i].value + '-' + x_axis_val + '-' + group_by_val + '.json';
-        var is_ok = file in json_files;
-        y_opts[i].disabled = ! is_ok;
+    for (y_idx = 0; y_idx < y_opts.length; ++y_idx) {
+        file = y_opts[y_idx].value + '-' + x_axis_val + '-' + group_by_val + '.json';
+        is_ok = file in json_files;
+        y_opts[y_idx].disabled = ! is_ok;
     }
 
     // enable group_by choices that are valid given current x_axis, y_axis
-    for (var i = 0;i < gb_opts.length;++i) {
-	var file = y_axis_val + '-' + x_axis_val + '-' + gb_opts[i].value + '.json';
-        var is_ok = file in json_files;
-        gb_opts[i].disabled = ! is_ok;
+    for (gb_idx = 0; gb_idx < gb_opts.length; ++gb_idx) {
+        file = y_axis_val + '-' + x_axis_val + '-' + gb_opts[gb_idx].value + '.json';
+        is_ok = file in json_files;
+        gb_opts[gb_idx].disabled = ! is_ok;
     }
 }
 
@@ -193,17 +196,16 @@ function update_chart_title(chart_id) {
 }
 
 function update_chart(chart_id) {
-    console.log("entered update_chart(" + chart_id + ")");
+    console.log('Entered update_chart(' + chart_id + ')');
     update_dropdowns(chart_id);
 
     var x_axis = $('#' + chart_id + '-x-axis option:checked').val();
     var y_axis = $('#' + chart_id + '-y-axis option:checked').val();
     var group_by = $('#' + chart_id + '-group-by option:checked').val();
 
-    console.log("y_axis = " + y_axis);
-    console.log("x_axis = " + x_axis);
-    console.log("group_by = " + group_by);
-
+    console.log('y_axis = ' + y_axis);
+    console.log('x_axis = ' + x_axis);
+    console.log('group_by = ' + group_by);
 
     // Given the x, y and group by information, we formulate the URL
     // to retrieve data from.
@@ -285,8 +287,8 @@ function add_tooltip(chart_id, svg) {
 }
 
 function draw_chart(svg_id, stacked_data, x_axis, y_axis,
-                    svg_height=350, legend_width=100, x_axis_rot=-25,
-                    review=false) {
+    svg_height = 350, legend_width = 100, x_axis_rot = -25,
+    review = false) {
 
     update_chart_title(svg_id);
 
@@ -300,23 +302,22 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis,
     // Get the human readable y-axis name
     var y_title = y_map[y_axis];
 
-    var categories_h = {}
+    var categories_h = {};
 
     // Can't assume that y-axis keys will be the same in each list element,
     // must take union across them all.
     stacked_data.forEach(d => {
-	var keys = d3.keys(d);
-	keys.forEach(k => {
-	    if (k != x_axis) {
-		if (!(k in categories_h)) categories_h[k] = 0;
-		categories_h[k] += d[k];
-	    }
-	});
+        var keys = d3.keys(d);
+        keys.forEach(k => {
+            if (k != x_axis) {
+                if (! (k in categories_h)) categories_h[k] = 0;
+                categories_h[k] += d[k];
+            }
+        });
     });
 
     // sort y-axis categories in descending order
     var categories = d3.keys(categories_h).sort((x, y) => categories_h[y] - categories_h[x]);
-//    console.log("got " + categories.length + " categories total: " + categories);
 
     // For each element of the data (an object), we compute the
     // total and save it, because we will need to display the total
@@ -434,8 +435,7 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis,
             })
             .append('title')
             .text('Export chart');
-    }
-    else {
+    } else {
         svg.append('image')
             .attr('x', svg_width - margin + 145)
             .attr('y', top_margin - 23)
@@ -463,9 +463,10 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis,
             .append('title')
             .text('Export chart');
     }
-    add_legend(width, chart, categories);
 
+    add_legend(width, chart, categories);
     add_tooltip(svg_id, svg);
+
     var tooltip = d3.select('#' + svg_id + '-tooltip');
 
     groups.attr('fill', function(a, b) { return colorizer(b); })
@@ -561,11 +562,13 @@ function save_csv(filename, rows) {
     };
 
     var csvFile = '';
+
     for (var i = 0; i < rows.length; i++) {
         csvFile += processRow(rows[i]);
     }
 
     var blob = new Blob([csvFile], { type: 'text/csv;charset=utf-8;' });
+
     if (navigator.msSaveBlob) { // IE 10+
         navigator.msSaveBlob(blob, filename);
     } else {
