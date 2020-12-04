@@ -231,10 +231,9 @@ function compute_totals(data, keys) {
 // set the color palette
 var colorizer = d3.scaleOrdinal()
     .range([
-        '#a43730', '#a48e30', '#ff7f50', '#30a454', '#0ebec3', '#3046a4',
-        '#7130a4', '#a43080', '#083d77', '#ebebd3', '#f4d353', '#ee964b',
-        '#f95738', '#d0743c', '#ff8c00', '#303aa6', '#ff0000', '#006400',
-        '#309da4', '#05d005'
+	'#c0653d', '#f0593b', '#eb7e23', '#edb21e', '#f2cb2e',
+	'#d0c596', '#a28c33', '#96c93e', '#7da34a', '#80cbb3',
+	'#1bbcc0', '#138eae', '#76c8ed', '#aa8ec2', '#ef7e34'
     ]);
 
 function show_error(chart_id) {
