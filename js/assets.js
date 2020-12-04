@@ -16,7 +16,6 @@ var fonts = [
     'typeface-roboto/files/roboto-latin-700.woff2',
     'typeface-roboto/files/roboto-latin-900.woff',
     'typeface-roboto/files/roboto-latin-900.woff2',
-    { 'source': '@fortawesome/fontawesome-free/svgs/solid/download.svg', 'dest': 'download-solid.svg' }
 ];
 
 var js = [

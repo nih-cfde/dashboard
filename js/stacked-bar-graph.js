@@ -410,49 +410,19 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis,
         .attr('text-anchor', 'middle')
         .text(y_title);
 
-
-    if (review) {
-        svg.append('image')
-            .attr('x', svg_width - margin - 100)
-            .attr('y', top_margin - 30)
-            .attr('id', svg_id + '-export-button')
-            .attr('height', 30)
-            .attr('width', 150)
-            .attr('xlink:href', './images/download_button.png')
-            .on('click', function() {
-                $('#export-modal').attr('name', svg_id + '-modal');
-                $('#export-modal').modal();
-            })
-            .append('title')
-            .text('Export chart');
-    } else {
-        svg.append('image')
-            .attr('x', svg_width - margin + 145)
-            .attr('y', top_margin - 23)
-            .attr('id', svg_id + '-export-button')
-            .attr('height', 20)
-            .attr('width', 20)
-            .attr('xlink:href', './fonts/components/download-solid.svg')
-            .attr('opacity', .5)
-            .on('mouseenter', function(actual, i) {
-                d3.select(this)
-                    .transition()
-                    .duration(100)
-                    .attr('opacity', 1);
-            })
-            .on('mouseleave', function(actual, i) {
-                d3.select(this)
-                    .transition()
-                    .duration(100)
-                    .attr('opacity', .5);
-            })
-            .on('click', function() {
-                $('#export-modal').attr('name', svg_id + '-modal');
-                $('#export-modal').modal();
-            })
-            .append('title')
-            .text('Export chart');
-    }
+    svg.append('image')
+        .attr('x', svg_width - margin - legend_width + 28)
+        .attr('y', top_margin - 30)
+        .attr('id', svg_id + '-export-button')
+        .attr('height', 30)
+        .attr('width', 150)
+        .attr('xlink:href', './images/download_button.png')
+        .on('click', function() {
+            $('#export-modal').attr('name', svg_id + '-modal');
+            $('#export-modal').modal();
+        })
+        .append('title')
+        .text('Export chart');
 
     add_legend(width, chart, categories);
     add_tooltip(svg_id, svg);

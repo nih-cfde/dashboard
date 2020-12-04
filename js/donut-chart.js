@@ -248,31 +248,19 @@ function draw_donut_chart(svg_id, data, dropdown, units) {
 
     // download icon
     svg.append('image')
-        .attr('x', svg_width - 20)
+        .attr('x', svg_width - 170)
         .attr('y', 0)
         .attr('id', svg_id + '-export-button')
-        .attr('height', 20)
-        .attr('width', 20)
-        .attr('xlink:href', './fonts/components/download-solid.svg')
-        .attr('opacity', .5)
-        .on('mouseenter', function(actual, i) {
-            d3.select(this)
-                .transition()
-                .duration(100)
-                .attr('opacity', 1);
-        })
-        .on('mouseleave', function(actual, i) {
-            d3.select(this)
-                .transition()
-                .duration(100)
-                .attr('opacity', .5);
-        })
+        .attr('height', 30)
+        .attr('width', 150)
+        .attr('xlink:href', './images/download_button.png')
         .on('click', function() {
             $('#export-modal').attr('name', svg_id + '-modal');
             $('#export-modal').modal();
         })
         .append('title')
         .text('Export chart');
+
     add_tooltip(svg_id, svg);
     tooltip = d3.select('#' + svg_id + '-tooltip');
 }
