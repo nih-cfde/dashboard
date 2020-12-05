@@ -15,7 +15,7 @@ function populate_chart(chart_id) {
     var data_url = './data/HMP/files-assay-anatomy.json';
     var x_axis = 'assay';
     var y_axis = 'files';
-
+    
     $.getJSON(data_url, function(data) {
         $('#' + chart_id).replaceWith('<svg id="' + chart_id + '"/>');
         register_export_buttons(chart_id, data);
@@ -89,17 +89,71 @@ function get_time_zone_diff(d) {
     return timezone_standard;
 }
 
-function add_summary_data(DCC) {
+// TODO - foreign key names are CFDE schema-dependent
+// TODO - move this to a config file
+var ENTITY_FKEYS = {
+    'subject:biosample': 'biosample_from_subject',
+    'subject:file': 'file_describes_subject',
+    'biosample:subject': 'biosample_from_subject',
+    'biosample:file': 'file_describes_biosample',
+    'file:subject': 'file_describes_subject',
+    'file:biosample': 'file_describes_biosample',
+};
+
+// Construct Chaise URI for the specified entity.
+//
+// entity - 'subject', 'biosample', 'file', 'project', or 'X_with_Y'
+//           where X in ('subjects', 'biosamples', 'files')
+//           and Y in ('subject', 'biosample', 'file')
+function get_chaise_uri(catalog_id, DCC, entity) {
+    // TODO - DERIVA server name and default catalog id should be in config file
+    var base_uri = 'http://app-dev.nih-cfde.org/chaise/recordset/#' + catalog_id;
+
+    // TODO - this depends on hard-coded foreign key names
+    // Chaise/DERIVA facet string to show only projects with subprojects
+    var project_facet_str = LZString.compressToEncodedURIComponent('{"and":[{"source":[{"inbound":["CFDE","project_in_project_parent_fkey"]},{"outbound":["CFDE","project_in_project_child_fkey"]},{"inbound":["CFDE","project_in_project_transitive_leader_fkey"]},{"outbound":["CFDE","project_in_project_transitive_member_fkey"]},"RID"],"not_null":true}]}');    
+
+    var i = entity.indexOf('_with_');
+
+    // single entity, no explicit join (except for project)
+    if (i == -1) {
+	// trim trailing 's'
+	if (entity.slice(-1) == 's') {
+	    entity = entity.slice(0, entity.length - 1);
+	}
+	var chaise_uri = base_uri + '/CFDE:' + entity;
+	if (entity == 'project') {
+	    chaise_uri += '/*::facets::' + project_facet_str + '@sort(RID)';
+	}
+	return chaise_uri;
+    }
+    // multiple entities
+    else {
+	var from = entity.slice(0,i-1);
+	var to = entity.slice(i+6);
+	var facet_str = '';
+	var fkey_str = ENTITY_FKEYS[from + ":" + to];
+	var from_fkey = fkey_str + '_' + from + '_fkey';
+	var to_fkey = fkey_str + '_' + to + '_fkey';
+	var chaise_facet = '{"and":[{"source":[{"inbound":["CFDE","' + from_fkey + '"]},{"outbound":["CFDE","' + to_fkey + '"]},"RID"],"not_null":true}]}';
+	var facet_str = LZString.compressToEncodedURIComponent(chaise_facet);
+	return base_uri + '/CFDE:' + from + '/*::facets::' + facet_str + '@sort(RID)';
+    }
+}
+
+function add_summary_data(catalog_id, DCC) {
     var data_totals_table = $('#data_total_table');
     var data_preview_table = $('#data_preview_table');
-
     var summary_data_url = './data/' + DCC + '/' + DCC + '-summary.json';
 
+    // counts for top-level entities, except project
     $.getJSON(summary_data_url, function(data) {
         Object.keys(data).forEach(function(key) {
             if (key.endsWith('_count')) {
+		var entity =  key.slice(0, key.length - '_count'.length);
                 var name = 'Total ' + key.charAt(0).toUpperCase() + key.slice(1, key.length - '_count'.length) + 's';
-                var markup = '<tr><td>' + name + '</td><td>' + data[key].toLocaleString() + '</td></tr>';
+		var chaise_uri = get_chaise_uri(catalog_id, DCC, entity);
+                var markup = '<tr><td>' + name + '</td><td><a href="' + chaise_uri + '">' + data[key].toLocaleString() + '</a></td></tr>';
                 data_totals_table.append(markup);
                 data_preview_table.append(markup);
             }
@@ -114,16 +168,19 @@ function add_summary_data(DCC) {
         $('#last_updated').append('Last updated: ' + formatted_date);
     });
 
+    // counts for top-level projects (i.e., those linked to a sub-project)
+    var chaise_uri = get_chaise_uri(catalog_id, DCC, 'project');
     summary_data_url = './data/' + DCC + '/' + DCC +  '-projects.json';
 
     $.getJSON(summary_data_url, function(data) {
         var name = 'Total Projects';
         var value = data.length;
-        var markup = '<tr><td>' + name + '</td><td>' + value + '</td></tr>';
+        var markup = '<tr><td>' + name + '</td><td><a href="' + chaise_uri + '">' + value + '</a></td></tr>';
         data_totals_table.append(markup);
         data_preview_table.append(markup);
     });
 
+    // counts for top-level entities with links to other entities of a specified type (e.g., Subjects with File)
     var linkcount_data_url = './data/' + DCC + '/' + DCC + '-linkcount.json';
     var data_breakdown_table = $('#data_breakdown_table');
 
@@ -149,8 +206,9 @@ function add_summary_data(DCC) {
                     name = name.slice(0, idx + 1) + name.charAt(idx + 1).toUpperCase() + name.slice(idx + 2);
                 }
 
+		var chaise_uri = get_chaise_uri(catalog_id, DCC, name.toLowerCase());
                 name = name.replace(/_/g, ' ');
-                var markup = '<tr><td>' + name + '</td><td>' + data[key].toLocaleString() + '</td></tr>';
+                var markup = '<tr><td>' + name + '</td><td><a href="' + chaise_uri + '">' + data[key].toLocaleString() + '</a></td></tr>';
                 data_breakdown_table.append(markup);
             }
         });
@@ -161,6 +219,7 @@ $(document).ready(function() {
     // chart 1 - stacked bar graph
     populate_chart('review_bc1');
 
+    var CATALOG_ID = 6;
     var DCC = 'HMP';
-    add_summary_data(DCC);
+    add_summary_data(CATALOG_ID, DCC);
 });
