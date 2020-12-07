@@ -198,8 +198,10 @@ function add_summary_data(catalog_id) {
         var markup = '<tr><td>' + name + '</td><td><a href="' + chaise_uri + '">' + value + '</a></td></tr>';
         data_totals_table.append(markup);
         data_preview_table.append(markup);
+        var d = new Date(data['last_updated']);
+        var formatted_date = get_formatted_date(d);
+        $('#last_updated').append('Last updated: ' + formatted_date);
     });
-
 }
 
 $(document).ready(function() {

@@ -1,5 +1,5 @@
 
-/* Data preview CSS from dcc-review.css
+/* CSS from dcc-review.css
 ----------------------------------------*/
 
 .top_content_section_right {
@@ -23,7 +23,29 @@
 	border-bottom:1px solid #CCCCCC;
 }
 
-/* End - Data preview CSS from dcc-review.css
+.data_snapshot {
+	border:1px solid #cccccc;
+	flex:0 0 100%;
+	margin-bottom: 20px;
+}
+
+.snapshot {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+}
+.snapshot_head {
+	flex:0 1 auto;
+}
+
+.last-updated {
+	font-size: 14px;
+	flex:0 1 auto;
+}
+
+
+/* End - CSS from dcc-review.css
 ----------------------------------------*/
 
 .data_content {
