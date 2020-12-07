@@ -322,6 +322,12 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis,
     var stack = d3.stack().keys(categories);
     var series = stack(stacked_data);
 
+    // add x index to series so it's not lost when empty bars are filtered
+    series.forEach(s => {
+	j = 0;
+	s.forEach(t => t.push(j++));
+    });
+
     const svg_width = 793;
     const top_margin = 30;
     const margin = 60;
@@ -433,8 +439,9 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis,
         .selectAll('rect')
         .data(function(d, i) { return series[i]; })
         .enter()
+    	.filter(function(s, j) { return !isNaN(s[0]) && !isNaN(s[1]); })
         .append('rect')
-        .attr('x', function(s, j) { return xScale(stacked_data[j][x_axis]); })
+        .attr('x', function(s, j) { return xScale(stacked_data[s[2]][x_axis]); })
         .attr('y', (s) => yScale(s[1]))
         .attr('width', xScale.bandwidth())
         .attr('height', (s) => height - yScale(s[1] - s[0]))
