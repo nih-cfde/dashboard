@@ -11,13 +11,14 @@ body {
 
 .top_content_section_right .data_preview {
 	float: right;
-	width: 200px;
+	width: 240px;
 	font-size: 1rem;
 	color: #333333;
 	margin-left: 5px;
-	margin-top: 15px;
+	margin-top: 5px;
 	border-left:1px solid #CCCCCC;
 }
+
 .top_content_section_right .data_preview td {
 	padding:0 0 0 10px;
 	border-bottom:1px solid #CCCCCC;
