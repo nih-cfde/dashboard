@@ -78,30 +78,32 @@ div.thumbnail_chart {
     margin: 1em 1em 1em 0em;
     padding: 0.5em;
     text-align: center;
-    color: #a0a0a0;
+    color: blue;
+    cursor: pointer;
 }
 
 div.selected {
-    color: #000000;
+    color: #a0a0a0;
+    cursor: auto;
 }
 
 img.thumbnail_chart {
     width: 180px;
     margin: 0em 0em 0.5em 0em;
-    border: 2px solid #a0a0a0;
-    opacity: 0.5;
+    border: 2px solid blue;
+    opacity: 1;
 }
 
 div.selected img {
-    border: 2px solid blue;
-    opacity: 1;
+    border: 2px solid #a0a0a0;
+    opacity: 0.5;
 }
     
 img.thumbnail_donut_chart {
     width: 100px;
     margin: 0em 0em 0.5em 0em;
-    border: 2px solid #a0a0a0;
-    opacity: 0.5;
+    border: 2px solid blue;
+    opacity: 1;
 }
 
 #expand_all {
