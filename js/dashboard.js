@@ -29,4 +29,35 @@ $(document).ready(function() {
         console.error('error');
     });
 
+    // display a single chart, hide the others
+    function showChart(cnum) {
+	for (var i = 1; i <= 4; ++i) {
+	    $('#chart' + i).hide();
+	    $('#thumb' + i).removeClass('selected');
+	}
+	$('#chart' + cnum).show();
+	$('#thumb' + cnum).addClass('selected');
+    }
+
+    // display all charts
+    function showAllCharts() {
+	for (var i = 1; i <= 4; ++i) {
+	    $('#chart' + i).show();
+	    $('#thumb' + i).addClass('selected');
+	}
+    }
+    
+    // enable interactive chart selection by clicking thumbnails
+    for (var i = 1; i <= 4; ++i) {
+	const cnum = i;
+	$('#thumb' + cnum).off('click');
+	$('#thumb' + cnum).click(function() {
+	    showChart(cnum);
+	});
+    }
+    
+    $('#expand_all').click(function() {
+	showAllCharts();
+    });
+
 });
