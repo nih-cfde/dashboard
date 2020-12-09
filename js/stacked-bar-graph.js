@@ -369,7 +369,7 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis,
 	// final bar has less space due to color key
 	return (index+1 == num_bars) ? 13 : 28;
     }
-    
+
     var tlc = 0;
     function trim_labels(text, maxlen_fn) {
 	text.each(function() {
@@ -382,17 +382,17 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis,
 	    node.append('title').text(label);
 	});
     }
-    
+
     // Add the x-axis
     chart.append('g')
         .attr('transform', `translate(0, ${height})`)
         .call(d3.axisBottom(xScale))
         .selectAll('.tick text')
-	.call(trim_labels, maxlen_fn)
+        .call(trim_labels, maxlen_fn)
         .attr('dx', '-.8em')
         .attr('dy', '.5em')
-    	.style('text-anchor', 'start')
-	.attr('transform', 'rotate(' + x_axis_rot + ')');
+        .style('text-anchor', 'start')
+        .attr('transform', 'rotate(' + x_axis_rot + ')');
 
     var y_formatter = d3.format('.2s');
     var comma_formatter = d3.format(',');
@@ -514,7 +514,7 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis,
             // let seriesX = xScale(stacked_data[series_idx][x_axis]);
             // let tooltipX = seriesX;
 
-            let tooltipX = xPosition + margin - (tooltip_width / 2);
+            let tooltipX = xPosition + x_margin - (tooltip_width / 2);
             let tooltipY = yPosition - 50;  // Get the tooltip above the mouse position
 
             // Prevent the tooltip from starting from out-of-bounds
