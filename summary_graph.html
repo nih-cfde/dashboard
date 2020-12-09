@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>CFDE Summary Graph</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="./css/components/normalize.css" type="text/css">
+    <link rel="stylesheet" href="./css/components/bootstrap.min.css" type="text/css">
+    <link rel="shortcut icon" type="image/png" href="./images/icons/CFDE-icon-1.png?v=2"/>
+    <link rel="stylesheet" href="./css/fonts.css" type="text/css"/>
+    <link rel="stylesheet" href="./css/style.css" type="text/css"/>
+    <link rel="stylesheet" href="./css/summary_graph.css" type="text/css"/>
+  </head>
+  <body>
+    <main class="main">
+      <div class="content">
+	<div class="content__right">
+	  <div class="data_header snapshot">
+            <p id="summary_view_title" class="snapshot_head">Summary View</p>
+	    <p id="sbc1-last_updated" class="last-updated"></p>
+	  </div>
+	  <div class="data_content">
+	  
+	    <div id="chart-container">
+	      <svg id="sbc1"/>
+	    </div>
+	    
+            <div id="form-controls">
+              <form>
+		<div class="container">
+		  <div class="row" style="flex-wrap:nowrap">
+                    <div class="col-md-4" id="sbc1-x-axis-container">
+                      <label for="x-axis">X-axis</label>
+                      <select class="custom-select" id="sbc1-x-axis" name="x-axis">
+			<option selected value="dcc">CF Program</option>
+			<option value="data_type">Data Type</option>
+			<option value="assay">Assay</option>
+			<option value="species">Species</option>
+			<option value="anatomy">Anatomy</option>
+                      </select>
+                    </div>
+                    <div class="col-md-4" id="sbc1-y-axis-container">
+                      <label for="y-axis">Y-axis</label>
+                      <select class="custom-select" id="sbc1-y-axis" name="y-axis">
+			<option selected value="files">File count</option>
+			<option value="volume">Data volume</option>
+			<option value="samples">Sample count</option>
+			<option value="subjects">Subject count</option>
+                      </select>
+                    </div>
+                    <div class="col-md-4" id="sbc1-group-by-container">
+                      <label for="group-by">Stack by</label>
+                      <select class="custom-select" id="sbc1-group-by" name="groupby">
+			<option value="dcc">CF Program</option>
+			<option value="data_type">Data Type</option>
+			<option selected value="assay">Assay</option>
+			<option value="species">Species</option>
+			<option value="anatomy">Anatomy</option>
+                      </select>
+                    </div>
+		  </div>
+		</div>
+              </form>
+            </div>
+	  </div> <!--end data_content-->
+	</div> <!--end content__right-->
+      </div>
+      
+      <div id="export-modal" class="modal">
+	<div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5>Choose how you wish to export this chart</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="close">
+		<span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="row justify-content-center export-row">
+		<button id="export-png" type="button" class="btn btn-primary">Export as PNG</button>
+              </div>
+              <div class="row justify-content-center export-row">
+		<button id="export-svg" type="button" class="btn btn-primary">Export as SVG</button>
+              </div>
+              <div class="row justify-content-center export-row">
+		<button id="export-csv" type="button" class="btn btn-primary">Export data as CSV</button>
+              </div>
+	      
+            </div>
+          </div>
+	</div>
+      </div>
+    </main>
+    
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-168435864-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-168435864-1');
+    </script>
+    <script src="./js/components/jquery.min.js"></script>
+    <script src="./js/components/bootstrap.min.js"></script>
+    <script src="./js/components/d3.min.js"></script>
+    <script src="./js/components/saveSvgAsPng.js"></script>
+    <script src="./js/components/d3-save-svg.min.js"></script>
+    <script src="./js/stacked-bar-graph.js"></script>
+    <script src="./js/lz-string.min.js"></script>
+    <script src="./js/summary_graph.js"></script>
+
+  </body>
+</html>
