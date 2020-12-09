@@ -228,12 +228,26 @@ function compute_totals(data, keys) {
     return data;
 }
 
+function ellipsize(width, padding) {
+    return function () {
+        let self = d3.select(this);
+        let textLength = self.node().getComputedTextLength();
+        let text = self.text();
+
+        while (textLength > (width - 2 * padding) && text.length > 0) {
+            text = text.slice(0, -1);
+            self.text(text + '...');
+            textLength = self.node().getComputedTextLength();
+        }
+    };
+}
+
 // set the color palette
 var colorizer = d3.scaleOrdinal()
     .range([
-	'#c0653d', '#f0593b', '#eb7e23', '#edb21e', '#f2cb2e',
-	'#d0c596', '#a28c33', '#96c93e', '#7da34a', '#80cbb3',
-	'#1bbcc0', '#138eae', '#76c8ed', '#aa8ec2', '#ef7e34'
+        '#c0653d', '#f0593b', '#eb7e23', '#edb21e', '#f2cb2e',
+        '#d0c596', '#a28c33', '#96c93e', '#7da34a', '#80cbb3',
+        '#1bbcc0', '#138eae', '#76c8ed', '#aa8ec2', '#ef7e34'
     ]);
 
 function show_error(chart_id) {
@@ -252,28 +266,22 @@ function add_tooltip(chart_id, svg) {
         .attr('class', 'chart_tooltip')
         .style('display', 'none');
 
-    tooltip.append('rect')
+    let rect = tooltip.append('rect')
         .attr('width', 190)
         .attr('height', 50)
-        .attr('fill', '#000')
-        .style('opacity', 0.9);
+        .attr('class', 'chart_tooltip_rect');
 
-    tooltip.append('text')
+    let text1 = tooltip.append('text')
+        .attr('class', 'chart_tooltip_title')
         .attr('id', chart_id + '-brick-category')
         .attr('x', 5)
-        .attr('dy', '1.2em')
-        .style('text-anchor', 'left')
-        .attr('font-size', '12px')
-        .attr('font-family', 'sans-serif')
-        .attr('fill', '#fff');
+        .attr('dy', '1.8em');
 
     tooltip.append('text')
         .attr('x', 5)
+        .attr('dy', '3.4em')
         .attr('id', chart_id + '-brick-value')
-        .attr('dy', '2.4em') // you can vary how far apart it shows up
-        .style('text-anchor', 'left')
-        .attr('font-size', '12px')
-        .attr('fill', '#fff');
+        .attr('class', 'chart_tooltip_value');
 }
 
 function draw_chart(svg_id, stacked_data, x_axis, y_axis,
@@ -439,7 +447,7 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis,
         .selectAll('rect')
         .data(function(d, i) { return series[i]; })
         .enter()
-    	.filter(function(s, j) { return !isNaN(s[0]) && !isNaN(s[1]); })
+        .filter(function(s, j) { return ! isNaN(s[0]) && ! isNaN(s[1]); })
         .append('rect')
         .attr('x', function(s, j) { return xScale(stacked_data[s[2]][x_axis]); })
         .attr('y', (s) => yScale(s[1]))
@@ -462,16 +470,41 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis,
         .on('mousemove', function(d, e) {
             var brick_name = d3.select(this.parentNode).datum().key;
             var brick_value = 0;
-            var xPosition = d3.mouse(this)[0] - 50;
-            var yPosition = d3.mouse(this)[1] - 50;
+            let coords = d3.mouse(this);
+            let xPosition = coords[0];  // distance from y-axis on chart
+            let yPosition = coords[1];  // distance from top of chart
+
+            let tooltip_width = $('.chart_tooltip_rect').width();
+
             if (d[1] - d[0] > 999999) {
                 brick_value = large_number_formatter(d[1] - d[0]);
             } else {
                 brick_value = comma_formatter(d[1] - d[0]);
             }
+
             $('#' + svg_id + '-brick-value').text(brick_value);
-            $('#' + svg_id + '-brick-category').text(brick_name);
-            tooltip.attr('transform', 'translate(' + xPosition + ',' + yPosition + ')');
+            let text = $('#' + svg_id + '-brick-category');
+            text.append('tspan').text(brick_name).each(ellipsize(190, 5));
+
+            // Get the series index that we are hovering over so we can compute the
+            // the x value to use (if we wish to lock it down).
+            // let series_idx = d3.select(this).datum()[2];
+            // let seriesX = xScale(stacked_data[series_idx][x_axis]);
+            // let tooltipX = seriesX;
+
+            let tooltipX = xPosition + margin - (tooltip_width / 2);
+            let tooltipY = yPosition - 50;  // Get the tooltip above the mouse position
+
+            // Prevent the tooltip from starting from out-of-bounds
+            if (tooltipX < 1) {
+                tooltipX = 1;
+            }
+
+            if (tooltipY < 1) {
+                tooltipY = 1;
+            }
+
+            tooltip.attr('transform', 'translate(' + tooltipX + ',' + tooltipY + ')');
         });
 }
 
