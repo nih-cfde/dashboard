@@ -277,7 +277,7 @@ function add_tooltip(chart_id, svg) {
 }
 
 function draw_chart(svg_id, stacked_data, x_axis, y_axis,
-    svg_height = 350, legend_width = 100, x_axis_rot = -25,
+    svg_height = 375, legend_width = 100, x_axis_rot = 25,
     review = false) {
 
     update_chart_title(svg_id);
@@ -330,15 +330,16 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis,
 
     const svg_width = 793;
     const top_margin = 30;
-    const margin = 60;
-    const width = svg_width - 2 * margin - legend_width;
-    const height = svg_height - margin - top_margin;
+    const bottom_margin = 100;
+    const x_margin = 60;
+    const width = svg_width - 2 * x_margin - legend_width;
+    const height = svg_height - top_margin - bottom_margin;
     const svg = d3.select('#' + svg_id);
     svg.attr('width', svg_width);
     svg.attr('height', svg_height);
 
     const chart = svg.append('g')
-        .attr('transform', `translate(${margin}, ${top_margin})`);
+        .attr('transform', `translate(${x_margin}, ${top_margin})`);
 
     // Configure the x-axis scale to use discrete values from the
     // data, which are taken from the x_axis key from each object.
@@ -354,15 +355,36 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis,
         .range([height, 0])
         .domain([0, 1.2 * d3.max(stacked_data.map((s) => s.total))]);
 
+
+    var num_bars = stacked_data.length;
+    function maxlen_fn(text, index) {
+	// final bar has less space due to color key
+	return (index+1 == num_bars) ? 13 : 28;
+    }
+    
+    var tlc = 0;
+    function trim_labels(text, maxlen_fn) {
+	text.each(function() {
+	    var node = d3.select(this);
+	    var label = node.text();
+	    var ml = maxlen_fn(label, tlc++);
+	    if (label.length > (ml-3)) {
+		node.text(label.substring(0, ml-3) + '...');
+	    }
+	    node.append('title').text(label);
+	});
+    }
+    
     // Add the x-axis
     chart.append('g')
         .attr('transform', `translate(0, ${height})`)
         .call(d3.axisBottom(xScale))
-        .selectAll('text')
-        .style('text-anchor', 'end')
+        .selectAll('.tick text')
+	.call(trim_labels, maxlen_fn)
         .attr('dx', '-.8em')
-        .attr('dy', '.15em')
-        .attr('transform', 'rotate(' + x_axis_rot + ')');
+        .attr('dy', '.5em')
+    	.style('text-anchor', 'start')
+	.attr('transform', 'rotate(' + x_axis_rot + ')');
 
     var y_formatter = d3.format('.2s');
     var comma_formatter = d3.format(',');
@@ -410,14 +432,14 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis,
 
     // Add the y-axis label
     svg.append('text')
-        .attr('x', -(height / 2) - margin)
-        .attr('y', margin / 2.4 - 5)
+        .attr('x', -(height / 2) - x_margin)
+        .attr('y', bottom_margin / 2.4 - 5)
         .attr('transform', 'rotate(-90)')
         .attr('text-anchor', 'middle')
         .text(y_title);
 
     svg.append('image')
-        .attr('x', svg_width - margin - legend_width + 28)
+        .attr('x', svg_width - x_margin - legend_width + 28)
         .attr('y', top_margin - 30)
         .attr('id', svg_id + '-export-button')
         .attr('height', 30)
