@@ -50,7 +50,6 @@ function get_time_zone_diff(d) {
     return timezone_standard;
 }
 
-
 $(document).ready(function() {
     // chart 1 - stacked bar graph
     register_dropdowns('sbc1');
