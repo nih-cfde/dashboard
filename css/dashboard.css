@@ -12,7 +12,6 @@
 }
 
 svg {
-  height: 100%;
   width: 100%;
 }
 
@@ -27,28 +26,28 @@ svg {
 
 #sbc1-form-controls {
   margin: 0 auto;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
   position: relative;
   width: 600px;
 }
 
 #sbc2-form-controls {
   margin: 0 auto;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
   position: relative;
   width: 600px;
 }
 
 #dc1-form-controls {
   margin: 0 auto;
-  margin-bottom: 10px;
+  margin-bottom: 0px;
   margin-top: 10px;
   position: relative;
 }
 
 #dc2-form-controls {
   margin: 0 auto;
-  margin-bottom: 10px;
+  margin-bottom: 0px;
   margin-top: 10px;
   position: relative;
 }
