@@ -285,7 +285,7 @@ function add_tooltip(chart_id, svg) {
 }
 
 function draw_chart(svg_id, stacked_data, x_axis, y_axis,
-    svg_height = 375, legend_width = 100, x_axis_rot = 25,
+    svg_height = 350, legend_width = 100, x_axis_rot = 25,
     review = false) {
 
     update_chart_title(svg_id);
@@ -460,7 +460,9 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis,
         .append('title')
         .text('Export chart');
 
-    add_legend(width, chart, categories);
+    // limit categories
+    var max_categories = 14;
+    add_legend(width, chart, categories.slice(0,max_categories));
     add_tooltip(svg_id, svg);
 
     var tooltip = d3.select('#' + svg_id + '-tooltip');
