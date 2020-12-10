@@ -20,9 +20,9 @@ function populate_chart(chart_id) {
         $('#' + chart_id).replaceWith('<svg id="' + chart_id + '"/>');
         register_export_buttons(chart_id, data);
 
-        var svg_height = 400;
+        var svg_height = 450;
         var legend_width = 150;
-        var x_axis_rot = -30;
+        var x_axis_rot = 25;
         var review = true;
 
         draw_chart(chart_id, data, x_axis, y_axis, svg_height, legend_width, x_axis_rot, review);
