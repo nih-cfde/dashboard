@@ -116,33 +116,3 @@ img.thumbnail_donut_chart {
   justify-content: space-between;
   align-items: center;
 }
-
-.chart_tooltip {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.chart_tooltip_rect {
-  stroke: blue;
-  rx: 2px;
-  ry: 2px;
-  fill: #fff;
-  opacity: 0.9;
-  stroke-width: 1px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.chart_tooltip_title {
-  font-size: .8em;
-  font-weight: bold;
-  fill: #000;
-  font-family: sans-serif;
-}
-
-.chart_tooltip_value {
-  font-size: .7em;
-  font-family: sans-serif;
-  fill: #000;
-  dy: 2.4em;
-}
