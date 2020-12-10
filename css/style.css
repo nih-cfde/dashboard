@@ -301,6 +301,12 @@ main {
   min-height: 450px;
 }
 
+.donut_chart {
+  border: 1px solid #cccccc;
+  margin-bottom: 20px;
+  min-height: 500px;
+}
+
 .content__bottom--alt {
   display: flex;
   flex-direction: row;

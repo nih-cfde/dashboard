@@ -29,21 +29,25 @@ function draw_donut_chart(svg_id, data, dropdown, units) {
     var dropdown_value = $('#' + svg_id + '-' + dropdown).val();
     update_donut_chart_title(svg_id, dropdown);
 
-    const svg_width = 426;
+    const svg_width = 820;
+    const svg_height = 400;
     const top_margin = 90;
     const margin = 40;
     const legend_width = 0;
     const width = svg_width - 2 * margin - legend_width;
-    const height = 300 - margin - top_margin;
+    const height = svg_height - margin - top_margin;
     const hw = svg_width / 2;
     const hh = height / 2;
     const cx = hw;
     const cy = hh + top_margin;
-    const outer_radius = hw - top_margin - margin;
+    const outer_radius = 250 - top_margin - margin;
     const inner_radius = outer_radius / 2.0;
     // console.log("hw=" + hw + " hh=" + hh + " cx=" + cx + " cy=" + cy + " outer_radius=" + outer_radius);
 
     const svg = d3.select('#' + svg_id);
+    svg.attr('width', svg_width);
+    svg.attr('height', svg_height);
+
     const chart = svg.append('g')
         .attr('transform', `translate(${cx}, ${cy})`);
 

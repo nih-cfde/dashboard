@@ -43,6 +43,7 @@ svg {
   margin-bottom: 0px;
   margin-top: 10px;
   position: relative;
+  width: 800px;
 }
 
 #dc2-form-controls {
@@ -50,14 +51,7 @@ svg {
   margin-bottom: 0px;
   margin-top: 10px;
   position: relative;
-}
-
-#dc1-title {
-  min-height: 2.5em;
-}
-
-#dc2-title {
-  min-height: 2.5em;
+  width: 800px;
 }
 
 .chart__chooser {
