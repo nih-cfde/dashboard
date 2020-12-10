@@ -557,7 +557,8 @@ function add_legend(width, chart, categories) {
         .attr('dy', '.35em')
         .attr('font-family', 'sans-serif')
         .style('font-size', '0.7rem')
-        .text(function(d) { return d; });
+        .text(function(d) { return d; })
+	.append('title').text(function(d) { return d; });
 }
 
 function save_csv(filename, rows) {
