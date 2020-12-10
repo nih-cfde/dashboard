@@ -295,16 +295,10 @@ main {
   width: 940px;
 }
 
-.chart__top {
+.chart {
   border: 1px solid #cccccc;
   margin-bottom: 20px;
   min-height: 450px;
-}
-
-.chart__bottom {
-  border: 1px solid #cccccc;
-  margin-bottom: 20px;
-  min-height: 500px;
 }
 
 .content__bottom--alt {
