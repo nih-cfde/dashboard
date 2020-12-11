@@ -22,10 +22,10 @@ function register_donut_dropdown(chart_id, data, dropdown, units) {
 
 function update_donut_chart(chart_id, data, dropdown, units) {
     $('#' + chart_id).replaceWith('<svg id="' + chart_id + '" style="min-height: 400px; overflow: visible;"/>');
-    draw_donut_chart(chart_id, data, dropdown, units);
+    draw_donut_chart(chart_id, data, dropdown, units, false);
 }
 
-function draw_donut_chart(svg_id, data, dropdown, units) {
+function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
     var dropdown_value = $('#' + svg_id + '-' + dropdown).val();
     update_donut_chart_title(svg_id, dropdown);
 
@@ -40,7 +40,7 @@ function draw_donut_chart(svg_id, data, dropdown, units) {
     const hh = height / 2;
     const cx = hw;
     const cy = hh + top_margin;
-    const outer_radius = 250 - top_margin - margin;
+    const outer_radius = 280 - top_margin - margin;
     const inner_radius = outer_radius / 2.0;
     // console.log("hw=" + hw + " hh=" + hh + " cx=" + cx + " cy=" + cy + " outer_radius=" + outer_radius);
 
@@ -96,7 +96,6 @@ function draw_donut_chart(svg_id, data, dropdown, units) {
 
     var comma_formatter = d3.format(',');
     var large_number_formatter = d3.format('.2s');
-
     var tooltip = null;
 
     // donut chart
@@ -105,7 +104,7 @@ function draw_donut_chart(svg_id, data, dropdown, units) {
         .enter()
         .append('path')
         .attr('d', arc)
-        .attr('fill', function(d) { return (colorizer(d.data.key)); })
+        .attr('fill', function(d, i) { return (colorizer(i)); })
         .attr('stroke', 'none')
         .style('stroke-width', '1px')
         .on('mouseenter', function(actual, i) {
@@ -133,7 +132,8 @@ function draw_donut_chart(svg_id, data, dropdown, units) {
                 brick_value = comma_formatter(d.data.value);
             }
             $('#' + svg_id + '-brick-value').text(brick_value + ' ' + units);
-            $('#' + svg_id + '-brick-category').text(brick_name);
+	    let text = $('#' + svg_id + '-brick-category');
+            text.append('tspan').text(brick_name).each(ellipsize(190, 5));
             tooltip.attr('transform', 'translate(' + xPosition + ',' + yPosition + ')');
         });
 
@@ -145,6 +145,7 @@ function draw_donut_chart(svg_id, data, dropdown, units) {
     // define point of the arc to label
     var angle_fn = function(d) { return d.startAngle + ((d.endAngle - d.startAngle) / 2); };
 
+    if (show_labels) {
     // yspread - arrange labels using entire vertical space on left and right
     var ypos = {};
     if (label_type == 'yspread') {
@@ -249,10 +250,11 @@ function draw_donut_chart(svg_id, data, dropdown, units) {
             var midangle = angle_fn(d);
             return (midangle < Math.PI ? 'start' : 'end');
         });
-
+    }
+    
     // download icon
     svg.append('image')
-        .attr('x', svg_width - 170)
+        .attr('x', svg_width - 200)
         .attr('y', 0)
         .attr('id', svg_id + '-export-button')
         .attr('height', 30)
@@ -265,7 +267,12 @@ function draw_donut_chart(svg_id, data, dropdown, units) {
         .append('title')
         .text('Export chart');
 
+    var max_categories = 16;
+    var categories = data_ready.map(d => d.data.key);
+    const legend = svg.append('g')
+        .attr('transform', `translate(60, 60)`);
+
+    add_legend(svg_width-(2*outer_radius), legend, categories.slice(0,max_categories));
     add_tooltip(svg_id, svg);
     tooltip = d3.select('#' + svg_id + '-tooltip');
 }
-
