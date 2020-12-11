@@ -52,6 +52,16 @@ navbar .navbar-nav {
   flex-direction: unset;
 }
 
+navbar #login-link {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 40px;
+    border: 1px solid white;
+    border-radius: 4px;
+}
+
 /* external link icon to use in navbar */
 navbar a span.external-link-icon:not(:empty):not(.external-link-no-icon)::after {
     display: inline-block;
