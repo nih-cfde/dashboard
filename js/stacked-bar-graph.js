@@ -291,10 +291,10 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis,
     update_chart_title(svg_id);
 
     const y_map = {
-        'file_count': 'File Count',
-        'file_size': 'Data Volume (bytes)',
-        'sample_count': 'Sample Count',
-        'subject_count': 'Subject Count'
+        'files': 'File Count',
+        'volume': 'Data Volume (bytes)',
+        'samples': 'Sample Count',
+        'subjects': 'Subject Count'
     };
 
     // Get the human readable y-axis name
@@ -440,8 +440,8 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis,
 
     // Add the y-axis label
     svg.append('text')
-        .attr('x', -(height / 2) - x_margin)
-        .attr('y', bottom_margin / 2.4 - 5)
+        .attr('x', -(height/2 + top_margin))
+        .attr('y', 20)
         .attr('transform', 'rotate(-90)')
         .attr('text-anchor', 'middle')
         .text(y_title);
