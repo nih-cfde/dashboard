@@ -97,16 +97,17 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
     var comma_formatter = d3.format(',');
     var large_number_formatter = d3.format('.2s');
     var tooltip = null;
-
+    var cat2path = {};
+    
     // donut chart
     chart.selectAll('slices')
         .data(data_ready)
         .enter()
         .append('path')
         .attr('d', arc)
-        .attr('fill', function(d, i) { return (colorizer(i)); })
+        .attr('fill', function(d, i) { const th = this; cat2path[d.data.key] = th; return (colorizer(i)); })
         .attr('stroke', 'none')
-        .style('stroke-width', '1px')
+        .attr('stroke-width', '1px')
         .on('mouseenter', function(actual, i) {
             d3.select(this)
                 .transition()
@@ -268,11 +269,33 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
         .text('Export chart');
 
     var max_categories = 16;
-    var categories = data_ready.map(d => d.data.key);
     const legend = svg.append('g')
         .attr('transform', `translate(60, 60)`);
 
-    add_legend(svg_width-(2*outer_radius), legend, categories.slice(0,max_categories));
     add_tooltip(svg_id, svg);
     tooltip = d3.select('#' + svg_id + '-tooltip');
+
+    var categories = data_ready.slice(0, max_categories);
+    var title_fn = function(d) { return d.data.key; }
+
+    // highlight donut chart slice when mouse is over corresponding legend entry
+    var mouseover_fn = function(d, e) {
+	d3.select(cat2path[d.data.key]).attr('stroke', '#000');
+    };
+    
+    var mouseout_fn = function(d, e) {
+	d3.select(cat2path[d.data.key]).attr('stroke', 'none');
+    };
+    
+    var text_fn = function(d) {
+	value = d.data.value;
+        if (value > 999999) {
+            value = large_number_formatter(d.data.value);
+        } else {
+            value = comma_formatter(d.data.value);
+        }
+	return value + " " + units; 
+    };
+    
+    add_legend(svg_id, svg_width-(2*outer_radius), legend, categories, tooltip, title_fn, text_fn, 60, 40, mouseover_fn, mouseout_fn);
 }

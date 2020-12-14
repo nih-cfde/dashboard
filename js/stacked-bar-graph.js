@@ -462,10 +462,12 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis,
 
     // limit categories
     var max_categories = 14;
-    add_legend(width, chart, categories.slice(0,max_categories));
     add_tooltip(svg_id, svg);
-
     var tooltip = d3.select('#' + svg_id + '-tooltip');
+    var title_fn = function(d) { return d; };
+    var text_fn = function(d) { return d; };
+//    add_legend(svg_id, width, chart, categories.slice(0,max_categories), tooltip, title_fn, text_fn, x_margin, 0);
+    add_legend(svg_id, width, chart, categories.slice(0,max_categories), null, title_fn, text_fn, x_margin, 0);
 
     groups.attr('fill', function(a, b) { return colorizer(b); })
         .selectAll('rect')
@@ -532,7 +534,7 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis,
         });
 }
 
-function add_legend(width, chart, categories) {
+function add_legend(svg_id, width, chart, categories, tooltip, title_fn, text_fn, x_offset, y_offset, mouseover_fn, mouseout_fn) {
     var top = 20;
 
     // Create the legend
@@ -543,8 +545,45 @@ function add_legend(width, chart, categories) {
         .attr('class', 'legend')
         .attr('transform', function(d, i) {
             return 'translate(0,' + (top + i * 20) + ')';
-        });
+        })
+        .on('mouseover', function(d, e) {
+	    if (tooltip != null) tooltip.style('display', null);
+	    if (mouseover_fn != null) mouseover_fn(d, e);
+	})
+        .on('mouseout', function(d, e) {
+	    if (tooltip != null) tooltip.style('display', 'none');
+	    if (mouseout_fn != null) mouseout_fn(d, e);
+	})
+        .on('mousemove', function(d, e) {
+	    if (tooltip == null) return;
+	    var tooltip_title = title_fn(d);
+            var tooltip_text = text_fn(d);
 
+            let coords = d3.mouse(this);
+            let xPosition = coords[0];  // distance from y-axis on chart
+            let yPosition = coords[1];  // distance from top of chart
+
+            let tooltip_width = $('.chart_tooltip_rect').width();
+            $('#' + svg_id + '-brick-value').text(tooltip_text).each(ellipsize(190, 5));
+            let text = $('#' + svg_id + '-brick-category');
+            text.append('tspan').text(tooltip_title).each(ellipsize(190, 5));
+
+            let tooltipX = xPosition + x_offset - tooltip_width;
+            let tooltipY = yPosition + y_offset - 50;  // Get the tooltip above the mouse position
+	    tooltipY += (top + e * 20);
+	    
+            // Prevent the tooltip from starting from out-of-bounds
+            if (tooltipX < 1) {
+                tooltipX = 1;
+            }
+
+            if (tooltipY < 1) {
+                tooltipY = 1;
+            }
+	    
+            tooltip.attr('transform', 'translate(' + tooltipX + ',' + tooltipY + ')');
+	});
+    
     legend.append('rect')
         .attr('x', width + 28)
         .attr('width', 18)
@@ -557,8 +596,8 @@ function add_legend(width, chart, categories) {
         .attr('dy', '.35em')
         .attr('font-family', 'sans-serif')
         .style('font-size', '0.7rem')
-        .text(function(d) { return d; })
-	.append('title').text(function(d) { return d; });
+        .text(title_fn)
+	.append('title').text(title_fn);
 }
 
 function save_csv(filename, rows) {
