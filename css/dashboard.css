@@ -117,3 +117,8 @@ img.thumbnail_donut_chart {
 	font-size: 14px;
 	flex:0 1 auto;
 }
+
+.form-label {
+  padding-top: 0.25em;
+  margin-bottom: 0em;
+}
