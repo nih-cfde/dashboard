@@ -57,7 +57,8 @@ $(document).ready(function() {
     // chart 1 - stacked bar graph
     register_dropdowns('sbc1');
     update_chart('sbc1');
-
+    window.addEventListener('resize', function() { update_chart('sbc1'); });
+    
     // TODO - set these individually based on API response
     // update last updated
     var summary_data_url = './data/summary.json';

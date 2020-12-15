@@ -284,11 +284,15 @@ function add_tooltip(chart_id, svg) {
         .attr('class', 'chart_tooltip_value');
 }
 
-function draw_chart(svg_id, stacked_data, x_axis, y_axis,
-    svg_height = 350, legend_width = 100, x_axis_rot = 25,
-    review = false) {
+function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
+//    svg_height = 350, legend_width = 150, x_axis_rot = 25,
+//    review = false) {
 
     update_chart_title(svg_id);
+
+    var x_axis_label_rot = 25;
+    var x_axis_label_dx = '-.8em';
+    var x_axis_label_dy = '.5em';
 
     const y_map = {
         'files': 'File Count',
@@ -299,7 +303,7 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis,
 
     // Get the human readable y-axis name
     var y_title = y_map[y_axis];
-
+    
     var categories_h = {};
 
     // Can't assume that y-axis keys will be the same in each list element,
@@ -336,14 +340,41 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis,
 	s.forEach(t => t.push(j++));
     });
 
-    const svg_width = 793;
-    const top_margin = 30;
-    const bottom_margin = 100;
+    const top_margin = 35;
+    const bottom_margin = 80;
     const x_margin = 60;
+
+    // svg_width determined by enclosing div
+    const svg = d3.select('#' + svg_id);
+    var svg_style = window.getComputedStyle(svg.node());
+    var svg_height = parseInt(svg_style.height);
+    var svg_width = parseInt(svg_style.width);
+
+    if (svg_width < 200) svg_width = 200;
+    if (svg_height < 200) svg_height = 300;
+    
+    legend_width = svg_width * 0.3;
+    var show_bar_totals = true;
+
+    if (legend_width > 350) {
+	legend_width = 350;
+    }
+
+    // switch to more (horizontally) compact layout
+    if (svg_width < 400) {
+	legend_width = 0;
+	x_axis_label_rot = 90;
+	x_axis_label_dx = '1em';
+	x_axis_label_dy = '-0.5em';
+	d3.select('#' + svg_id + '-last_updated').style('display', 'none');
+	d3.select('#' + svg_id + '-form-row').style('flex-wrap', 'wrap');
+    } else {
+	d3.select('#' + svg_id + '-last_updated').style('display', null);
+	d3.select('#' + svg_id + '-form-row').style('flex-wrap', 'nowrap');
+    }
+    
     const width = svg_width - 2 * x_margin - legend_width;
     const height = svg_height - top_margin - bottom_margin;
-    const svg = d3.select('#' + svg_id);
-    svg.attr('width', svg_width);
     svg.attr('height', svg_height);
 
     const chart = svg.append('g')
@@ -356,6 +387,12 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis,
         .domain(stacked_data.map((s) => s[x_axis]))
         .padding(0.2);
 
+    // guess whether there's enough space to display stacked bar totals
+    var xbw = xScale.bandwidth();
+    if (xbw < 35) {
+	show_bar_totals = false;
+    }
+    
     // Configure the y-axis scale. It goes from 0 to the maximum
     // value (the height of the tallest stacked bar). We have already
     // computed this and stored the total in each objects "total" key.
@@ -363,11 +400,10 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis,
         .range([height, 0])
         .domain([0, 1.2 * d3.max(stacked_data.map((s) => s.total))]);
 
-
     var num_bars = stacked_data.length;
     function maxlen_fn(text, index) {
 	// final bar has less space due to color key
-	return (index+1 == num_bars) ? 13 : 28;
+	return ((x_axis_label_rot != 90) && (index+1 == num_bars)) ? 13 : 28;
     }
 
     var tlc = 0;
@@ -389,10 +425,10 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis,
         .call(d3.axisBottom(xScale))
         .selectAll('.tick text')
         .call(trim_labels, maxlen_fn)
-        .attr('dx', '-.8em')
-        .attr('dy', '.5em')
+        .attr('dx', x_axis_label_dx)
+        .attr('dy', x_axis_label_dy)
         .style('text-anchor', 'start')
-        .attr('transform', 'rotate(' + x_axis_rot + ')');
+        .attr('transform', 'rotate(' + x_axis_label_rot + ')');
 
     var y_formatter = d3.format('.2s');
     var comma_formatter = d3.format(',');
@@ -432,11 +468,14 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis,
         .attr('y', (a) => yScale(a.total) - 5)
         .attr('text-anchor', 'middle')
         .attr('fill', '#000')
-        .text((a) => {if (a.total > 999999) {
-            return `${large_number_formatter(a.total)}`;
-        } else {
-            return `${comma_formatter(a.total)}`;
-        }});
+        .text((a) => {
+	    if (!show_bar_totals) return '';
+	    if (a.total > 999999) {
+		return `${large_number_formatter(a.total)}`;
+            } else {
+		return `${comma_formatter(a.total)}`;
+            }
+	});
 
     // Add the y-axis label
     svg.append('text')
@@ -445,10 +484,10 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis,
         .attr('transform', 'rotate(-90)')
         .attr('text-anchor', 'middle')
         .text(y_title);
-
+    
     svg.append('image')
-        .attr('x', svg_width - x_margin - legend_width + 28)
-        .attr('y', top_margin - 30)
+        .attr('x', svg_width - 150)
+        .attr('y', 0)
         .attr('id', svg_id + '-export-button')
         .attr('height', 30)
         .attr('width', 150)
@@ -466,8 +505,11 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis,
     var tooltip = d3.select('#' + svg_id + '-tooltip');
     var title_fn = function(d) { return d; };
     var text_fn = function(d) { return d; };
-//    add_legend(svg_id, width, chart, categories.slice(0,max_categories), tooltip, title_fn, text_fn, x_margin, 0);
-    add_legend(svg_id, width, chart, categories.slice(0,max_categories), null, title_fn, text_fn, x_margin, 0);
+
+   //    add_legend(svg_id, width, chart, categories.slice(0,max_categories), tooltip, title_fn, text_fn, x_margin, 0);
+    if (legend_width > 0) {
+	add_legend(svg_id, width, chart, categories.slice(0,max_categories), null, title_fn, text_fn, x_margin, 0);
+    }
 
     groups.attr('fill', function(a, b) { return colorizer(b); })
         .selectAll('rect')
@@ -535,7 +577,7 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis,
 }
 
 function add_legend(svg_id, width, chart, categories, tooltip, title_fn, text_fn, x_offset, y_offset, mouseover_fn, mouseout_fn) {
-    var top = 20;
+    var top = 10;
 
     // Create the legend
     var legend = chart.append('g').selectAll('.legend')

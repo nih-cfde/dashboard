@@ -86,6 +86,8 @@ $(document).ready(function() {
 	    $('#thumb' + i).removeClass('selected');
 	}
 	$('#chart' + cnum).show();
+	if (cnum == 1) update_chart('sbc1');
+	if (cnum == 2) update_chart('sbc2');
 	$('#thumb' + cnum).addClass('selected');
     }
 
@@ -95,6 +97,8 @@ $(document).ready(function() {
 	    $('#chart' + i).show();
 	    $('#thumb' + i).addClass('selected');
 	}
+	update_chart('sbc1');
+	update_chart('sbc2');
     }
     
     // enable interactive chart selection by clicking thumbnails
