@@ -59,8 +59,12 @@ $(document).ready(function() {
     register_dropdowns('sbc2');
     update_chart('sbc2');
 
+    var dc1_data = null;
+    var dc2_data = null;
+    
     // chart 3 - donut graph
     $.getJSON('./data/dc-subjects-assay-anatomy.json', function(data) {
+	dc1_data = data;
         register_donut_dropdown('dc1', data, 'data_type', 'subjects');
         register_export_buttons('dc1', data);
         draw_donut_chart('dc1', data, 'data_type', 'subjects');
@@ -71,6 +75,7 @@ $(document).ready(function() {
 
     // chart 4 - donut graph
     $.getJSON('./data/dc-samples-dcc-anatomy.json', function(data) {
+	dc2_data = data;
         register_donut_dropdown('dc2', data, 'dcc', 'samples');
         register_export_buttons('dc2', data);
         draw_donut_chart('dc2', data, 'dcc', 'samples');
@@ -88,6 +93,8 @@ $(document).ready(function() {
 	$('#chart' + cnum).show();
 	if (cnum == 1) update_chart('sbc1');
 	if (cnum == 2) update_chart('sbc2');
+	if (cnum == 3) update_donut_chart('dc1', dc1_data, 'data_type', 'subjects');
+	if (cnum == 4) update_donut_chart('dc2', dc2_data, 'dcc', 'samples');
 	$('#thumb' + cnum).addClass('selected');
     }
 
@@ -99,6 +106,8 @@ $(document).ready(function() {
 	}
 	update_chart('sbc1');
 	update_chart('sbc2');
+	update_donut_chart('dc1', dc1_data, 'data_type', 'subjects');
+	update_donut_chart('dc2', dc2_data, 'dcc', 'samples');
     }
     
     // enable interactive chart selection by clicking thumbnails

@@ -29,24 +29,30 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
     var dropdown_value = $('#' + svg_id + '-' + dropdown).val();
     update_donut_chart_title(svg_id, dropdown);
 
-    const svg_width = 820;
-    const svg_height = 300;
-    const top_margin = 90;
+    const svg = d3.select('#' + svg_id);
+    var svg_style = window.getComputedStyle(svg.node());
+    var svg_height = parseInt(svg_style.height);
+    var svg_width = parseInt(svg_style.width);
+
+    if (svg_width < 300) svg_width = 300;
+    if (svg_height < 200) svg_height = 200;
+
+    svg.attr('width', svg_width);
+    svg.attr('height', svg_height);
+
+    const top_margin = 35;
+    const bottom_margin = 10;
     const margin = 40;
     const legend_width = 0;
     const width = svg_width - 2 * margin - legend_width;
-    const height = svg_height - margin - top_margin;
+    const height = svg_height - top_margin - bottom_margin;
     const hw = svg_width / 2;
     const hh = height / 2;
     const cx = hw;
     const cy = hh + top_margin;
-    const outer_radius = 280 - top_margin - margin;
+    const outer_radius = hh;
     const inner_radius = outer_radius / 2.0;
     // console.log("hw=" + hw + " hh=" + hh + " cx=" + cx + " cy=" + cy + " outer_radius=" + outer_radius);
-
-    const svg = d3.select('#' + svg_id);
-    svg.attr('width', svg_width);
-    svg.attr('height', svg_height);
     
     const chart = svg.append('g')
         .attr('transform', `translate(${cx}, ${cy})`);
@@ -164,9 +170,9 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
             }
         });
 
-        var t_height = height + top_margin + margin;
-        var l_delta = (height + top_margin + margin) / (n_left + 1);
-        var r_delta = (height + top_margin + margin) / (n_right + 1);
+        var t_height = height + top_margin + bottom_margin;
+        var l_delta = t_height / (n_left + 1);
+        var r_delta = t_height / (n_right + 1);
         var l_offset = t_height - l_delta - cy;
         var r_offset = r_delta - cy;
 
