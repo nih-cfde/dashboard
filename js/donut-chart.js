@@ -21,7 +21,7 @@ function register_donut_dropdown(chart_id, data, dropdown, units) {
 }
 
 function update_donut_chart(chart_id, data, dropdown, units) {
-    $('#' + chart_id).replaceWith('<svg id="' + chart_id + '" style="min-height: 400px; overflow: visible;"/>');
+    $('#' + chart_id).replaceWith('<svg id="' + chart_id + '"/>');
     draw_donut_chart(chart_id, data, dropdown, units, false);
 }
 
@@ -30,7 +30,7 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
     update_donut_chart_title(svg_id, dropdown);
 
     const svg_width = 820;
-    const svg_height = 400;
+    const svg_height = 300;
     const top_margin = 90;
     const margin = 40;
     const legend_width = 0;
@@ -47,7 +47,7 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
     const svg = d3.select('#' + svg_id);
     svg.attr('width', svg_width);
     svg.attr('height', svg_height);
-
+    
     const chart = svg.append('g')
         .attr('transform', `translate(${cx}, ${cy})`);
 

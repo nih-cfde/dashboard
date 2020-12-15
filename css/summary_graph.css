@@ -48,9 +48,14 @@
 /* End - CSS from dcc-review.css
 ---------------------------------------- */
 
+.content {
+    width: 100%;
+    height: 100%;
+}
+
 .data_content {
   padding: 14px;
-  width: 940px;
+  width: 100%;
 }
 
 .data_content > p {
@@ -80,5 +85,10 @@ svg {
   margin: 0 auto;
   margin-bottom: 0px;
   margin-top: 10px;
-  width: 600px;
+  max-width: 800px;
+}
+
+.form-label {
+  padding-top: 0.5em;
+  margin-bottom: 0em;
 }

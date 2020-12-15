@@ -96,3 +96,8 @@ svg {
 .content__bottom .right {
   flex: 1 0 400px;
 }
+
+.form-label {
+  padding-top: 0.25em;
+  margin-bottom: 0em;
+}

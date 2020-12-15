@@ -135,7 +135,7 @@ body {
 	flex-wrap: nowrap;
 }
 
-.provanence_report {
+.provenance_report {
     flex:1 1 45%;
     margin-right: 20px;
     border:1px solid #cccccc;
@@ -146,7 +146,7 @@ body {
     border:1px solid #cccccc;
 }
 
-.provanence_report_content {
+.provenance_report_content {
 	margin-left: 20px;
 	margin-top: 10px;
 }
