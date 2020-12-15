@@ -426,7 +426,7 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
         .call(trim_labels, maxlen_fn)
         .attr('dx', x_axis_label_dx)
         .attr('dy', x_axis_label_dy)
-        .style('text-anchor', 'start')
+        .attr('text-anchor', 'start')
         .attr('transform', 'rotate(' + x_axis_label_rot + ')');
 
     var y_formatter = d3.format('.2s');
