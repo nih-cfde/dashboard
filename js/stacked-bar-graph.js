@@ -716,16 +716,37 @@ function export2csv(chart_id) {
     var filename = 'chart.csv';
 
     var data = [];
-    var fields = d3.keys(chdata[0]).slice(0);
+    var all_fields_d = {};
+    var all_fields = [];
+    var total_field = null;
+    
+    chdata.forEach(function(obj_row) {
+	d3.keys(obj_row).forEach(function(field) {
+	    if ((field == 'total') || (field == 'Total')) {
+		total_field = field;
+	    }
+	    else if (!(field in all_fields_d)) {
+		all_fields_d[field] = true;
+		all_fields.push(field);
+	    }
+	});
+    });
 
-    data[0] = fields;
+    // place total last
+    if (total_field != null) all_fields.push(total_field);
+    
+    data[0] = all_fields;
     var index = 1;
 
     chdata.forEach(function(obj_row) {
         data[index] = [];
 
-        fields.forEach(function(field) {
-            data[index].push(obj_row[field]);
+        all_fields.forEach(function(field) {
+	    if ((field in obj_row) && (obj_row[field] != null)) {
+		data[index].push(obj_row[field]);
+	    } else {
+		data[index].push(0);
+	    }
         });
 
         index++;
