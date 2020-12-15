@@ -285,9 +285,6 @@ function add_tooltip(chart_id, svg) {
 }
 
 function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
-//    svg_height = 350, legend_width = 150, x_axis_rot = 25,
-//    review = false) {
-
     update_chart_title(svg_id);
 
     var x_axis_label_rot = 25;
