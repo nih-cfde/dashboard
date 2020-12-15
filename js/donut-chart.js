@@ -261,7 +261,7 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
     
     // download icon
     svg.append('image')
-        .attr('x', svg_width - 200)
+        .attr('x', svg_width - 150)
         .attr('y', 0)
         .attr('id', svg_id + '-export-button')
         .attr('height', 30)
