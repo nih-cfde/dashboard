@@ -88,3 +88,7 @@ svg {
   max-width: 800px;
 }
 
+.form-label {
+  padding-top: 0.5em;
+  margin-bottom: 0em;
+}
