@@ -339,8 +339,9 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
 
     const top_margin = 35;
     const bottom_margin = 80;
-    const x_margin = 60;
-
+    var left_margin = 60;
+    var right_margin = 60;
+    
     // svg_width determined by enclosing div
     const svg = d3.select('#' + svg_id);
     var svg_style = window.getComputedStyle(svg.node());
@@ -360,6 +361,7 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
     // switch to more (horizontally) compact layout
     if (svg_width < 400) {
 	legend_width = 0;
+	right_margin = 10;
 	x_axis_label_rot = 90;
 	x_axis_label_dx = '1em';
 	x_axis_label_dy = '-0.5em';
@@ -370,12 +372,12 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
 	d3.select('#' + svg_id + '-form-row').style('flex-wrap', 'nowrap');
     }
     
-    const width = svg_width - 2 * x_margin - legend_width;
+    const width = svg_width - left_margin - right_margin - legend_width;
     const height = svg_height - top_margin - bottom_margin;
     svg.attr('height', svg_height);
 
     const chart = svg.append('g')
-        .attr('transform', `translate(${x_margin}, ${top_margin})`);
+        .attr('transform', `translate(${left_margin}, ${top_margin})`);
 
     // Configure the x-axis scale to use discrete values from the
     // data, which are taken from the x_axis key from each object.
@@ -503,9 +505,9 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
     var title_fn = function(d) { return d; };
     var text_fn = function(d) { return d; };
 
-   //    add_legend(svg_id, width, chart, categories.slice(0,max_categories), tooltip, title_fn, text_fn, x_margin, 0);
+   //    add_legend(svg_id, width, chart, categories.slice(0,max_categories), tooltip, title_fn, text_fn, left_margin, 0);
     if (legend_width > 0) {
-	add_legend(svg_id, width, chart, categories.slice(0,max_categories), null, title_fn, text_fn, x_margin, 0);
+	add_legend(svg_id, width, chart, categories.slice(0,max_categories), null, title_fn, text_fn, left_margin, 0);
     }
 
     groups.attr('fill', function(a, b) { return colorizer(b); })
@@ -557,7 +559,7 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
             // let seriesX = xScale(stacked_data[series_idx][x_axis]);
             // let tooltipX = seriesX;
 
-            let tooltipX = xPosition + x_margin - (tooltip_width / 2);
+            let tooltipX = xPosition + left_margin - (tooltip_width / 2);
             let tooltipY = yPosition - 50;  // Get the tooltip above the mouse position
 
             // Prevent the tooltip from starting from out-of-bounds
@@ -693,18 +695,20 @@ function save_csv(filename, rows) {
 
 function export2png(chart_id) {
     // Hide the export button
-    $('#export-button').hide();
+    $('#' + chart_id + '-export-button').hide();
     saveSvgAsPng(document.getElementById(chart_id), 'export.png').then(function() {
         // Re-display the export button
-        $('#export-button').show();
+	$('#' + chart_id + '-export-button').show();
     });
 }
 
 function export2svg(chart_id) {
+    $('#' + chart_id + '-export-button').hide();
     var config = {
         filename: 'chart'
     };
     d3_save_svg.save(d3.select('#' + chart_id).node(), config);
+    $('#' + chart_id + '-export-button').show();
 }
 
 function export2csv(chart_id) {
