@@ -205,7 +205,7 @@ function add_summary_data(catalog_id, DCC) {
 }
 
 $(document).ready(function() {
-    var catalog_id = 6;
+    var catalog_id = get_catalog_id();
     var dcc = null;
     
     // the DCC review page assumes that the specified catalog contains data for a single DCC only
