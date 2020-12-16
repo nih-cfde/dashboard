@@ -5,11 +5,10 @@ function populate_chart(catalog_id, chart_id) {
     // summary info to display
     var count = 'files';
     var group1 = 'assay';
-    var group1_max = 12;
     var group2 = 'anatomy';
-    var group2_max = 5;
     
-    var data_url = DASHBOARD_API_URL + '/stats/' + [count, group1, group1_max, group2, group2_max].join('/') + '?catalogId=' + catalog_id;
+    var data_url = DASHBOARD_API_URL + '/stats/' + [count, group1, MAX_GRAPH_GROUP1, group2, MAX_GRAPH_GROUP2].join('/');
+    if (catalog_id != null) data_url += '?catalogId=' + catalog_id;
     
     $.getJSON(data_url, function(data) {
         $('#' + chart_id).replaceWith('<svg id="' + chart_id + '"/>');
@@ -132,7 +131,8 @@ function get_chaise_uri(catalog_id, entity) {
 function add_summary_data(catalog_id, DCC) {
     var data_totals_table = $('#data_total_table');
     var data_preview_table = $('#data_preview_table');
-    var dcc_summary_url = DASHBOARD_API_URL + '/dcc/' + DCC + '?catalogId=' + catalog_id;
+    var dcc_summary_url = DASHBOARD_API_URL + '/dcc/' + DCC;
+    if (catalog_id != null) dcc_summary_url += '?catalogId=' + catalog_id;
 
     // counts for top-level entities, except project
     $.getJSON(dcc_summary_url, function(data) {
@@ -159,8 +159,9 @@ function add_summary_data(catalog_id, DCC) {
     // counts for top-level projects (i.e., those linked to a sub-project)
     var chaise_uri = get_chaise_uri(catalog_id, 'project');
     // TODO - add project count to DCC summary endpoint
-    var dcc_projects_url = DASHBOARD_API_URL + '/dcc/' + DCC + '/projects?catalogId=' + catalog_id
-
+    var dcc_projects_url = DASHBOARD_API_URL + '/dcc/' + DCC + '/projects';
+    if (catalog_id != null) dcc_projects_url += '?catalogId=' + catalog_id;
+    
     $.getJSON(dcc_projects_url, function(data) {
         var name = 'Total Projects';
         var value = data.length;
@@ -170,7 +171,8 @@ function add_summary_data(catalog_id, DCC) {
     });
 
     // counts for top-level entities with links to other entities of a specified type (e.g., Subjects with File)
-    var dcc_linkcount_url = DASHBOARD_API_URL + '/dcc/' + DCC + '/linkcount?catalogId=' + catalog_id
+    var dcc_linkcount_url = DASHBOARD_API_URL + '/dcc/' + DCC + '/linkcount';
+    if (catalog_id != null) dcc_linkcount_url += '?catalogId=' + catalog_id;
     var data_breakdown_table = $('#data_breakdown_table');
 
     $.getJSON(dcc_linkcount_url, function(data) {
@@ -209,7 +211,9 @@ $(document).ready(function() {
     var dcc = null;
     
     // the DCC review page assumes that the specified catalog contains data for a single DCC only
-    var dcc_list_url = DASHBOARD_API_URL + '/dcc?catalogId=' + catalog_id;
+    var dcc_list_url = DASHBOARD_API_URL + '/dcc';
+    if (catalog_id != null) dcc_list_url += '?catalogId=' + catalog_id;
+    
     $.getJSON(dcc_list_url, function(data) {
 	if (data.length != 1) {
 	    alert("ERROR: DERIVA CATALOG_ID  " + catalog_id + " contains " + ((data.length > 1) ? "data from multiple DCCs" : "no data"));
