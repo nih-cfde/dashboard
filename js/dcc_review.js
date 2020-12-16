@@ -1,25 +1,20 @@
 /* globals draw_chart register_export_buttons show_error */
 
-function populate_chart(chart_id) {
-    //update_dropdowns(chart_id);
+function populate_chart(catalog_id, chart_id) {
 
-    //var y_axis = $('#' + chart_id + '-y-axis').val();
-    //var x_axis = $('#' + chart_id + '-x-axis').val();
-    //var group_by = $('#' + chart_id + '-group-by').val();
-
-    // Given the x, y and group by information, we formulate the URL
-    // to retrieve data from.
-    //var data_url = './data/' + y_axis + '-' + x_axis + '-' + group_by + '.json';
-
-    // Will render files-anatomy-assay.json data
-    var data_url = './data/HMP/files-assay-anatomy.json';
-    var x_axis = 'assay';
-    var y_axis = 'files';
+    // summary info to display
+    var count = 'files';
+    var group1 = 'assay';
+    var group1_max = 12;
+    var group2 = 'anatomy';
+    var group2_max = 5;
+    
+    var data_url = DASHBOARD_API_URL + '/stats/' + [count, group1, group1_max, group2, group2_max].join('/') + '?catalogId=' + catalog_id;
     
     $.getJSON(data_url, function(data) {
         $('#' + chart_id).replaceWith('<svg id="' + chart_id + '"/>');
         register_export_buttons(chart_id, data);
-        draw_chart(chart_id, data, x_axis, y_axis);
+        draw_chart(chart_id, data, group1, count);
     }).fail(function() {
         console.error('Error loading data for DCC review chart combination.');
         show_error(chart_id);
@@ -99,10 +94,9 @@ var ENTITY_FKEYS = {
 // entity - 'subject', 'biosample', 'file', 'project', or 'X_with_Y'
 //           where X in ('subjects', 'biosamples', 'files')
 //           and Y in ('subject', 'biosample', 'file')
-function get_chaise_uri(catalog_id, DCC, entity) {
-    // TODO - DERIVA server name and default catalog id should be in config file
-    var base_uri = 'http://app-dev.nih-cfde.org/chaise/recordset/#' + catalog_id;
-
+function get_chaise_uri(catalog_id, entity) {
+    var base_uri = DERIVA_URL + '/chaise/recordset/#' + catalog_id;
+    
     // TODO - this depends on hard-coded foreign key names
     // Chaise/DERIVA facet string to show only projects with subprojects
     var project_facet_str = LZString.compressToEncodedURIComponent('{"and":[{"source":[{"inbound":["CFDE","project_in_project_parent_fkey"]},{"outbound":["CFDE","project_in_project_child_fkey"]},{"inbound":["CFDE","project_in_project_transitive_leader_fkey"]},{"outbound":["CFDE","project_in_project_transitive_member_fkey"]},"RID"],"not_null":true}]}');    
@@ -138,15 +132,15 @@ function get_chaise_uri(catalog_id, DCC, entity) {
 function add_summary_data(catalog_id, DCC) {
     var data_totals_table = $('#data_total_table');
     var data_preview_table = $('#data_preview_table');
-    var summary_data_url = './data/' + DCC + '/' + DCC + '-summary.json';
+    var dcc_summary_url = DASHBOARD_API_URL + '/dcc/' + DCC + '?catalogId=' + catalog_id;
 
     // counts for top-level entities, except project
-    $.getJSON(summary_data_url, function(data) {
+    $.getJSON(dcc_summary_url, function(data) {
         Object.keys(data).forEach(function(key) {
             if (key.endsWith('_count')) {
 		var entity =  key.slice(0, key.length - '_count'.length);
                 var name = 'Total ' + key.charAt(0).toUpperCase() + key.slice(1, key.length - '_count'.length) + 's';
-		var chaise_uri = get_chaise_uri(catalog_id, DCC, entity);
+		var chaise_uri = get_chaise_uri(catalog_id, entity);
                 var markup = '<tr><td>' + name + '</td><td><a href="' + chaise_uri + '">' + data[key].toLocaleString() + '</a></td></tr>';
                 data_totals_table.append(markup);
                 data_preview_table.append(markup);
@@ -163,10 +157,11 @@ function add_summary_data(catalog_id, DCC) {
     });
 
     // counts for top-level projects (i.e., those linked to a sub-project)
-    var chaise_uri = get_chaise_uri(catalog_id, DCC, 'project');
-    summary_data_url = './data/' + DCC + '/' + DCC +  '-projects.json';
+    var chaise_uri = get_chaise_uri(catalog_id, 'project');
+    // TODO - add project count to DCC summary endpoint
+    var dcc_projects_url = DASHBOARD_API_URL + '/dcc/' + DCC + '/projects?catalogId=' + catalog_id
 
-    $.getJSON(summary_data_url, function(data) {
+    $.getJSON(dcc_projects_url, function(data) {
         var name = 'Total Projects';
         var value = data.length;
         var markup = '<tr><td>' + name + '</td><td><a href="' + chaise_uri + '">' + value + '</a></td></tr>';
@@ -175,10 +170,10 @@ function add_summary_data(catalog_id, DCC) {
     });
 
     // counts for top-level entities with links to other entities of a specified type (e.g., Subjects with File)
-    var linkcount_data_url = './data/' + DCC + '/' + DCC + '-linkcount.json';
+    var dcc_linkcount_url = DASHBOARD_API_URL + '/dcc/' + DCC + '/linkcount?catalogId=' + catalog_id
     var data_breakdown_table = $('#data_breakdown_table');
 
-    $.getJSON(linkcount_data_url, function(data) {
+    $.getJSON(dcc_linkcount_url, function(data) {
         // iterate over keys like "subject_count" and "subject_with_biosample_count"
         // remove "_count", append an 's' at the end of the first word, make
         // first and last words title case, and replace "_" with " "
@@ -200,7 +195,7 @@ function add_summary_data(catalog_id, DCC) {
                     name = name.slice(0, idx + 1) + name.charAt(idx + 1).toUpperCase() + name.slice(idx + 2);
                 }
 
-		var chaise_uri = get_chaise_uri(catalog_id, DCC, name.toLowerCase());
+		var chaise_uri = get_chaise_uri(catalog_id, name.toLowerCase());
                 name = name.replace(/_/g, ' ');
                 var markup = '<tr><td>' + name + '</td><td><a href="' + chaise_uri + '">' + data[key].toLocaleString() + '</a></td></tr>';
                 data_breakdown_table.append(markup);
@@ -210,10 +205,18 @@ function add_summary_data(catalog_id, DCC) {
 }
 
 $(document).ready(function() {
-    // chart 1 - stacked bar graph
-    populate_chart('review_bc1');
-
-    var CATALOG_ID = 6;
-    var DCC = 'HMP';
-    add_summary_data(CATALOG_ID, DCC);
+    var catalog_id = 6;
+    var dcc = null;
+    
+    // the DCC review page assumes that the specified catalog contains data for a single DCC only
+    var dcc_list_url = DASHBOARD_API_URL + '/dcc?catalogId=' + catalog_id;
+    $.getJSON(dcc_list_url, function(data) {
+	if (data.length != 1) {
+	    alert("ERROR: DERIVA CATALOG_ID  " + catalog_id + " contains " + ((data.length > 1) ? "data from multiple DCCs" : "no data"));
+	} else {
+	    dcc = data[0];
+	    populate_chart(catalog_id, 'review_bc1');
+	    add_summary_data(catalog_id, dcc);
+	}
+    });
 });
