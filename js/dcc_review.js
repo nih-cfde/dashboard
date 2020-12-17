@@ -97,8 +97,8 @@ function get_chaise_uri(catalog_id, entity) {
     var base_uri = DERIVA_URL + '/chaise/recordset/#' + catalog_id;
     
     // TODO - this depends on hard-coded foreign key names
-    // Chaise/DERIVA facet string to show only projects with subprojects
-    var project_facet_str = LZString.compressToEncodedURIComponent('{"and":[{"source":[{"inbound":["CFDE","project_in_project_parent_fkey"]},{"outbound":["CFDE","project_in_project_child_fkey"]},{"inbound":["CFDE","project_in_project_transitive_leader_fkey"]},{"outbound":["CFDE","project_in_project_transitive_member_fkey"]},"RID"],"not_null":true}]}');    
+    // Chaise/DERIVA facet string to show only top-level subprojects
+    var project_facet_str = LZString.compressToEncodedURIComponent('{"and":[{"source":[{"inbound":["CFDE","project_in_project_child_fkey"]},{"outbound":["CFDE","project_in_project_parent_fkey"]},{"inbound":["CFDE","project_in_project_transitive_member_fkey"]},{"outbound":["CFDE","project_in_project_transitive_leader_fkey"]},"RID"],"not_null":true},{"source":[{"inbound":["CFDE","project_in_project_child_fkey"]},{"outbound":["CFDE","project_in_project_parent_fkey"]},{"inbound":["CFDE","project_in_project_child_fkey"]},{"outbound":["CFDE","project_in_project_parent_fkey"]},"RID"],"choices":[null]}]}');
 
     var i = entity.indexOf('_with_');
 
