@@ -37,7 +37,6 @@ var json_files = {
     'samples-data_type-dcc.json': true,
     'samples-data_type-species.json': true,
     'samples-dcc-anatomy.json': true,
-    'samples-dcc-anatomy.json~': true,
     'samples-dcc-assay.json': true,
     'samples-dcc-data_type.json': true,
     'samples-dcc-species.json': true,
@@ -171,10 +170,10 @@ function update_dropdowns(chart_id) {
     }
 }
 
-function register_dropdowns(chart_id) {
+function register_dropdowns(catalog_id, chart_id) {
     $.each(['x-axis', 'y-axis', 'group-by'], function(i, id) {
         $('#' + chart_id + '-' + id).change(function() {
-            update_chart(chart_id);
+            update_chart(catalog_id, chart_id);
         });
     });
 }
@@ -191,7 +190,7 @@ function update_chart_title(chart_id) {
     }
 }
 
-function update_chart(chart_id) {
+function update_chart(catalog_id, chart_id) {
     update_dropdowns(chart_id);
 
     var x_axis = $('#' + chart_id + '-x-axis option:checked').val();
@@ -200,8 +199,9 @@ function update_chart(chart_id) {
 
     // Given the x, y and group by information, we formulate the URL
     // to retrieve data from.
-    var data_url = './data/' + y_axis + '-' + x_axis + '-' + group_by + '.json';
-
+    var data_url = DASHBOARD_API_URL + '/stats/' + [y_axis, x_axis, MAX_GRAPH_GROUP1, group_by, MAX_GRAPH_GROUP2].join('/');
+    if (catalog_id != null) data_url += '?catalogId=' + catalog_id;
+    
     $.getJSON(data_url, function(data) {
         $('#' + chart_id).replaceWith('<svg id="' + chart_id + '"/>');
         register_export_buttons(chart_id, data);

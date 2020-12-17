@@ -51,16 +51,16 @@ function get_time_zone_diff(d) {
 }
 
 $(document).ready(function() {
-
-    var CATALOG_ID = 1;
+    var catalog_id = get_catalog_id();
 
     // chart 1 - stacked bar graph
-    register_dropdowns('sbc1');
-    update_chart('sbc1');
-    window.addEventListener('resize', function() { update_chart('sbc1'); });
+    register_dropdowns(catalog_id, 'sbc1');
+    update_chart(catalog_id, 'sbc1');
+    window.addEventListener('resize', function() { update_chart(catalog_id, 'sbc1'); });
     
     // TODO - set these individually based on API response
     // update last updated
+    // TODO - need new endpoint for this:
     var summary_data_url = './data/summary.json';
     $.getJSON(summary_data_url, function(data) {
 	var d = new Date(data['last_updated']);
