@@ -69,6 +69,7 @@ $(document).ready(function() {
     var group1 = 'assay';
     var group2 = 'anatomy';
     var dc1_url = DASHBOARD_API_URL + '/stats/' + [count, group1, MAX_DONUT_GROUP1, group2, MAX_DONUT_GROUP2].join('/');
+    if (catalog_id != null) dc1_url += '?catalogId=' + catalog_id;
     
     $.getJSON(dc1_url, function(data) {
 	dc1_data = data;
@@ -85,7 +86,8 @@ $(document).ready(function() {
     group1 = 'dcc';
     group2 = 'anatomy';
     var dc2_url = DASHBOARD_API_URL + '/stats/' + [count, group1, MAX_DONUT_GROUP1, group2, MAX_DONUT_GROUP2].join('/');
-
+    if (catalog_id != null) dc2_url += '?catalogId=' + catalog_id;
+    
     $.getJSON(dc2_url, function(data) {
 	dc2_data = data;
         register_donut_dropdown('dc2', data, 'dcc', 'samples');
