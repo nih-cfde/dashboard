@@ -7,6 +7,9 @@ const DERIVA_URL='http://app-dev.nih-cfde.org';
 const MAX_GRAPH_GROUP1 = 12;
 const MAX_GRAPH_GROUP2 = 5;
 
+const MAX_DONUT_GROUP1 = 15;
+const MAX_DONUT_GROUP2 = 12;
+
 // read DERIVA catalog id from URL
 function get_catalog_id() {
     var url = new URL(window.location.href);
