@@ -4,30 +4,34 @@
   "description": "Dashboard for the Common Fund Data Ecosystem (CFDE) project",
   "dependencies": {
     "@fortawesome/fontawesome-free": "5.15.1",
-    "bootstrap": "4.5.0",
+    "bootstrap": "4.5.3",
     "d3": "5.16.0",
     "d3-save-svg": "0.0.2",
-    "fontawesome-4.7": "^4.7.0",
+    "fontawesome-4.7": "4.7.0",
     "jquery": "3.5.1",
     "normalize.css": "8.0.1",
     "save-svg-as-png": "1.4.17",
-    "typeface-roboto": "0.0.75"
+    "typeface-roboto": "1.1.13"
   },
   "devDependencies": {
-    "browser-sync": "^2.26.13",
-    "copy-webpack-plugin": "6.3.0",
-    "eslint": "7.13.0",
+    "browser-sync": "2.26.13",
+    "copy-webpack-plugin": "7.0.0",
+    "eslint": "7.17.0",
     "gulp": "4.0.2",
-    "stylelint": "13.7.2",
+    "stylelint": "13.8.0",
     "stylelint-order": "4.1.0",
-    "webpack": "5.4.0",
-    "webpack-cli": "4.2.0"
+    "webpack": "5.11.1",
+    "webpack-cli": "4.3.1"
   },
   "scripts": {
     "build": "webpack --mode production",
     "eslint": "eslint -c .eslintrc.json --ignore-path .eslintignore js",
     "stylelint": "stylelint --config css/.stylelintrc --ignore-path .stylelintignore css/",
-    "browser_sync": "browser-sync start --proxy localhost/cfde --files index.html dcc_review.html templates/**/*.tpl ./*.php css/*.css"
+    "browser_sync": "browser-sync start --proxy localhost/cfde --files index.html dcc_review.html templates/**/*.tpl ./*.php css/*.css",
+    "preinstall": "npx npm-force-resolutions"
+  },
+  "resolutions": {
+    "axios": "0.21.1"
   },
   "author": "",
   "license": "UNLICENSED"
