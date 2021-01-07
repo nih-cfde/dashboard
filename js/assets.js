@@ -15,7 +15,7 @@ var fonts = [
     'typeface-roboto/files/roboto-latin-700.woff',
     'typeface-roboto/files/roboto-latin-700.woff2',
     'typeface-roboto/files/roboto-latin-900.woff',
-    'typeface-roboto/files/roboto-latin-900.woff2',
+    'typeface-roboto/files/roboto-latin-900.woff2'
 ];
 
 var js = [
