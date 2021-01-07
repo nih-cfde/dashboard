@@ -1,4 +1,4 @@
-/* global draw_donut_chart register_dropdowns register_donut_dropdown register_export_buttons update_chart */
+/* global draw_donut_chart register_dropdowns register_donut_dropdown register_export_buttons update_chart update_donut_chart */
 
 // TODO - copied from dcc_review.js
 function get_formatted_date(d) {
@@ -61,10 +61,10 @@ $(document).ready(function() {
 
     var dc1_data = null;
     var dc2_data = null;
-    
+
     // chart 3 - donut graph
     $.getJSON('./data/dc-subjects-assay-anatomy.json', function(data) {
-	dc1_data = data;
+        dc1_data = data;
         register_donut_dropdown('dc1', data, 'data_type', 'subjects');
         register_export_buttons('dc1', data);
         draw_donut_chart('dc1', data, 'data_type', 'subjects');
@@ -75,7 +75,7 @@ $(document).ready(function() {
 
     // chart 4 - donut graph
     $.getJSON('./data/dc-samples-dcc-anatomy.json', function(data) {
-	dc2_data = data;
+        dc2_data = data;
         register_donut_dropdown('dc2', data, 'dcc', 'samples');
         register_export_buttons('dc2', data);
         draw_donut_chart('dc2', data, 'dcc', 'samples');
@@ -86,53 +86,54 @@ $(document).ready(function() {
 
     // display a single chart, hide the others
     function showChart(cnum) {
-	for (var i = 1; i <= 4; ++i) {
-	    $('#chart' + i).hide();
-	    $('#thumb' + i).removeClass('selected');
-	}
-	$('#chart' + cnum).show();
-	if (cnum == 1) update_chart('sbc1');
-	if (cnum == 2) update_chart('sbc2');
-	if (cnum == 3) update_donut_chart('dc1', dc1_data, 'data_type', 'subjects');
-	if (cnum == 4) update_donut_chart('dc2', dc2_data, 'dcc', 'samples');
-	$('#thumb' + cnum).addClass('selected');
+        for (var i = 1; i <= 4; ++i) {
+            $('#chart' + i).hide();
+            $('#thumb' + i).removeClass('selected');
+        }
+
+        $('#chart' + cnum).show();
+        if (cnum == 1) update_chart('sbc1');
+        if (cnum == 2) update_chart('sbc2');
+        if (cnum == 3) update_donut_chart('dc1', dc1_data, 'data_type', 'subjects');
+        if (cnum == 4) update_donut_chart('dc2', dc2_data, 'dcc', 'samples');
+        $('#thumb' + cnum).addClass('selected');
     }
 
     // display all charts
     function showAllCharts() {
-	for (var i = 1; i <= 4; ++i) {
-	    $('#chart' + i).show();
-	    $('#thumb' + i).addClass('selected');
-	}
-	update_chart('sbc1');
-	update_chart('sbc2');
-	update_donut_chart('dc1', dc1_data, 'data_type', 'subjects');
-	update_donut_chart('dc2', dc2_data, 'dcc', 'samples');
+        for (var i = 1; i <= 4; ++i) {
+            $('#chart' + i).show();
+            $('#thumb' + i).addClass('selected');
+        }
+        update_chart('sbc1');
+        update_chart('sbc2');
+        update_donut_chart('dc1', dc1_data, 'data_type', 'subjects');
+        update_donut_chart('dc2', dc2_data, 'dcc', 'samples');
     }
-    
+
     // enable interactive chart selection by clicking thumbnails
     for (var i = 1; i <= 4; ++i) {
-	const cnum = i;
-	$('#thumb' + cnum).off('click');
-	$('#thumb' + cnum).click(function() {
-	    showChart(cnum);
-	});
+        const cnum = i;
+        $('#thumb' + cnum).off('click');
+        $('#thumb' + cnum).click(function() {
+            showChart(cnum);
+        });
     }
-    
+
     $('#expand_all').click(function() {
-	showAllCharts();
+        showAllCharts();
     });
 
     // TODO - set these individually based on API response
     // update last updated
     var summary_data_url = './data/summary.json';
     $.getJSON(summary_data_url, function(data) {
-	var d = new Date(data['last_updated']);
+        var d = new Date(data['last_updated']);
         var formatted_date = get_formatted_date(d);
         $('#sbc1-last_updated').append('Last updated: ' + formatted_date);
-	$('#sbc2-last_updated').append('Last updated: ' + formatted_date);
-	$('#dc1-last_updated').append('Last updated: ' + formatted_date);
-	$('#dc2-last_updated').append('Last updated: ' + formatted_date);
+        $('#sbc2-last_updated').append('Last updated: ' + formatted_date);
+        $('#dc1-last_updated').append('Last updated: ' + formatted_date);
+        $('#dc2-last_updated').append('Last updated: ' + formatted_date);
     });
-    
+
 });

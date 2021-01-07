@@ -1,14 +1,16 @@
-/* global d3 add_tooltip colorizer */
+/* global d3 add_legend add_tooltip colorizer ellipsize */
 
 function update_donut_chart_title(chart_id, dropdown) {
     const heading = d3.select('#' + chart_id + '-title');
     var dvalue = d3.select('#' + chart_id + '-' + dropdown + ' option:checked').text();
     var new_title;
+
     if (dropdown == 'data_type') {
         new_title = 'Subjects by Assay and Anatomy across Programs';
     } else if (dropdown == 'dcc') {
         new_title = 'Samples by Anatomy and CF Program';
     }
+
     heading.text(new_title);
 }
 
@@ -53,7 +55,7 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
     const outer_radius = hh;
     const inner_radius = outer_radius / 2.0;
     // console.log("hw=" + hw + " hh=" + hh + " cx=" + cx + " cy=" + cy + " outer_radius=" + outer_radius);
-    
+
     const chart = svg.append('g')
         .attr('transform', `translate(${cx}, ${cy})`);
 
@@ -104,7 +106,7 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
     var large_number_formatter = d3.format('.2s');
     var tooltip = null;
     var cat2path = {};
-    
+
     // donut chart
     chart.selectAll('slices')
         .data(data_ready)
@@ -139,7 +141,7 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
                 brick_value = comma_formatter(d.data.value);
             }
             $('#' + svg_id + '-brick-value').text(brick_value + ' ' + units);
-	    let text = $('#' + svg_id + '-brick-category');
+            let text = $('#' + svg_id + '-brick-category');
             text.append('tspan').text(brick_name).each(ellipsize(190, 5));
             tooltip.attr('transform', 'translate(' + xPosition + ',' + yPosition + ')');
         });
@@ -153,112 +155,112 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
     var angle_fn = function(d) { return d.startAngle + ((d.endAngle - d.startAngle) / 2); };
 
     if (show_labels) {
-    // yspread - arrange labels using entire vertical space on left and right
-    var ypos = {};
-    if (label_type == 'yspread') {
-        // count labels on left and right
-        var n_left = 0;
-        var n_right = 0;
+        // yspread - arrange labels using entire vertical space on left and right
+        var ypos = {};
+        if (label_type == 'yspread') {
+            // count labels on left and right
+            var n_left = 0;
+            var n_right = 0;
 
-        data_ready.forEach(d => {
-            var midangle = angle_fn(d);
-            d.isLeft = (midangle > Math.PI);
-            if (d.isLeft) {
-                n_left += 1;
-            } else {
-                n_right += 1;
-            }
-        });
+            data_ready.forEach(d => {
+                var midangle = angle_fn(d);
+                d.isLeft = (midangle > Math.PI);
+                if (d.isLeft) {
+                    n_left += 1;
+                } else {
+                    n_right += 1;
+                }
+            });
 
-        var t_height = height + top_margin + bottom_margin;
-        var l_delta = t_height / (n_left + 1);
-        var r_delta = t_height / (n_right + 1);
-        var l_offset = t_height - l_delta - cy;
-        var r_offset = r_delta - cy;
+            var t_height = height + top_margin + bottom_margin;
+            var l_delta = t_height / (n_left + 1);
+            var r_delta = t_height / (n_right + 1);
+            var l_offset = t_height - l_delta - cy;
+            var r_offset = r_delta - cy;
 
-        // console.log("n_left=" + n_left + " n_right=" + n_right + " cy=" + cy + " t_height=" + t_height + " l_delta=" + l_delta + " l_offset=" + l_offset + " r_delta=" + r_delta + " r_offset=" + r_offset);
+            // console.log("n_left=" + n_left + " n_right=" + n_right + " cy=" + cy + " t_height=" + t_height + " l_delta=" + l_delta + " l_offset=" + l_offset + " r_delta=" + r_delta + " r_offset=" + r_offset);
 
-        data_ready.forEach(d => {
-            if (d.isLeft) {
-                ypos[d.data.key] = l_offset;
-                l_offset -= l_delta;
-            } else {
-                ypos[d.data.key] = r_offset;
-                r_offset += r_delta;
-            }
-        });
+            data_ready.forEach(d => {
+                if (d.isLeft) {
+                    ypos[d.data.key] = l_offset;
+                    l_offset -= l_delta;
+                } else {
+                    ypos[d.data.key] = r_offset;
+                    r_offset += r_delta;
+                }
+            });
+        }
+
+        // label lines
+        svg.selectAll('slice_lines')
+            .data(data_ready)
+            .enter()
+            .append('polyline')
+            .attr('stroke', 'black')
+            .style('fill', 'none')
+            .attr('stroke-width', 1)
+            .attr('points', function(d) {
+                var posA = arc.centroid(d);
+                var posB = labelLineArc.centroid(d);
+                var posC = labelArc.centroid(d);
+                var midangle = angle_fn(d);
+                posC[0] = label_radius * 0.95 * (midangle < Math.PI ? 1 : -1);
+                posA[0] += cx;
+                posA[1] += cy;
+                posB[0] += cx;
+                posB[1] += cy;
+                posC[0] += cx;
+                posC[1] += cy;
+
+                // original
+                if (label_type == 'original') {
+                    return [posA, posB, posC];
+                }
+                // spoke
+                else if (label_type == 'spoke') {
+                    return [posA, posB];
+                }
+                // yspread
+                else if (label_type == 'yspread') {
+                    posC[1] = posB[1];
+                    var posD = [cx + (label_radius * 1.08 * (midangle < Math.PI ? 1 : -1)), ypos[d.data.key] + cy];
+                    return [posA, posD];
+                }
+            });
+
+        // slice labels
+        chart.selectAll('slice_labels')
+            .data(data_ready)
+            .enter()
+            .append('text')
+            .attr('font-size', '10px')
+            .text( function (d) { return d.data.key; } )
+            .attr('vertical-align', 'middle')
+            .attr('transform', function(d) {
+                var pos = labelArc.centroid(d);
+                var midangle = angle_fn(d);
+                // original
+                if (label_type == 'original') {
+                    pos[0] = label_radius * 0.99 * (midangle < Math.PI ? 1 : -1);
+                    return 'translate(' + pos + ')';
+                }
+                // spoke
+                else if (label_type == 'spoke') {
+                    return 'translate(' + pos + ') rotate(' + (((midangle * 180) / Math.PI) + (midangle < Math.PI ? -90 : 90)) + ' )';
+                }
+                // yspread
+                else if (label_type == 'yspread') {
+                    pos[0] = label_radius * 1.1 * (midangle < Math.PI ? 1 : -1);
+                    pos[1] = ypos[d.data.key];
+                    return 'translate(' + pos + ')';
+                }
+            })
+            .style('text-anchor', function(d) {
+                var midangle = angle_fn(d);
+                return (midangle < Math.PI ? 'start' : 'end');
+            });
     }
 
-    // label lines
-    svg.selectAll('slice_lines')
-        .data(data_ready)
-        .enter()
-        .append('polyline')
-        .attr('stroke', 'black')
-        .style('fill', 'none')
-        .attr('stroke-width', 1)
-        .attr('points', function(d) {
-            var posA = arc.centroid(d);
-            var posB = labelLineArc.centroid(d);
-            var posC = labelArc.centroid(d);
-            var midangle = angle_fn(d);
-            posC[0] = label_radius * 0.95 * (midangle < Math.PI ? 1 : -1);
-            posA[0] += cx;
-            posA[1] += cy;
-            posB[0] += cx;
-            posB[1] += cy;
-            posC[0] += cx;
-            posC[1] += cy;
-
-            // original
-            if (label_type == 'original') {
-                return [posA, posB, posC];
-            }
-            // spoke
-            else if (label_type == 'spoke') {
-                return [posA, posB];
-            }
-            // yspread
-            else if (label_type == 'yspread') {
-                posC[1] = posB[1];
-                var posD = [cx + (label_radius * 1.08 * (midangle < Math.PI ? 1 : -1)), ypos[d.data.key] + cy];
-                return [posA, posD];
-            }
-        });
-
-    // slice labels
-    chart.selectAll('slice_labels')
-        .data(data_ready)
-        .enter()
-        .append('text')
-        .attr('font-size', '10px')
-        .text( function (d) { return d.data.key; } )
-        .attr('vertical-align', 'middle')
-        .attr('transform', function(d) {
-            var pos = labelArc.centroid(d);
-            var midangle = angle_fn(d);
-            // original
-            if (label_type == 'original') {
-                pos[0] = label_radius * 0.99 * (midangle < Math.PI ? 1 : -1);
-                return 'translate(' + pos + ')';
-            }
-            // spoke
-            else if (label_type == 'spoke') {
-                return 'translate(' + pos + ') rotate(' + (((midangle * 180) / Math.PI) + (midangle < Math.PI ? -90 : 90)) + ' )';
-            }
-            // yspread
-            else if (label_type == 'yspread') {
-                pos[0] = label_radius * 1.1 * (midangle < Math.PI ? 1 : -1);
-                pos[1] = ypos[d.data.key];
-                return 'translate(' + pos + ')';
-            }
-        })
-        .style('text-anchor', function(d) {
-            var midangle = angle_fn(d);
-            return (midangle < Math.PI ? 'start' : 'end');
-        });
-    }
-    
     // download icon
     svg.append('image')
         .attr('x', svg_width - 150)
@@ -282,26 +284,28 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
     tooltip = d3.select('#' + svg_id + '-tooltip');
 
     var categories = data_ready.slice(0, max_categories);
-    var title_fn = function(d) { return d.data.key; }
+    var title_fn = function(d) {
+        return d.data.key;
+    };
 
     // highlight donut chart slice when mouse is over corresponding legend entry
     var mouseover_fn = function(d, e) {
-	d3.select(cat2path[d.data.key]).attr('stroke', '#000');
+        d3.select(cat2path[d.data.key]).attr('stroke', '#000');
     };
-    
+
     var mouseout_fn = function(d, e) {
-	d3.select(cat2path[d.data.key]).attr('stroke', 'none');
+        d3.select(cat2path[d.data.key]).attr('stroke', 'none');
     };
-    
+
     var text_fn = function(d) {
-	value = d.data.value;
+        let value = d.data.value;
         if (value > 999999) {
             value = large_number_formatter(d.data.value);
         } else {
             value = comma_formatter(d.data.value);
         }
-	return value + " " + units; 
+        return value + ' ' + units;
     };
-    
-    add_legend(svg_id, svg_width-(2*outer_radius), legend, categories, tooltip, title_fn, text_fn, 60, 40, mouseover_fn, mouseout_fn);
+
+    add_legend(svg_id, svg_width - (2 * outer_radius), legend, categories, tooltip, title_fn, text_fn, 60, 40, mouseover_fn, mouseout_fn);
 }
