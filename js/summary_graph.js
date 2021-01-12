@@ -63,7 +63,7 @@ $(document).ready(function() {
     if (catalog_id != null) summary_url += '?catalogId=' + catalog_id;
 
     $.getJSON(summary_url, function(data) {
-	var d = new Date(data['last_updated']);
+        var d = new Date(data['last_updated']);
         var formatted_date = get_formatted_date(d);
         $('#sbc1-last_updated').append('Last updated: ' + formatted_date);
     });

@@ -64,27 +64,27 @@ function get_chaise_uri(catalog_id, DCC, entity) {
 
     // single entity, no explicit join (except for project)
     if (i == -1) {
-	// trim trailing 's'
-	if (entity.slice(-1) == 's') {
+        // trim trailing 's'
+        if (entity.slice(-1) == 's') {
 	    entity = entity.slice(0, entity.length - 1);
-	}
-	var chaise_uri = base_uri + '/CFDE:' + entity;
-	if (entity == 'project') {
+        }
+        var chaise_uri = base_uri + '/CFDE:' + entity;
+        if (entity == 'project') {
 	    chaise_uri += '/*::facets::' + project_facet_str + '@sort(RID)';
-	}
-	return chaise_uri;
+        }
+        return chaise_uri;
     }
     // multiple entities
     else {
-	var from = entity.slice(0,i-1);
-	var to = entity.slice(i+6);
-	var facet_str = '';
-	var fkey_str = ENTITY_FKEYS[from + ":" + to];
-	var from_fkey = fkey_str + '_' + from + '_fkey';
-	var to_fkey = fkey_str + '_' + to + '_fkey';
-	var chaise_facet = '{"and":[{"source":[{"inbound":["CFDE","' + from_fkey + '"]},{"outbound":["CFDE","' + to_fkey + '"]},"RID"],"not_null":true}]}';
-	var facet_str = LZString.compressToEncodedURIComponent(chaise_facet);
-	return base_uri + '/CFDE:' + from + '/*::facets::' + facet_str + '@sort(RID)';
+        var from = entity.slice(0, i - 1);
+        var to = entity.slice(i + 6);
+        var facet_str = '';
+        var fkey_str = ENTITY_FKEYS[from + ':' + to];
+        var from_fkey = fkey_str + '_' + from + '_fkey';
+        var to_fkey = fkey_str + '_' + to + '_fkey';
+        var chaise_facet = '{"and":[{"source":[{"inbound":["CFDE","' + from_fkey + '"]},{"outbound":["CFDE","' + to_fkey + '"]},"RID"],"not_null":true}]}';
+        var facet_str = LZString.compressToEncodedURIComponent(chaise_facet);
+        return base_uri + '/CFDE:' + from + '/*::facets::' + facet_str + '@sort(RID)';
     }
 }
 
@@ -95,16 +95,16 @@ function add_summary_data(catalog_id) {
 
     // counts for top-level entities
     $.getJSON(summary_url, function(data) {
-	if (catalog_id == null) {
+        if (catalog_id == null) {
 	    catalog_id = data['catalog_id'];
 	    update_chaise_urls(catalog_id);
-	}
+        }
 
-	Object.keys(data).forEach(function(key) {
+        Object.keys(data).forEach(function(key) {
             if (key.endsWith('_count')) {
-		var entity =  key.slice(0, key.length - '_count'.length);
+                var entity =  key.slice(0, key.length - '_count'.length);
                 var name = 'Total ' + key.charAt(0).toUpperCase() + key.slice(1, key.length - '_count'.length) + 's';
-		var chaise_uri = get_chaise_uri(catalog_id, null, entity);
+                var chaise_uri = get_chaise_uri(catalog_id, null, entity);
                 var markup = '<tr><td>' + name + '</td><td><a href="' + chaise_uri + '">' + data[key].toLocaleString() + '</a></td></tr>';
                 data_preview_table.append(markup);
             }
@@ -130,10 +130,10 @@ function update_chaise_urls(catalog_id) {
     // all anchor links (i.e., <a href=...>)
     var chaise_re = /\/chaise\/recordset\/\#/;
 
-    d3.selectAll("a").each(function() {
-	if (this.href.match(chaise_re)) {
-	    this.href = this.href.replace(/^.*\/chaise\/recordset\/\#\d+\//, DERIVA_URL + "/chaise/recordset/#" + catalog_id + "/");
-	}
+    d3.selectAll('a').each(function() {
+        if (this.href.match(chaise_re)) {
+	    this.href = this.href.replace(/^.*\/chaise\/recordset\/\#\d+\//, DERIVA_URL + '/chaise/recordset/#' + catalog_id + '/');
+        }
     });
 }
 
@@ -142,6 +142,6 @@ $(document).ready(function() {
     if (catalog_id != null) update_chaise_urls(catalog_id);
     // chart 1 - stacked bar graph
     register_dropdowns(catalog_id, 'sbc1');
-    update_chart(catalog_id,'sbc1');
+    update_chart(catalog_id, 'sbc1');
     add_summary_data(catalog_id);
 });

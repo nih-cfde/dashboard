@@ -333,8 +333,8 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
 
     // add x index to series so it's not lost when empty bars are filtered
     series.forEach(s => {
-	j = 0;
-	s.forEach(t => t.push(j++));
+        j = 0;
+        s.forEach(t => t.push(j++));
     });
 
     const top_margin = 35;
@@ -355,21 +355,21 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
     var show_bar_totals = true;
 
     if (legend_width > 350) {
-	legend_width = 350;
+        legend_width = 350;
     }
 
     // switch to more (horizontally) compact layout
     if (svg_width < 400) {
-	legend_width = 0;
-	right_margin = 10;
-	x_axis_label_rot = 90;
-	x_axis_label_dx = '1em';
-	x_axis_label_dy = '-0.5em';
-	d3.select('#' + svg_id + '-last_updated').style('display', 'none');
-	d3.select('#' + svg_id + '-form-row').style('flex-wrap', 'wrap');
+        legend_width = 0;
+        right_margin = 10;
+        x_axis_label_rot = 90;
+        x_axis_label_dx = '1em';
+        x_axis_label_dy = '-0.5em';
+        d3.select('#' + svg_id + '-last_updated').style('display', 'none');
+        d3.select('#' + svg_id + '-form-row').style('flex-wrap', 'wrap');
     } else {
-	d3.select('#' + svg_id + '-last_updated').style('display', null);
-	d3.select('#' + svg_id + '-form-row').style('flex-wrap', 'nowrap');
+        d3.select('#' + svg_id + '-last_updated').style('display', null);
+        d3.select('#' + svg_id + '-form-row').style('flex-wrap', 'nowrap');
     }
     
     const width = svg_width - left_margin - right_margin - legend_width;
@@ -389,7 +389,7 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
     // guess whether there's enough space to display stacked bar totals
     var xbw = xScale.bandwidth();
     if (xbw < 35) {
-	show_bar_totals = false;
+        show_bar_totals = false;
     }
     
     // Configure the y-axis scale. It goes from 0 to the maximum
@@ -401,21 +401,21 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
 
     var num_bars = stacked_data.length;
     function maxlen_fn(text, index) {
-	// final bar has less space due to color key
-	return ((x_axis_label_rot != 90) && (index+1 == num_bars)) ? 13 : 28;
+        // final bar has less space due to color key
+        return ((x_axis_label_rot != 90) && (index + 1 == num_bars)) ? 13 : 28;
     }
 
     var tlc = 0;
     function trim_labels(text, maxlen_fn) {
-	text.each(function() {
+        text.each(function() {
 	    var node = d3.select(this);
 	    var label = node.text();
 	    var ml = maxlen_fn(label, tlc++);
-	    if (label.length > (ml-3)) {
-		node.text(label.substring(0, ml-3) + '...');
+	    if (label.length > (ml - 3)) {
+                node.text(label.substring(0, ml - 3) + '...');
 	    }
 	    node.append('title').text(label);
-	});
+        });
     }
 
     // Add the x-axis
@@ -468,17 +468,17 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
         .attr('text-anchor', 'middle')
         .attr('fill', '#000')
         .text((a) => {
-	    if (!show_bar_totals) return '';
+	    if (! show_bar_totals) return '';
 	    if (a.total > 999999) {
-		return `${large_number_formatter(a.total)}`;
+                return `${large_number_formatter(a.total)}`;
             } else {
-		return `${comma_formatter(a.total)}`;
+                return `${comma_formatter(a.total)}`;
             }
-	});
+        });
 
     // Add the y-axis label
     svg.append('text')
-        .attr('x', -(height/2 + top_margin))
+        .attr('x', -(height / 2 + top_margin))
         .attr('y', 20)
         .attr('transform', 'rotate(-90)')
         .attr('text-anchor', 'middle')
@@ -505,9 +505,9 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
     var title_fn = function(d) { return d; };
     var text_fn = function(d) { return d; };
 
-   //    add_legend(svg_id, width, chart, categories.slice(0,max_categories), tooltip, title_fn, text_fn, left_margin, 0);
+    //    add_legend(svg_id, width, chart, categories.slice(0,max_categories), tooltip, title_fn, text_fn, left_margin, 0);
     if (legend_width > 0) {
-	add_legend(svg_id, width, legend_width, chart, categories.slice(0,max_categories), null, title_fn, text_fn, left_margin, 0);
+        add_legend(svg_id, width, legend_width, chart, categories.slice(0, max_categories), null, title_fn, text_fn, left_margin, 0);
     }
 
     groups.attr('fill', function(a, b) { return colorizer(b); })
@@ -590,11 +590,11 @@ function add_legend(svg_id, chart_width, legend_width, chart, categories, toolti
         .on('mouseover', function(d, e) {
 	    if (tooltip != null) tooltip.style('display', null);
 	    if (mouseover_fn != null) mouseover_fn(d, e);
-	})
+        })
         .on('mouseout', function(d, e) {
 	    if (tooltip != null) tooltip.style('display', 'none');
 	    if (mouseout_fn != null) mouseout_fn(d, e);
-	})
+        })
         .on('mousemove', function(d, e) {
 	    if (tooltip == null) return;
 	    var tooltip_title = title_fn(d);
@@ -623,7 +623,7 @@ function add_legend(svg_id, chart_width, legend_width, chart, categories, toolti
             }
 	    
             tooltip.attr('transform', 'translate(' + tooltipX + ',' + tooltipY + ')');
-	});
+        });
     
     legend.append('rect')
         .attr('x', chart_width + 28)
@@ -637,8 +637,8 @@ function add_legend(svg_id, chart_width, legend_width, chart, categories, toolti
         .attr('dy', '.35em')
         .attr('font-family', 'sans-serif')
         .style('font-size', '0.7rem')
-        .text(title_fn).each(ellipsize(legend_width-15,5))
-	.append('title').text(title_fn);
+        .text(title_fn).each(ellipsize(legend_width - 15, 5))
+        .append('title').text(title_fn);
 }
 
 function save_csv(filename, rows) {
@@ -698,7 +698,7 @@ function export2png(chart_id) {
     $('#' + chart_id + '-export-button').hide();
     saveSvgAsPng(document.getElementById(chart_id), 'export.png').then(function() {
         // Re-display the export button
-	$('#' + chart_id + '-export-button').show();
+        $('#' + chart_id + '-export-button').show();
     });
 }
 
@@ -721,15 +721,15 @@ function export2csv(chart_id) {
     var total_field = null;
     
     chdata.forEach(function(obj_row) {
-	d3.keys(obj_row).forEach(function(field) {
+        d3.keys(obj_row).forEach(function(field) {
 	    if ((field == 'total') || (field == 'Total')) {
-		total_field = field;
+                total_field = field;
 	    }
-	    else if (!(field in all_fields_d)) {
-		all_fields_d[field] = true;
-		all_fields.push(field);
+	    else if (! (field in all_fields_d)) {
+                all_fields_d[field] = true;
+                all_fields.push(field);
 	    }
-	});
+        });
     });
 
     // place total last
@@ -743,9 +743,9 @@ function export2csv(chart_id) {
 
         all_fields.forEach(function(field) {
 	    if ((field in obj_row) && (obj_row[field] != null)) {
-		data[index].push(obj_row[field]);
+                data[index].push(obj_row[field]);
 	    } else {
-		data[index].push(0);
+                data[index].push(0);
 	    }
         });
 
