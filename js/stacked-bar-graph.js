@@ -333,7 +333,7 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
 
     // add x index to series so it's not lost when empty bars are filtered
     series.forEach(s => {
-        j = 0;
+        var j = 0;
         s.forEach(t => t.push(j++));
     });
 
@@ -351,7 +351,7 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
     if (svg_width < 200) svg_width = 200;
     if (svg_height < 200) svg_height = 300;
     
-    legend_width = svg_width * 0.3;
+    var legend_width = svg_width * 0.3;
     var show_bar_totals = true;
 
     if (legend_width > 350) {

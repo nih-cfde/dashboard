@@ -78,7 +78,6 @@ function get_chaise_uri(catalog_id, DCC, entity) {
     else {
         var from = entity.slice(0, i - 1);
         var to = entity.slice(i + 6);
-        var facet_str = '';
         var fkey_str = ENTITY_FKEYS[from + ':' + to];
         var from_fkey = fkey_str + '_' + from + '_fkey';
         var to_fkey = fkey_str + '_' + to + '_fkey';
@@ -128,11 +127,11 @@ function update_chaise_urls(catalog_id) {
     });
 
     // all anchor links (i.e., <a href=...>)
-    var chaise_re = /\/chaise\/recordset\/\#/;
+    var chaise_re = /\/chaise\/recordset\/#/;
 
     d3.selectAll('a').each(function() {
         if (this.href.match(chaise_re)) {
-	    this.href = this.href.replace(/^.*\/chaise\/recordset\/\#\d+\//, DERIVA_URL + '/chaise/recordset/#' + catalog_id + '/');
+	    this.href = this.href.replace(/^.*\/chaise\/recordset\/#\d+\//, DERIVA_URL + '/chaise/recordset/#' + catalog_id + '/');
         }
     });
 }

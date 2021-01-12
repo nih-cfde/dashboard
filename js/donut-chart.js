@@ -299,7 +299,7 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
     };
     
     var text_fn = function(d) {
-        value = d.data.value;
+        var value = d.data.value;
         if (value > 999999) {
             value = large_number_formatter(d.data.value);
         } else {
