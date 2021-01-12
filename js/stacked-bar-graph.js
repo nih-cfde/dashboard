@@ -507,7 +507,6 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
 
    //    add_legend(svg_id, width, chart, categories.slice(0,max_categories), tooltip, title_fn, text_fn, left_margin, 0);
     if (legend_width > 0) {
-	console.log("bar graph svg_width=" + svg_width + " legend_width=" + legend_width + " left_margin=" + left_margin + " right_margin=" + right_margin);
 	add_legend(svg_id, width, legend_width, chart, categories.slice(0,max_categories), null, title_fn, text_fn, left_margin, 0);
     }
 
