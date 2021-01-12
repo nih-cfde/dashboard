@@ -37,7 +37,6 @@ var json_files = {
     'samples-data_type-dcc.json': true,
     'samples-data_type-species.json': true,
     'samples-dcc-anatomy.json': true,
-    'samples-dcc-anatomy.json~': true,
     'samples-dcc-assay.json': true,
     'samples-dcc-data_type.json': true,
     'samples-dcc-species.json': true,
@@ -340,7 +339,7 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
     const top_margin = 35;
     const bottom_margin = 80;
     var left_margin = 60;
-    var right_margin = 60;
+    var right_margin = 30;
     
     // svg_width determined by enclosing div
     const svg = d3.select('#' + svg_id);
@@ -485,11 +484,11 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
         .text(y_title);
     
     svg.append('image')
-        .attr('x', svg_width - 150)
+        .attr('x', svg_width - 125)
         .attr('y', 0)
         .attr('id', svg_id + '-export-button')
-        .attr('height', 30)
-        .attr('width', 150)
+        .attr('height', 32)
+        .attr('width', 125)
         .attr('xlink:href', './images/download_button.png')
         .on('click', function() {
             $('#export-modal').attr('name', svg_id + '-modal');
@@ -507,7 +506,7 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
 
    //    add_legend(svg_id, width, chart, categories.slice(0,max_categories), tooltip, title_fn, text_fn, left_margin, 0);
     if (legend_width > 0) {
-	add_legend(svg_id, width, chart, categories.slice(0,max_categories), null, title_fn, text_fn, left_margin, 0);
+	add_legend(svg_id, width, legend_width, chart, categories.slice(0,max_categories), null, title_fn, text_fn, left_margin, 0);
     }
 
     groups.attr('fill', function(a, b) { return colorizer(b); })
@@ -575,7 +574,7 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
         });
 }
 
-function add_legend(svg_id, width, chart, categories, tooltip, title_fn, text_fn, x_offset, y_offset, mouseover_fn, mouseout_fn) {
+function add_legend(svg_id, chart_width, legend_width, chart, categories, tooltip, title_fn, text_fn, x_offset, y_offset, mouseover_fn, mouseout_fn) {
     var top = 10;
 
     // Create the legend
@@ -626,18 +625,18 @@ function add_legend(svg_id, width, chart, categories, tooltip, title_fn, text_fn
 	});
     
     legend.append('rect')
-        .attr('x', width + 28)
+        .attr('x', chart_width + 28)
         .attr('width', 18)
         .attr('height', 18)
         .attr('fill', function(d, i) { return colorizer(i); });
 
     legend.append('text')
-        .attr('x', width + 50)
+        .attr('x', chart_width + 50)
         .attr('y', 8)
         .attr('dy', '.35em')
         .attr('font-family', 'sans-serif')
         .style('font-size', '0.7rem')
-        .text(title_fn)
+        .text(title_fn).each(ellipsize(legend_width-15,5))
 	.append('title').text(title_fn);
 }
 

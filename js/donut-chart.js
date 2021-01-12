@@ -44,20 +44,25 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
 
     const top_margin = 35;
     const bottom_margin = 10;
-    const margin = 40;
-    const legend_width = 0;
+    const margin = 30;
+
+    var legend_width = svg_width * 0.3;
+    if (legend_width > 350) {
+	legend_width = 350;
+    }
+    
     const width = svg_width - 2 * margin - legend_width;
     const height = svg_height - top_margin - bottom_margin;
     const hw = svg_width / 2;
     const hh = height / 2;
-    const cx = hw;
-    const cy = hh + top_margin;
+    const cx = (svg_width * 0.35) - margin;
+    const cy = hh;
     const outer_radius = hh;
     const inner_radius = outer_radius / 2.0;
     // console.log("hw=" + hw + " hh=" + hh + " cx=" + cx + " cy=" + cy + " outer_radius=" + outer_radius);
 
     const chart = svg.append('g')
-        .attr('transform', `translate(${cx}, ${cy})`);
+        .attr('transform', `translate(${margin}, ${top_margin})`);
 
     // reformat data
     var rf_data = {};
@@ -112,6 +117,7 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
         .data(data_ready)
         .enter()
         .append('path')
+    	.attr('transform', 'translate(' + cx + ',' + cy + ')')
         .attr('d', arc)
         .attr('fill', function(d, i) { const th = this; cat2path[d.data.key] = th; return (colorizer(i)); })
         .attr('stroke', 'none')
@@ -263,11 +269,11 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
 
     // download icon
     svg.append('image')
-        .attr('x', svg_width - 150)
+        .attr('x', svg_width - 125)
         .attr('y', 0)
         .attr('id', svg_id + '-export-button')
-        .attr('height', 30)
-        .attr('width', 150)
+        .attr('height', 32)
+        .attr('width', 125)
         .attr('xlink:href', './images/download_button.png')
         .on('click', function() {
             $('#export-modal').attr('name', svg_id + '-modal');
@@ -277,8 +283,7 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
         .text('Export chart');
 
     var max_categories = 16;
-    const legend = svg.append('g')
-        .attr('transform', `translate(60, 60)`);
+    const legend = chart.append('g');
 
     add_tooltip(svg_id, svg);
     tooltip = d3.select('#' + svg_id + '-tooltip');
@@ -307,5 +312,8 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
         return value + ' ' + units;
     };
 
-    add_legend(svg_id, svg_width - (2 * outer_radius), legend, categories, tooltip, title_fn, text_fn, 60, 40, mouseover_fn, mouseout_fn);
+    var x_offset = 0;
+    var y_offset = 0;
+    var chart_width = svg_width - legend_width - (2 * margin);
+    add_legend(svg_id, chart_width, legend_width, legend, categories, tooltip, title_fn, text_fn, x_offset, y_offset, mouseover_fn, mouseout_fn);
 }
