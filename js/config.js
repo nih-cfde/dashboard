@@ -1,7 +1,7 @@
 /* global */
 
-// dev - laptop
-const DASHBOARD_API_URL='http://localhost:5000';
+// dev
+const DASHBOARD_API_URL='https://app-dev.nih-cfde.org/dashboard-api';
 const DERIVA_URL='http://app-dev.nih-cfde.org';
 
 const MAX_GRAPH_GROUP1 = 12;
