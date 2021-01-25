@@ -48,6 +48,10 @@
 /* End - CSS from dcc-review.css
 ---------------------------------------- */
 
+main {
+    padding: 0em;
+}
+
 .content {
     width: 100%;
     height: 100%;
