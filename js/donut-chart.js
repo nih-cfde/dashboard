@@ -13,6 +13,15 @@ function update_donut_chart_title(chart_id, dropdown) {
 }
 
 function register_donut_dropdown(chart_id, data, dropdown, units) {
+    var field = dropdown;
+    if (field == 'data_type') field = 'assay';
+    
+    // populate dropdown menu with observed values from data
+    var sel = $('#' + chart_id + '-' + dropdown);
+    data.forEach(d => {
+	sel.append($('<option></option>').val(d[field]).text(d[field]));
+    });
+    
     $.each([dropdown], function(i, id) {
         $('#' + chart_id + '-' + id).change(function() {
             update_donut_chart(chart_id, data, id, units);
