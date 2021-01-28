@@ -1,90 +1,7 @@
 /* global d3 saveSvgAsPng d3_save_svg */
 
-// ls data | grep json | grep -v example | perl -ne 'chomp; print "    \"$_\": true,\n";'
-// remove any JSON files with errors/timeouts:
-// grep -l 'time limit' *.json
-var json_files = {
-    'files-anatomy-assay.json': true,
-    'files-anatomy-data_type.json': true,
-    'files-anatomy-dcc.json': true,
-    'files-anatomy-species.json': true,
-    'files-assay-anatomy.json': true,
-    'files-assay-data_type.json': true,
-    'files-assay-dcc.json': true,
-    'files-assay-species.json': true,
-    'files-data_type-anatomy.json': true,
-    'files-data_type-assay.json': true,
-    'files-data_type-dcc.json': true,
-    'files-data_type-species.json': true,
-    'files-dcc-anatomy.json': true,
-    'files-dcc-assay.json': true,
-    'files-dcc-data_type.json': true,
-    'files-dcc-species.json': true,
-    'files-species-anatomy.json': true,
-    'files-species-assay.json': true,
-    'files-species-data_type.json': true,
-    'files-species-dcc.json': true,
-    'samples-anatomy-assay.json': true,
-    'samples-anatomy-data_type.json': true,
-    'samples-anatomy-dcc.json': true,
-    'samples-anatomy-species.json': true,
-    'samples-assay-anatomy.json': true,
-    'samples-assay-data_type.json': true,
-    'samples-assay-dcc.json': true,
-    'samples-assay-species.json': true,
-    'samples-data_type-anatomy.json': true,
-    'samples-data_type-assay.json': true,
-    'samples-data_type-dcc.json': true,
-    'samples-data_type-species.json': true,
-    'samples-dcc-anatomy.json': true,
-    'samples-dcc-assay.json': true,
-    'samples-dcc-data_type.json': true,
-    'samples-dcc-species.json': true,
-    'samples-species-anatomy.json': true,
-    'samples-species-assay.json': true,
-    'samples-species-data_type.json': true,
-    'samples-species-dcc.json': true,
-    'subjects-anatomy-assay.json': true,
-    'subjects-anatomy-data_type.json': true,
-    'subjects-anatomy-dcc.json': true,
-    'subjects-anatomy-species.json': true,
-    'subjects-assay-anatomy.json': true,
-    'subjects-assay-data_type.json': true,
-    'subjects-assay-dcc.json': true,
-    'subjects-assay-species.json': true,
-    'subjects-data_type-anatomy.json': true,
-    'subjects-data_type-assay.json': true,
-    'subjects-data_type-dcc.json': true,
-    'subjects-data_type-species.json': true,
-    'subjects-dcc-anatomy.json': true,
-    'subjects-dcc-assay.json': true,
-    'subjects-dcc-data_type.json': true,
-    'subjects-dcc-species.json': true,
-    'subjects-species-anatomy.json': true,
-    'subjects-species-assay.json': true,
-    'subjects-species-data_type.json': true,
-    'subjects-species-dcc.json': true,
-    'volume-anatomy-assay.json': true,
-    'volume-anatomy-data_type.json': true,
-    'volume-anatomy-dcc.json': true,
-    'volume-anatomy-species.json': true,
-    'volume-assay-anatomy.json': true,
-    'volume-assay-data_type.json': true,
-    'volume-assay-dcc.json': true,
-    'volume-assay-species.json': true,
-    'volume-data_type-anatomy.json': true,
-    'volume-data_type-assay.json': true,
-    'volume-data_type-dcc.json': true,
-    'volume-data_type-species.json': true,
-    'volume-dcc-anatomy.json': true,
-    'volume-dcc-assay.json': true,
-    'volume-dcc-data_type.json': true,
-    'volume-dcc-species.json': true,
-    'volume-species-anatomy.json': true,
-    'volume-species-assay.json': true,
-    'volume-species-data_type.json': true,
-    'volume-species-dcc.json': true
-};
+var XVALS = ['dcc', 'data_type', 'assay', 'species', 'anatomy'];
+var YVALS = ['files', 'volume', 'samples', 'subjects'];
 
 var chart_data = {};
 
@@ -117,11 +34,9 @@ function update_dropdowns(chart_id) {
     var x_axis_val = $('#' + chart_id + '-x-axis option:checked').val();
     var y_axis_val = $('#' + chart_id + '-y-axis option:checked').val();
     var group_by_val = $('#' + chart_id + '-group-by option:checked').val();
-
+    
     // is the current selection valid?
-    var file = y_axis_val + '-' + x_axis_val + '-' + group_by_val + '.json';
-    var is_valid = file in json_files;
-
+    var is_valid = x_axis_val != group_by_val;
     var y_opts = document.getElementById(chart_id + '-y-axis').options;
     var gb_opts = document.getElementById(chart_id + '-group-by').options;
 
@@ -129,21 +44,23 @@ function update_dropdowns(chart_id) {
 
     // if not, find a valid selection that includes the selected x_axis_val
     if (! is_valid) {
-        var new_y = null;
-        var new_gb = null;
-        Object.keys(json_files).forEach(k => {
-            var parts = k.replace('.json', '').split('-');
+	var new_y = null;
+	var new_gb = null;
 
-            // pick the first one in the list
-            if ((parts[1] == x_axis_val) && (new_y == null)) {
-                new_y = parts[0];
-                new_gb = parts[2];
-            }
-        });
+	yv_loop:
+	for (yv of YVALS) {
+	    for (gb of XVALS) {
+		if (x_axis_val != gb) {
+		    new_y = yv;
+		    new_gb = gb;
+		    break yv_loop;
+		}
+	    }
+	}
 
-        y_axis_val = new_y;
-        group_by_val = new_gb;
-
+	y_axis_val = new_y;
+	group_by_val = new_gb;
+	
         for (y_idx = 0; y_idx < y_opts.length; ++y_idx) {
             y_opts[y_idx].disabled = false;
             y_opts[y_idx].selected = (y_opts[y_idx].value == new_y);
@@ -157,15 +74,13 @@ function update_dropdowns(chart_id) {
 
     // enable y_axis choices that are valid given current x_axis, group_by
     for (y_idx = 0; y_idx < y_opts.length; ++y_idx) {
-        file = y_opts[y_idx].value + '-' + x_axis_val + '-' + group_by_val + '.json';
-        is_ok = file in json_files;
+	is_ok = (x_axis_val != group_by_val);
         y_opts[y_idx].disabled = ! is_ok;
     }
 
     // enable group_by choices that are valid given current x_axis, y_axis
     for (gb_idx = 0; gb_idx < gb_opts.length; ++gb_idx) {
-        file = y_axis_val + '-' + x_axis_val + '-' + gb_opts[gb_idx].value + '.json';
-        is_ok = file in json_files;
+	is_ok = (x_axis_val != gb_opts[gb_idx].value);
         gb_opts[gb_idx].disabled = ! is_ok;
     }
 }
