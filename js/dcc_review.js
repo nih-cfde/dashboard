@@ -6,10 +6,10 @@ function populate_chart(catalog_id, chart_id) {
     var count = 'files';
     var group1 = 'assay';
     var group2 = 'anatomy';
-    
+
     var data_url = DASHBOARD_API_URL + '/stats/' + [count, group1, MAX_GRAPH_GROUP1, group2, MAX_GRAPH_GROUP2].join('/');
     if (catalog_id != null) data_url += '?catalogId=' + catalog_id;
-    
+
     $.getJSON(data_url, function(data) {
         $('#' + chart_id).replaceWith('<svg id="' + chart_id + '"/>');
         register_export_buttons(chart_id, data);
@@ -95,7 +95,7 @@ var ENTITY_FKEYS = {
 //           and Y in ('subject', 'biosample', 'file')
 function get_chaise_uri(catalog_id, entity) {
     var base_uri = DERIVA_URL + '/chaise/recordset/#' + catalog_id;
-    
+
     // TODO - this depends on hard-coded foreign key names
     // Chaise/DERIVA facet string to show only top-level subprojects
     var project_facet_str = LZString.compressToEncodedURIComponent('{"and":[{"source":[{"inbound":["CFDE","project_in_project_child_fkey"]},{"outbound":["CFDE","project_in_project_parent_fkey"]},{"inbound":["CFDE","project_in_project_transitive_member_fkey"]},{"outbound":["CFDE","project_in_project_transitive_leader_fkey"]},"RID"],"not_null":true},{"source":[{"inbound":["CFDE","project_in_project_child_fkey"]},{"outbound":["CFDE","project_in_project_parent_fkey"]},{"inbound":["CFDE","project_in_project_child_fkey"]},{"outbound":["CFDE","project_in_project_parent_fkey"]},"RID"],"choices":[null]}]}');
@@ -161,7 +161,7 @@ function add_summary_data(catalog_id, DCC) {
     // TODO - add project count to DCC summary endpoint
     var dcc_projects_url = DASHBOARD_API_URL + '/dcc/' + DCC + '/projects';
     if (catalog_id != null) dcc_projects_url += '?catalogId=' + catalog_id;
-    
+
     $.getJSON(dcc_projects_url, function(data) {
         var name = 'Total Projects';
         var value = data.length;
@@ -206,14 +206,33 @@ function add_summary_data(catalog_id, DCC) {
     });
 }
 
+function loadScript(url) {
+    var script = document.querySelector('script[src^="' + url + '"]');
+    if (script) {
+        // we're assuming that file injection = file loaded
+        // NOTE this assumption is not correct if these files are loaded dynamically by other sources
+        return;
+    }
+
+    script = document.createElement('script');
+    script.setAttribute("type", "text/javascript");
+    script.setAttribute("src", url);
+    document.getElementsByTagName('head')[0].appendChild(script);
+}
+
 $(document).ready(function() {
     var catalog_id = get_catalog_id();
     var dcc = null;
-    
+
     // the DCC review page assumes that the specified catalog contains data for a single DCC only
     var dcc_list_url = DASHBOARD_API_URL + '/dcc';
-    if (catalog_id != null) dcc_list_url += '?catalogId=' + catalog_id;
-    
+    if (catalog_id != null) {
+        chaiseConfig.defaultCatalog = catalog_id;
+        dcc_list_url += '?catalogId=' + catalog_id;
+    }
+
+    loadScript("/chaise/lib/navbar/navbar.app.js");
+
     $.getJSON(dcc_list_url, function(data) {
         if (data.length != 1) {
 	    alert('ERROR: DERIVA CATALOG_ID  ' + catalog_id + ' contains ' + ((data.length > 1) ? 'data from multiple DCCs' : 'no data'));
