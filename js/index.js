@@ -113,9 +113,6 @@ function add_summary_data(catalog_id) {
         $('#dcc_link').prop('href', data['url']);
         $('#dcc_link').prepend(data['url']);
         $('#data_snapshot_title').prepend(data['moniker'] + ' ');
-        var d = new Date(data['last_updated']);
-        var formatted_date = get_formatted_date(d);
-        $('#last_updated').append('Last updated: ' + formatted_date);
     });
 }
 
