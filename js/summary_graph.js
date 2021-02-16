@@ -58,14 +58,4 @@ $(document).ready(function() {
     update_chart(catalog_id, 'sbc1');
     window.addEventListener('resize', function() { update_chart(catalog_id, 'sbc1'); });
     
-    // update last_updated
-    var summary_url = DASHBOARD_API_URL + '/dcc_info';
-    if (catalog_id != null) summary_url += '?catalogId=' + catalog_id;
-
-    $.getJSON(summary_url, function(data) {
-        var d = new Date(data['last_updated']);
-        var formatted_date = get_formatted_date(d);
-        $('#sbc1-last_updated').append('Last updated: ' + formatted_date);
-    });
-
 });
