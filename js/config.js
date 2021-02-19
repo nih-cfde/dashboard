@@ -1,8 +1,8 @@
 /* global */
 
 // dev
-const DASHBOARD_API_URL='https://app-dev.nih-cfde.org/dashboard-api';
-const DERIVA_URL='http://app-dev.nih-cfde.org';
+const DASHBOARD_API_URL='/dashboard-api';
+const DERIVA_URL='';
 
 const MAX_GRAPH_GROUP1 = 12;
 const MAX_GRAPH_GROUP2 = 5;
