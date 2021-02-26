@@ -26,7 +26,7 @@
             <div class="section_left_page_info">
               <h1>Common Fund Data Ecosystem</h1>
               <h2 id="dcc_name"></h2>
-              <p>More at: <a href="" target="_blank" id="dcc_link"><i class="fas fa-external-link-alt"></i></a></p>
+              <p>Submitted datapackages: <a href="" target="_blank" id="datapackage_link"><i class="fas fa-external-link-alt"></i></a></p>
             </div>
           </div>
           <div class="top_content_section_right">
@@ -64,19 +64,58 @@
                   </div><!--end main_content_right-->
                   <div class="main_data_content_right">
                     <div class="data_snapshot">
-                      <div class="data_header snapshot">
-                        <p id="data_snapshot_title" class="snapshot_head">Data Snapshot</p>
-                        <p id="last_updated" class="last-updated"></p>
-                      </div>
-                      <div class="data_snapshot_content">
-
-                        <div id="chart-container-1" style="height:100%;">
-                          <svg id="review_bc1"/>
-                        </div>
-
-                      </div><!--end data_snapshot_content-->
+		      <div class="data_snapshot_border">
+			<div class="data_header snapshot">
+                          <p id="data_snapshot_title" class="snapshot_head">Data Snapshot</p>
+                          <p id="last_updated" class="last-updated"></p>
+			</div>
+			<div class="data_snapshot_content">
+			  
+                          <div id="chart-container-1" style="height:450px;">
+                            <svg id="review_bc1"/>
+                          </div>
+			  
+			  <div id="form-controls">
+			    <form>
+			      <div class="container">
+				<div class="row" style="flex-wrap:nowrap">
+				  <div class="col-md-4" id="review_bc1-x-axis-container">
+				    <label for="x-axis" class="form-label">X-axis</label>
+				    <select class="custom-select" id="review_bc1-x-axis" name="x-axis">
+				      <option value="dcc">CF Program</option>
+				      <option value="data_type">Data Type</option>
+				      <option selected value="assay">Assay</option>
+				      <option value="species">Species</option>
+				      <option value="anatomy">Anatomy</option>
+				    </select>
+				  </div>
+				  <div class="col-md-4" id="review_bc1-y-axis-container">
+				    <label for="y-axis" class="form-label">Y-axis</label>
+				    <select class="custom-select" id="review_bc1-y-axis" name="y-axis">
+				      <option selected value="files">File count</option>
+				      <option value="volume">Data volume</option>
+				      <option value="samples">Sample count</option>
+				      <option value="subjects">Subject count</option>
+				    </select>
+				  </div>
+				  <div class="col-md-4" id="review_bc1-group-by-container">
+				    <label for="group-by" class="form-label">Stack by</label>
+				    <select class="custom-select" id="review_bc1-group-by" name="groupby">
+				      <option value="dcc">CF Program</option>
+				      <option value="data_type">Data Type</option>
+				      <option value="assay">Assay</option>
+				      <option value="species">Species</option>
+				      <option selected value="anatomy">Anatomy</option>
+				    </select>
+				  </div>
+				</div>
+			      </div>
+			    </form>
+			  </div>
+			  
+			</div><!--end data_snapshot_content-->
+		      </div><!--end data_snapshot_border-->
                     </div><!--end data_snapshot-->
-
 
                     <div class="reports_wrap">
 
@@ -98,8 +137,6 @@
                       </div>
                     </div>
                   </div><!--end reports_wrap-->
-
-
 
                 </div><!--end main_content_right-->
               </div><!--end main_data_content-->

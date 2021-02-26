@@ -148,8 +148,10 @@ function add_summary_data(catalog_id, DCC) {
         });
 
         $('#dcc_name').append(data['complete_name']);
-        $('#dcc_link').prop('href', data['url']);
-        $('#dcc_link').prepend(data['url']);
+	// https://app-dev.nih-cfde.org/chaise/record/#registry/CFDE:datapackage/RID=4HE
+	var data_url = DERIVA_URL + '/chaise/recordset/#registry/CFDE:datapackage';
+        $('#datapackage_link').prop('href', data_url);
+        $('#datapackage_link').prepend(data_url);
         $('#data_snapshot_title').prepend(data['moniker'] + ' ');
         var d = new Date(data['last_updated']);
         var formatted_date = get_formatted_date(d);
@@ -223,7 +225,6 @@ function loadScript(url) {
 $(document).ready(function() {
     var catalog_id = get_catalog_id();
     var dcc = null;
-
     // the DCC review page assumes that the specified catalog contains data for a single DCC only
     var dcc_list_url = DASHBOARD_API_URL + '/dcc';
     if (catalog_id != null) {
@@ -233,12 +234,17 @@ $(document).ready(function() {
 
     loadScript("/chaise/lib/navbar/navbar.app.js");
 
+    register_dropdowns(catalog_id, 'review_bc1');
+    update_chart(catalog_id, 'review_bc1');
+    add_summary_data(catalog_id);
+    
     $.getJSON(dcc_list_url, function(data) {
         if (data.length != 1) {
-	    alert('ERROR: DERIVA CATALOG_ID  ' + catalog_id + ' contains ' + ((data.length > 1) ? 'data from multiple DCCs' : 'no data'));
-        } else {
+	    console.log('WARNING: DERIVA CATALOG_ID  ' + catalog_id + ' contains ' + ((data.length > 1) ? 'data from multiple DCCs' : 'no data'));
+        }
+	if (data.length > 0) {
 	    dcc = data[0];
-	    populate_chart(catalog_id, 'review_bc1');
+	    //	    populate_chart(catalog_id, 'review_bc1');
 	    add_summary_data(catalog_id, dcc);
         }
     });
