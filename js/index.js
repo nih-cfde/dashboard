@@ -93,7 +93,7 @@ function add_summary_data(catalog_id) {
     if (catalog_id != null) summary_url += '?catalogId=' + catalog_id;
 
     // counts for top-level entities
-    $.getJSON(summary_url, function(data) {
+    get_json_retry(summary_url, function(data) {
         if (catalog_id == null) {
 	    catalog_id = data['catalog_id'];
 	    update_chaise_urls(catalog_id);

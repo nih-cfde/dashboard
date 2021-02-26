@@ -10,14 +10,18 @@ function populate_chart(catalog_id, chart_id) {
     var data_url = DASHBOARD_API_URL + '/stats/' + [count, group1, MAX_GRAPH_GROUP1, group2, MAX_GRAPH_GROUP2].join('/');
     if (catalog_id != null) data_url += '?catalogId=' + catalog_id;
 
-    $.getJSON(data_url, function(data) {
+    var data_fn = function(data) {
         $('#' + chart_id).replaceWith('<svg id="' + chart_id + '"/>');
         register_export_buttons(chart_id, data);
         draw_chart(chart_id, data, group1, count);
-    }).fail(function() {
+    };
+
+    var fail_fn = function(jqXHR, status, error) {
         console.error('Error loading data for DCC review chart combination.');
         show_error(chart_id);
-    });
+    };
+    
+    get_json_retry(data_url, data_fn, fail_fn);
 }
 
 function titleCase(str) {
@@ -135,7 +139,7 @@ function add_summary_data(catalog_id, DCC) {
     if (catalog_id != null) dcc_summary_url += '?catalogId=' + catalog_id;
 
     // counts for top-level entities, except project
-    $.getJSON(dcc_summary_url, function(data) {
+    get_json_retry(dcc_summary_url, function(data) {
         Object.keys(data).forEach(function(key) {
             if (key.endsWith('_count')) {
                 var entity =  key.slice(0, key.length - '_count'.length);
@@ -164,7 +168,7 @@ function add_summary_data(catalog_id, DCC) {
     var dcc_projects_url = DASHBOARD_API_URL + '/dcc/' + DCC + '/projects';
     if (catalog_id != null) dcc_projects_url += '?catalogId=' + catalog_id;
 
-    $.getJSON(dcc_projects_url, function(data) {
+    get_json_retry(dcc_projects_url, function(data) {
         var name = 'Total Projects';
         var value = data.length;
         var markup = '<tr><td>' + name + '</td><td><a href="' + chaise_uri + '">' + value + '</a></td></tr>';
@@ -177,7 +181,7 @@ function add_summary_data(catalog_id, DCC) {
     if (catalog_id != null) dcc_linkcount_url += '?catalogId=' + catalog_id;
     var data_breakdown_table = $('#data_breakdown_table');
 
-    $.getJSON(dcc_linkcount_url, function(data) {
+    get_json_retry(dcc_linkcount_url, function(data) {
         // iterate over keys like "subject_count" and "subject_with_biosample_count"
         // remove "_count", append an 's' at the end of the first word, make
         // first and last words title case, and replace "_" with " "
@@ -236,15 +240,13 @@ $(document).ready(function() {
 
     register_dropdowns(catalog_id, 'review_bc1');
     update_chart(catalog_id, 'review_bc1');
-    add_summary_data(catalog_id);
     
-    $.getJSON(dcc_list_url, function(data) {
+    get_json_retry(dcc_list_url, function(data) {
         if (data.length != 1) {
 	    console.log('WARNING: DERIVA CATALOG_ID  ' + catalog_id + ' contains ' + ((data.length > 1) ? 'data from multiple DCCs' : 'no data'));
         }
 	if (data.length > 0) {
 	    dcc = data[0];
-	    //	    populate_chart(catalog_id, 'review_bc1');
 	    add_summary_data(catalog_id, dcc);
         }
     });

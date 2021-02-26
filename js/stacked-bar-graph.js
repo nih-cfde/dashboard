@@ -117,14 +117,17 @@ function update_chart(catalog_id, chart_id) {
     var data_url = DASHBOARD_API_URL + '/stats/' + [y_axis, x_axis, MAX_GRAPH_GROUP1, group_by, MAX_GRAPH_GROUP2].join('/');
     if (catalog_id != null) data_url += '?catalogId=' + catalog_id;
     
-    $.getJSON(data_url, function(data) {
+    var data_fn = function(data) {
         $('#' + chart_id).replaceWith('<svg id="' + chart_id + '"/>');
         register_export_buttons(chart_id, data);
         draw_chart(chart_id, data, x_axis, y_axis);
-    }).fail(function() {
+    };
+    var fail_fn = function(jqXHR, status, error) {
         console.error('Error loading data for chart combination.');
         show_error(chart_id);
-    });
+    };
+    
+    get_json_retry(data_url, data_fn, fail_fn);
 }
 
 function compute_totals(data, keys) {

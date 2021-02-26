@@ -71,15 +71,17 @@ $(document).ready(function() {
     var dc1_url = DASHBOARD_API_URL + '/stats/' + [count, group1, MAX_DONUT_GROUP1, group2, MAX_DONUT_GROUP2].join('/');
     if (catalog_id != null) dc1_url += '?catalogId=' + catalog_id;
     
-    $.getJSON(dc1_url, function(data) {
+    var dc1_data_fn =  function(data) {
         dc1_data = data;
         register_donut_dropdown('dc1', data, 'data_type', count);
         register_export_buttons('dc1', data);
         draw_donut_chart('dc1', data, 'data_type', count);
-    }).fail(function() {
+    };
+    var dc1_fail_fn = function() {
         // TODO: Show something where the SVG would be.
-        console.error('error');
-    });
+    };
+
+    get_json_retry(dc1_url,dc1_data_fn,dc1_fail_fn);
 
     // chart 4 - donut graph
     count = 'samples';
@@ -87,16 +89,18 @@ $(document).ready(function() {
     group2 = 'anatomy';
     var dc2_url = DASHBOARD_API_URL + '/stats/' + [count, group1, MAX_DONUT_GROUP1, group2, MAX_DONUT_GROUP2].join('/');
     if (catalog_id != null) dc2_url += '?catalogId=' + catalog_id;
-    
-    $.getJSON(dc2_url, function(data) {
+
+    var dc2_data_fn = function(data) {
         dc2_data = data;
         register_donut_dropdown('dc2', data, 'dcc', 'samples');
         register_export_buttons('dc2', data);
         draw_donut_chart('dc2', data, 'dcc', 'samples');
-    }).fail(function() {
+    };
+    var dc2_fail_fn = function() {
         // TODO: Show something where the SVG would be.
-        console.error('error');
-    });
+    };
+    
+    get_json_retry(dc2_url, dc2_data_fn, dc2_fail_fn);
 
     // display a single chart, hide the others
     function showChart(cnum) {
