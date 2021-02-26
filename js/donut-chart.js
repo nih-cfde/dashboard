@@ -15,6 +15,15 @@ function update_donut_chart_title(chart_id, dropdown) {
 }
 
 function register_donut_dropdown(chart_id, data, dropdown, units) {
+    var field = dropdown;
+    if (field == 'data_type') field = 'assay';
+    
+    // populate dropdown menu with observed values from data
+    var sel = $('#' + chart_id + '-' + dropdown);
+    data.forEach(d => {
+	sel.append($('<option></option>').val(d[field]).text(d[field]));
+    });
+    
     $.each([dropdown], function(i, id) {
         $('#' + chart_id + '-' + id).change(function() {
             update_donut_chart(chart_id, data, id, units);
@@ -48,9 +57,9 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
 
     var legend_width = svg_width * 0.3;
     if (legend_width > 350) {
-	legend_width = 350;
+        legend_width = 350;
     }
-    
+
     const width = svg_width - 2 * margin - legend_width;
     const height = svg_height - top_margin - bottom_margin;
     const hw = svg_width / 2;
@@ -117,7 +126,7 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
         .data(data_ready)
         .enter()
         .append('path')
-    	.attr('transform', 'translate(' + cx + ',' + cy + ')')
+        .attr('transform', 'translate(' + cx + ',' + cy + ')')
         .attr('d', arc)
         .attr('fill', function(d, i) { const th = this; cat2path[d.data.key] = th; return (colorizer(i)); })
         .attr('stroke', 'none')
@@ -161,10 +170,10 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
     var angle_fn = function(d) { return d.startAngle + ((d.endAngle - d.startAngle) / 2); };
 
     if (show_labels) {
-        // yspread - arrange labels using entire vertical space on left and right
+    // yspread - arrange labels using entire vertical space on left and right
         var ypos = {};
         if (label_type == 'yspread') {
-            // count labels on left and right
+        // count labels on left and right
             var n_left = 0;
             var n_right = 0;
 
@@ -289,9 +298,7 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
     tooltip = d3.select('#' + svg_id + '-tooltip');
 
     var categories = data_ready.slice(0, max_categories);
-    var title_fn = function(d) {
-        return d.data.key;
-    };
+    var title_fn = function(d) { return d.data.key; };
 
     // highlight donut chart slice when mouse is over corresponding legend entry
     var mouseover_fn = function(d, e) {
@@ -303,13 +310,13 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
     };
 
     var text_fn = function(d) {
-        let value = d.data.value;
+        var value = d.data.value;
         if (value > 999999) {
             value = large_number_formatter(d.data.value);
         } else {
             value = comma_formatter(d.data.value);
         }
-        return value + ' ' + units;
+        return value + ' ' + units; 
     };
 
     var x_offset = 0;

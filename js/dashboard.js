@@ -51,49 +51,66 @@ function get_time_zone_diff(d) {
 }
 
 $(document).ready(function() {
+    var catalog_id = get_catalog_id();
+    
     // chart 1 - stacked bar graph
-    register_dropdowns('sbc1');
-    update_chart('sbc1');
+    register_dropdowns(catalog_id, 'sbc1');
+    update_chart(catalog_id, 'sbc1');
 
     // chart 2 - stacked bar graph
-    register_dropdowns('sbc2');
-    update_chart('sbc2');
+    register_dropdowns(catalog_id, 'sbc2');
+    update_chart(catalog_id, 'sbc2');
 
     var dc1_data = null;
     var dc2_data = null;
 
     // chart 3 - donut graph
-    $.getJSON('./data/dc-subjects-assay-anatomy.json', function(data) {
+    var count = 'subjects';
+    var group1 = 'assay';
+    var group2 = 'anatomy';
+    var dc1_url = DASHBOARD_API_URL + '/stats/' + [count, group1, MAX_DONUT_GROUP1, group2, MAX_DONUT_GROUP2].join('/');
+    if (catalog_id != null) dc1_url += '?catalogId=' + catalog_id;
+    
+    var dc1_data_fn =  function(data) {
         dc1_data = data;
-        register_donut_dropdown('dc1', data, 'data_type', 'subjects');
+        register_donut_dropdown('dc1', data, 'data_type', count);
         register_export_buttons('dc1', data);
-        draw_donut_chart('dc1', data, 'data_type', 'subjects');
-    }).fail(function() {
+        draw_donut_chart('dc1', data, 'data_type', count);
+    };
+    var dc1_fail_fn = function() {
         // TODO: Show something where the SVG would be.
-        console.error('error');
-    });
+    };
+
+    get_json_retry(dc1_url,dc1_data_fn,dc1_fail_fn);
 
     // chart 4 - donut graph
-    $.getJSON('./data/dc-samples-dcc-anatomy.json', function(data) {
+    count = 'samples';
+    group1 = 'dcc';
+    group2 = 'anatomy';
+    var dc2_url = DASHBOARD_API_URL + '/stats/' + [count, group1, MAX_DONUT_GROUP1, group2, MAX_DONUT_GROUP2].join('/');
+    if (catalog_id != null) dc2_url += '?catalogId=' + catalog_id;
+
+    var dc2_data_fn = function(data) {
         dc2_data = data;
         register_donut_dropdown('dc2', data, 'dcc', 'samples');
         register_export_buttons('dc2', data);
         draw_donut_chart('dc2', data, 'dcc', 'samples');
-    }).fail(function() {
+    };
+    var dc2_fail_fn = function() {
         // TODO: Show something where the SVG would be.
-        console.error('error');
-    });
+    };
+    
+    get_json_retry(dc2_url, dc2_data_fn, dc2_fail_fn);
 
     // display a single chart, hide the others
     function showChart(cnum) {
         for (var i = 1; i <= 4; ++i) {
-            $('#chart' + i).hide();
-            $('#thumb' + i).removeClass('selected');
+	        $('#chart' + i).hide();
+	        $('#thumb' + i).removeClass('selected');
         }
-
         $('#chart' + cnum).show();
-        if (cnum == 1) update_chart('sbc1');
-        if (cnum == 2) update_chart('sbc2');
+        if (cnum == 1) update_chart(catalog_id, 'sbc1');
+        if (cnum == 2) update_chart(catalog_id, 'sbc2');
         if (cnum == 3) update_donut_chart('dc1', dc1_data, 'data_type', 'subjects');
         if (cnum == 4) update_donut_chart('dc2', dc2_data, 'dcc', 'samples');
         $('#thumb' + cnum).addClass('selected');
@@ -102,11 +119,11 @@ $(document).ready(function() {
     // display all charts
     function showAllCharts() {
         for (var i = 1; i <= 4; ++i) {
-            $('#chart' + i).show();
-            $('#thumb' + i).addClass('selected');
+     	    $('#chart' + i).show();
+    	    $('#thumb' + i).addClass('selected');
         }
-        update_chart('sbc1');
-        update_chart('sbc2');
+        update_chart(catalog_id, 'sbc1');
+        update_chart(catalog_id, 'sbc2');
         update_donut_chart('dc1', dc1_data, 'data_type', 'subjects');
         update_donut_chart('dc2', dc2_data, 'dcc', 'samples');
     }
@@ -122,18 +139,6 @@ $(document).ready(function() {
 
     $('#expand_all').click(function() {
         showAllCharts();
-    });
-
-    // TODO - set these individually based on API response
-    // update last updated
-    var summary_data_url = './data/summary.json';
-    $.getJSON(summary_data_url, function(data) {
-        var d = new Date(data['last_updated']);
-        var formatted_date = get_formatted_date(d);
-        $('#sbc1-last_updated').append('Last updated: ' + formatted_date);
-        $('#sbc2-last_updated').append('Last updated: ' + formatted_date);
-        $('#dc1-last_updated').append('Last updated: ' + formatted_date);
-        $('#dc2-last_updated').append('Last updated: ' + formatted_date);
     });
 
 });

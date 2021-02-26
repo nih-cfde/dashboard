@@ -1,90 +1,7 @@
 /* global d3 saveSvgAsPng d3_save_svg */
 
-// ls data | grep json | grep -v example | perl -ne 'chomp; print "    \"$_\": true,\n";'
-// remove any JSON files with errors/timeouts:
-// grep -l 'time limit' *.json
-var json_files = {
-    'files-anatomy-assay.json': true,
-    'files-anatomy-data_type.json': true,
-    'files-anatomy-dcc.json': true,
-    'files-anatomy-species.json': true,
-    'files-assay-anatomy.json': true,
-    'files-assay-data_type.json': true,
-    'files-assay-dcc.json': true,
-    'files-assay-species.json': true,
-    'files-data_type-anatomy.json': true,
-    'files-data_type-assay.json': true,
-    'files-data_type-dcc.json': true,
-    'files-data_type-species.json': true,
-    'files-dcc-anatomy.json': true,
-    'files-dcc-assay.json': true,
-    'files-dcc-data_type.json': true,
-    'files-dcc-species.json': true,
-    'files-species-anatomy.json': true,
-    'files-species-assay.json': true,
-    'files-species-data_type.json': true,
-    'files-species-dcc.json': true,
-    'samples-anatomy-assay.json': true,
-    'samples-anatomy-data_type.json': true,
-    'samples-anatomy-dcc.json': true,
-    'samples-anatomy-species.json': true,
-    'samples-assay-anatomy.json': true,
-    'samples-assay-data_type.json': true,
-    'samples-assay-dcc.json': true,
-    'samples-assay-species.json': true,
-    'samples-data_type-anatomy.json': true,
-    'samples-data_type-assay.json': true,
-    'samples-data_type-dcc.json': true,
-    'samples-data_type-species.json': true,
-    'samples-dcc-anatomy.json': true,
-    'samples-dcc-assay.json': true,
-    'samples-dcc-data_type.json': true,
-    'samples-dcc-species.json': true,
-    'samples-species-anatomy.json': true,
-    'samples-species-assay.json': true,
-    'samples-species-data_type.json': true,
-    'samples-species-dcc.json': true,
-    'subjects-anatomy-assay.json': true,
-    'subjects-anatomy-data_type.json': true,
-    'subjects-anatomy-dcc.json': true,
-    'subjects-anatomy-species.json': true,
-    'subjects-assay-anatomy.json': true,
-    'subjects-assay-data_type.json': true,
-    'subjects-assay-dcc.json': true,
-    'subjects-assay-species.json': true,
-    'subjects-data_type-anatomy.json': true,
-    'subjects-data_type-assay.json': true,
-    'subjects-data_type-dcc.json': true,
-    'subjects-data_type-species.json': true,
-    'subjects-dcc-anatomy.json': true,
-    'subjects-dcc-assay.json': true,
-    'subjects-dcc-data_type.json': true,
-    'subjects-dcc-species.json': true,
-    'subjects-species-anatomy.json': true,
-    'subjects-species-assay.json': true,
-    'subjects-species-data_type.json': true,
-    'subjects-species-dcc.json': true,
-    'volume-anatomy-assay.json': true,
-    'volume-anatomy-data_type.json': true,
-    'volume-anatomy-dcc.json': true,
-    'volume-anatomy-species.json': true,
-    'volume-assay-anatomy.json': true,
-    'volume-assay-data_type.json': true,
-    'volume-assay-dcc.json': true,
-    'volume-assay-species.json': true,
-    'volume-data_type-anatomy.json': true,
-    'volume-data_type-assay.json': true,
-    'volume-data_type-dcc.json': true,
-    'volume-data_type-species.json': true,
-    'volume-dcc-anatomy.json': true,
-    'volume-dcc-assay.json': true,
-    'volume-dcc-data_type.json': true,
-    'volume-dcc-species.json': true,
-    'volume-species-anatomy.json': true,
-    'volume-species-assay.json': true,
-    'volume-species-data_type.json': true,
-    'volume-species-dcc.json': true
-};
+var XVALS = ['dcc', 'data_type', 'assay', 'species', 'anatomy'];
+var YVALS = ['files', 'volume', 'samples', 'subjects'];
 
 var chart_data = {};
 
@@ -117,11 +34,9 @@ function update_dropdowns(chart_id) {
     var x_axis_val = $('#' + chart_id + '-x-axis option:checked').val();
     var y_axis_val = $('#' + chart_id + '-y-axis option:checked').val();
     var group_by_val = $('#' + chart_id + '-group-by option:checked').val();
-
+    
     // is the current selection valid?
-    var file = y_axis_val + '-' + x_axis_val + '-' + group_by_val + '.json';
-    var is_valid = file in json_files;
-
+    var is_valid = x_axis_val != group_by_val;
     var y_opts = document.getElementById(chart_id + '-y-axis').options;
     var gb_opts = document.getElementById(chart_id + '-group-by').options;
 
@@ -129,21 +44,23 @@ function update_dropdowns(chart_id) {
 
     // if not, find a valid selection that includes the selected x_axis_val
     if (! is_valid) {
-        var new_y = null;
-        var new_gb = null;
-        Object.keys(json_files).forEach(k => {
-            var parts = k.replace('.json', '').split('-');
+	var new_y = null;
+	var new_gb = null;
 
-            // pick the first one in the list
-            if ((parts[1] == x_axis_val) && (new_y == null)) {
-                new_y = parts[0];
-                new_gb = parts[2];
-            }
-        });
+	yv_loop:
+	for (yv of YVALS) {
+	    for (gb of XVALS) {
+		if (x_axis_val != gb) {
+		    new_y = yv;
+		    new_gb = gb;
+		    break yv_loop;
+		}
+	    }
+	}
 
-        y_axis_val = new_y;
-        group_by_val = new_gb;
-
+	y_axis_val = new_y;
+	group_by_val = new_gb;
+	
         for (y_idx = 0; y_idx < y_opts.length; ++y_idx) {
             y_opts[y_idx].disabled = false;
             y_opts[y_idx].selected = (y_opts[y_idx].value == new_y);
@@ -157,23 +74,21 @@ function update_dropdowns(chart_id) {
 
     // enable y_axis choices that are valid given current x_axis, group_by
     for (y_idx = 0; y_idx < y_opts.length; ++y_idx) {
-        file = y_opts[y_idx].value + '-' + x_axis_val + '-' + group_by_val + '.json';
-        is_ok = file in json_files;
+	is_ok = (x_axis_val != group_by_val);
         y_opts[y_idx].disabled = ! is_ok;
     }
 
     // enable group_by choices that are valid given current x_axis, y_axis
     for (gb_idx = 0; gb_idx < gb_opts.length; ++gb_idx) {
-        file = y_axis_val + '-' + x_axis_val + '-' + gb_opts[gb_idx].value + '.json';
-        is_ok = file in json_files;
+	is_ok = (x_axis_val != gb_opts[gb_idx].value);
         gb_opts[gb_idx].disabled = ! is_ok;
     }
 }
 
-function register_dropdowns(chart_id) {
+function register_dropdowns(catalog_id, chart_id) {
     $.each(['x-axis', 'y-axis', 'group-by'], function(i, id) {
         $('#' + chart_id + '-' + id).change(function() {
-            update_chart(chart_id);
+            update_chart(catalog_id, chart_id);
         });
     });
 }
@@ -190,7 +105,7 @@ function update_chart_title(chart_id) {
     }
 }
 
-function update_chart(chart_id) {
+function update_chart(catalog_id, chart_id) {
     update_dropdowns(chart_id);
 
     var x_axis = $('#' + chart_id + '-x-axis option:checked').val();
@@ -199,16 +114,20 @@ function update_chart(chart_id) {
 
     // Given the x, y and group by information, we formulate the URL
     // to retrieve data from.
-    var data_url = './data/' + y_axis + '-' + x_axis + '-' + group_by + '.json';
-
-    $.getJSON(data_url, function(data) {
+    var data_url = DASHBOARD_API_URL + '/stats/' + [y_axis, x_axis, MAX_GRAPH_GROUP1, group_by, MAX_GRAPH_GROUP2].join('/');
+    if (catalog_id != null) data_url += '?catalogId=' + catalog_id;
+    
+    var data_fn = function(data) {
         $('#' + chart_id).replaceWith('<svg id="' + chart_id + '"/>');
         register_export_buttons(chart_id, data);
         draw_chart(chart_id, data, x_axis, y_axis);
-    }).fail(function() {
+    };
+    var fail_fn = function(jqXHR, status, error) {
         console.error('Error loading data for chart combination.');
         show_error(chart_id);
-    });
+    };
+    
+    get_json_retry(data_url, data_fn, fail_fn);
 }
 
 function compute_totals(data, keys) {
@@ -332,8 +251,8 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
 
     // add x index to series so it's not lost when empty bars are filtered
     series.forEach(s => {
-	j = 0;
-	s.forEach(t => t.push(j++));
+        var j = 0;
+        s.forEach(t => t.push(j++));
     });
 
     const top_margin = 35;
@@ -350,25 +269,25 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
     if (svg_width < 200) svg_width = 200;
     if (svg_height < 200) svg_height = 300;
     
-    legend_width = svg_width * 0.3;
+    var legend_width = svg_width * 0.3;
     var show_bar_totals = true;
 
     if (legend_width > 350) {
-	legend_width = 350;
+        legend_width = 350;
     }
 
     // switch to more (horizontally) compact layout
     if (svg_width < 400) {
-	legend_width = 0;
-	right_margin = 10;
-	x_axis_label_rot = 90;
-	x_axis_label_dx = '1em';
-	x_axis_label_dy = '-0.5em';
-	d3.select('#' + svg_id + '-last_updated').style('display', 'none');
-	d3.select('#' + svg_id + '-form-row').style('flex-wrap', 'wrap');
+        legend_width = 0;
+        right_margin = 10;
+        x_axis_label_rot = 90;
+        x_axis_label_dx = '1em';
+        x_axis_label_dy = '-0.5em';
+        d3.select('#' + svg_id + '-last_updated').style('display', 'none');
+        d3.select('#' + svg_id + '-form-row').style('flex-wrap', 'wrap');
     } else {
-	d3.select('#' + svg_id + '-last_updated').style('display', null);
-	d3.select('#' + svg_id + '-form-row').style('flex-wrap', 'nowrap');
+        d3.select('#' + svg_id + '-last_updated').style('display', null);
+        d3.select('#' + svg_id + '-form-row').style('flex-wrap', 'nowrap');
     }
     
     const width = svg_width - left_margin - right_margin - legend_width;
@@ -388,7 +307,7 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
     // guess whether there's enough space to display stacked bar totals
     var xbw = xScale.bandwidth();
     if (xbw < 35) {
-	show_bar_totals = false;
+        show_bar_totals = false;
     }
     
     // Configure the y-axis scale. It goes from 0 to the maximum
@@ -400,21 +319,21 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
 
     var num_bars = stacked_data.length;
     function maxlen_fn(text, index) {
-	// final bar has less space due to color key
-	return ((x_axis_label_rot != 90) && (index+1 == num_bars)) ? 13 : 28;
+        // final bar has less space due to color key
+        return ((x_axis_label_rot != 90) && (index + 1 == num_bars)) ? 13 : 28;
     }
 
     var tlc = 0;
     function trim_labels(text, maxlen_fn) {
-	text.each(function() {
+        text.each(function() {
 	    var node = d3.select(this);
 	    var label = node.text();
 	    var ml = maxlen_fn(label, tlc++);
-	    if (label.length > (ml-3)) {
-		node.text(label.substring(0, ml-3) + '...');
+	    if (label.length > (ml - 3)) {
+                node.text(label.substring(0, ml - 3) + '...');
 	    }
 	    node.append('title').text(label);
-	});
+        });
     }
 
     // Add the x-axis
@@ -467,17 +386,17 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
         .attr('text-anchor', 'middle')
         .attr('fill', '#000')
         .text((a) => {
-	    if (!show_bar_totals) return '';
+	    if (! show_bar_totals) return '';
 	    if (a.total > 999999) {
-		return `${large_number_formatter(a.total)}`;
+                return `${large_number_formatter(a.total)}`;
             } else {
-		return `${comma_formatter(a.total)}`;
+                return `${comma_formatter(a.total)}`;
             }
-	});
+        });
 
     // Add the y-axis label
     svg.append('text')
-        .attr('x', -(height/2 + top_margin))
+        .attr('x', -(height / 2 + top_margin))
         .attr('y', 20)
         .attr('transform', 'rotate(-90)')
         .attr('text-anchor', 'middle')
@@ -504,9 +423,9 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
     var title_fn = function(d) { return d; };
     var text_fn = function(d) { return d; };
 
-   //    add_legend(svg_id, width, chart, categories.slice(0,max_categories), tooltip, title_fn, text_fn, left_margin, 0);
+    //    add_legend(svg_id, width, chart, categories.slice(0,max_categories), tooltip, title_fn, text_fn, left_margin, 0);
     if (legend_width > 0) {
-	add_legend(svg_id, width, legend_width, chart, categories.slice(0,max_categories), null, title_fn, text_fn, left_margin, 0);
+        add_legend(svg_id, width, legend_width, chart, categories.slice(0, max_categories), null, title_fn, text_fn, left_margin, 0);
     }
 
     groups.attr('fill', function(a, b) { return colorizer(b); })
@@ -589,11 +508,11 @@ function add_legend(svg_id, chart_width, legend_width, chart, categories, toolti
         .on('mouseover', function(d, e) {
 	    if (tooltip != null) tooltip.style('display', null);
 	    if (mouseover_fn != null) mouseover_fn(d, e);
-	})
+        })
         .on('mouseout', function(d, e) {
 	    if (tooltip != null) tooltip.style('display', 'none');
 	    if (mouseout_fn != null) mouseout_fn(d, e);
-	})
+        })
         .on('mousemove', function(d, e) {
 	    if (tooltip == null) return;
 	    var tooltip_title = title_fn(d);
@@ -622,7 +541,7 @@ function add_legend(svg_id, chart_width, legend_width, chart, categories, toolti
             }
 	    
             tooltip.attr('transform', 'translate(' + tooltipX + ',' + tooltipY + ')');
-	});
+        });
     
     legend.append('rect')
         .attr('x', chart_width + 28)
@@ -636,8 +555,8 @@ function add_legend(svg_id, chart_width, legend_width, chart, categories, toolti
         .attr('dy', '.35em')
         .attr('font-family', 'sans-serif')
         .style('font-size', '0.7rem')
-        .text(title_fn).each(ellipsize(legend_width-15,5))
-	.append('title').text(title_fn);
+        .text(title_fn).each(ellipsize(legend_width - 15, 5))
+        .append('title').text(title_fn);
 }
 
 function save_csv(filename, rows) {
@@ -697,7 +616,7 @@ function export2png(chart_id) {
     $('#' + chart_id + '-export-button').hide();
     saveSvgAsPng(document.getElementById(chart_id), 'export.png').then(function() {
         // Re-display the export button
-	$('#' + chart_id + '-export-button').show();
+        $('#' + chart_id + '-export-button').show();
     });
 }
 
@@ -720,15 +639,15 @@ function export2csv(chart_id) {
     var total_field = null;
     
     chdata.forEach(function(obj_row) {
-	d3.keys(obj_row).forEach(function(field) {
+        d3.keys(obj_row).forEach(function(field) {
 	    if ((field == 'total') || (field == 'Total')) {
-		total_field = field;
+                total_field = field;
 	    }
-	    else if (!(field in all_fields_d)) {
-		all_fields_d[field] = true;
-		all_fields.push(field);
+	    else if (! (field in all_fields_d)) {
+                all_fields_d[field] = true;
+                all_fields.push(field);
 	    }
-	});
+        });
     });
 
     // place total last
@@ -742,9 +661,9 @@ function export2csv(chart_id) {
 
         all_fields.forEach(function(field) {
 	    if ((field in obj_row) && (obj_row[field] != null)) {
-		data[index].push(obj_row[field]);
+                data[index].push(obj_row[field]);
 	    } else {
-		data[index].push(0);
+                data[index].push(0);
 	    }
         });
 

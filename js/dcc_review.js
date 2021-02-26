@@ -1,29 +1,27 @@
 /* globals draw_chart register_export_buttons show_error */
 
-function populate_chart(chart_id) {
-    //update_dropdowns(chart_id);
+function populate_chart(catalog_id, chart_id) {
 
-    //var y_axis = $('#' + chart_id + '-y-axis').val();
-    //var x_axis = $('#' + chart_id + '-x-axis').val();
-    //var group_by = $('#' + chart_id + '-group-by').val();
+    // summary info to display
+    var count = 'files';
+    var group1 = 'assay';
+    var group2 = 'anatomy';
 
-    // Given the x, y and group by information, we formulate the URL
-    // to retrieve data from.
-    //var data_url = './data/' + y_axis + '-' + x_axis + '-' + group_by + '.json';
+    var data_url = DASHBOARD_API_URL + '/stats/' + [count, group1, MAX_GRAPH_GROUP1, group2, MAX_GRAPH_GROUP2].join('/');
+    if (catalog_id != null) data_url += '?catalogId=' + catalog_id;
 
-    // Will render files-anatomy-assay.json data
-    var data_url = './data/HMP/files-assay-anatomy.json';
-    var x_axis = 'assay';
-    var y_axis = 'files';
-    
-    $.getJSON(data_url, function(data) {
+    var data_fn = function(data) {
         $('#' + chart_id).replaceWith('<svg id="' + chart_id + '"/>');
         register_export_buttons(chart_id, data);
-        draw_chart(chart_id, data, x_axis, y_axis);
-    }).fail(function() {
+        draw_chart(chart_id, data, group1, count);
+    };
+
+    var fail_fn = function(jqXHR, status, error) {
         console.error('Error loading data for DCC review chart combination.');
         show_error(chart_id);
-    });
+    };
+    
+    get_json_retry(data_url, data_fn, fail_fn);
 }
 
 function titleCase(str) {
@@ -91,7 +89,7 @@ var ENTITY_FKEYS = {
     'biosample:subject': 'biosample_from_subject',
     'biosample:file': 'file_describes_biosample',
     'file:subject': 'file_describes_subject',
-    'file:biosample': 'file_describes_biosample',
+    'file:biosample': 'file_describes_biosample'
 };
 
 // Construct Chaise URI for the specified entity.
@@ -99,54 +97,54 @@ var ENTITY_FKEYS = {
 // entity - 'subject', 'biosample', 'file', 'project', or 'X_with_Y'
 //           where X in ('subjects', 'biosamples', 'files')
 //           and Y in ('subject', 'biosample', 'file')
-function get_chaise_uri(catalog_id, DCC, entity) {
-    // TODO - DERIVA server name and default catalog id should be in config file
-    var base_uri = 'http://app-dev.nih-cfde.org/chaise/recordset/#' + catalog_id;
+function get_chaise_uri(catalog_id, entity) {
+    var base_uri = DERIVA_URL + '/chaise/recordset/#' + catalog_id;
 
     // TODO - this depends on hard-coded foreign key names
-    // Chaise/DERIVA facet string to show only projects with subprojects
-    var project_facet_str = LZString.compressToEncodedURIComponent('{"and":[{"source":[{"inbound":["CFDE","project_in_project_parent_fkey"]},{"outbound":["CFDE","project_in_project_child_fkey"]},{"inbound":["CFDE","project_in_project_transitive_leader_fkey"]},{"outbound":["CFDE","project_in_project_transitive_member_fkey"]},"RID"],"not_null":true}]}');    
+    // Chaise/DERIVA facet string to show only top-level subprojects
+    var project_facet_str = LZString.compressToEncodedURIComponent('{"and":[{"source":[{"inbound":["CFDE","project_in_project_child_fkey"]},{"outbound":["CFDE","project_in_project_parent_fkey"]},{"inbound":["CFDE","project_in_project_transitive_member_fkey"]},{"outbound":["CFDE","project_in_project_transitive_leader_fkey"]},"RID"],"not_null":true},{"source":[{"inbound":["CFDE","project_in_project_child_fkey"]},{"outbound":["CFDE","project_in_project_parent_fkey"]},{"inbound":["CFDE","project_in_project_child_fkey"]},{"outbound":["CFDE","project_in_project_parent_fkey"]},"RID"],"choices":[null]}]}');
 
     var i = entity.indexOf('_with_');
 
     // single entity, no explicit join (except for project)
     if (i == -1) {
-	// trim trailing 's'
-	if (entity.slice(-1) == 's') {
+        // trim trailing 's'
+        if (entity.slice(-1) == 's') {
 	    entity = entity.slice(0, entity.length - 1);
-	}
-	var chaise_uri = base_uri + '/CFDE:' + entity;
-	if (entity == 'project') {
+        }
+        var chaise_uri = base_uri + '/CFDE:' + entity;
+        if (entity == 'project') {
 	    chaise_uri += '/*::facets::' + project_facet_str + '@sort(RID)';
-	}
-	return chaise_uri;
+        }
+        return chaise_uri;
     }
     // multiple entities
     else {
-	var from = entity.slice(0,i-1);
-	var to = entity.slice(i+6);
-	var facet_str = '';
-	var fkey_str = ENTITY_FKEYS[from + ":" + to];
-	var from_fkey = fkey_str + '_' + from + '_fkey';
-	var to_fkey = fkey_str + '_' + to + '_fkey';
-	var chaise_facet = '{"and":[{"source":[{"inbound":["CFDE","' + from_fkey + '"]},{"outbound":["CFDE","' + to_fkey + '"]},"RID"],"not_null":true}]}';
-	var facet_str = LZString.compressToEncodedURIComponent(chaise_facet);
-	return base_uri + '/CFDE:' + from + '/*::facets::' + facet_str + '@sort(RID)';
+        var from = entity.slice(0, i - 1);
+        var to = entity.slice(i + 6);
+        var facet_str = '';
+        var fkey_str = ENTITY_FKEYS[from + ':' + to];
+        var from_fkey = fkey_str + '_' + from + '_fkey';
+        var to_fkey = fkey_str + '_' + to + '_fkey';
+        var chaise_facet = '{"and":[{"source":[{"inbound":["CFDE","' + from_fkey + '"]},{"outbound":["CFDE","' + to_fkey + '"]},"RID"],"not_null":true}]}';
+        var facet_str = LZString.compressToEncodedURIComponent(chaise_facet);
+        return base_uri + '/CFDE:' + from + '/*::facets::' + facet_str + '@sort(RID)';
     }
 }
 
 function add_summary_data(catalog_id, DCC) {
     var data_totals_table = $('#data_total_table');
     var data_preview_table = $('#data_preview_table');
-    var summary_data_url = './data/' + DCC + '/' + DCC + '-summary.json';
+    var dcc_summary_url = DASHBOARD_API_URL + '/dcc/' + DCC;
+    if (catalog_id != null) dcc_summary_url += '?catalogId=' + catalog_id;
 
     // counts for top-level entities, except project
-    $.getJSON(summary_data_url, function(data) {
+    get_json_retry(dcc_summary_url, function(data) {
         Object.keys(data).forEach(function(key) {
             if (key.endsWith('_count')) {
-		var entity =  key.slice(0, key.length - '_count'.length);
+                var entity =  key.slice(0, key.length - '_count'.length);
                 var name = 'Total ' + key.charAt(0).toUpperCase() + key.slice(1, key.length - '_count'.length) + 's';
-		var chaise_uri = get_chaise_uri(catalog_id, DCC, entity);
+                var chaise_uri = get_chaise_uri(catalog_id, entity);
                 var markup = '<tr><td>' + name + '</td><td><a href="' + chaise_uri + '">' + data[key].toLocaleString() + '</a></td></tr>';
                 data_totals_table.append(markup);
                 data_preview_table.append(markup);
@@ -154,8 +152,10 @@ function add_summary_data(catalog_id, DCC) {
         });
 
         $('#dcc_name').append(data['complete_name']);
-        $('#dcc_link').prop('href', data['url']);
-        $('#dcc_link').prepend(data['url']);
+	// https://app-dev.nih-cfde.org/chaise/record/#registry/CFDE:datapackage/RID=4HE
+	var data_url = DERIVA_URL + '/chaise/recordset/#registry/CFDE:datapackage';
+        $('#datapackage_link').prop('href', data_url);
+        $('#datapackage_link').prepend(data_url);
         $('#data_snapshot_title').prepend(data['moniker'] + ' ');
         var d = new Date(data['last_updated']);
         var formatted_date = get_formatted_date(d);
@@ -163,10 +163,12 @@ function add_summary_data(catalog_id, DCC) {
     });
 
     // counts for top-level projects (i.e., those linked to a sub-project)
-    var chaise_uri = get_chaise_uri(catalog_id, DCC, 'project');
-    summary_data_url = './data/' + DCC + '/' + DCC +  '-projects.json';
+    var chaise_uri = get_chaise_uri(catalog_id, 'project');
+    // TODO - add project count to DCC summary endpoint
+    var dcc_projects_url = DASHBOARD_API_URL + '/dcc/' + DCC + '/projects';
+    if (catalog_id != null) dcc_projects_url += '?catalogId=' + catalog_id;
 
-    $.getJSON(summary_data_url, function(data) {
+    get_json_retry(dcc_projects_url, function(data) {
         var name = 'Total Projects';
         var value = data.length;
         var markup = '<tr><td>' + name + '</td><td><a href="' + chaise_uri + '">' + value + '</a></td></tr>';
@@ -175,10 +177,11 @@ function add_summary_data(catalog_id, DCC) {
     });
 
     // counts for top-level entities with links to other entities of a specified type (e.g., Subjects with File)
-    var linkcount_data_url = './data/' + DCC + '/' + DCC + '-linkcount.json';
+    var dcc_linkcount_url = DASHBOARD_API_URL + '/dcc/' + DCC + '/linkcount';
+    if (catalog_id != null) dcc_linkcount_url += '?catalogId=' + catalog_id;
     var data_breakdown_table = $('#data_breakdown_table');
 
-    $.getJSON(linkcount_data_url, function(data) {
+    get_json_retry(dcc_linkcount_url, function(data) {
         // iterate over keys like "subject_count" and "subject_with_biosample_count"
         // remove "_count", append an 's' at the end of the first word, make
         // first and last words title case, and replace "_" with " "
@@ -200,7 +203,7 @@ function add_summary_data(catalog_id, DCC) {
                     name = name.slice(0, idx + 1) + name.charAt(idx + 1).toUpperCase() + name.slice(idx + 2);
                 }
 
-		var chaise_uri = get_chaise_uri(catalog_id, DCC, name.toLowerCase());
+                var chaise_uri = get_chaise_uri(catalog_id, name.toLowerCase());
                 name = name.replace(/_/g, ' ');
                 var markup = '<tr><td>' + name + '</td><td><a href="' + chaise_uri + '">' + data[key].toLocaleString() + '</a></td></tr>';
                 data_breakdown_table.append(markup);
@@ -209,11 +212,42 @@ function add_summary_data(catalog_id, DCC) {
     });
 }
 
-$(document).ready(function() {
-    // chart 1 - stacked bar graph
-    populate_chart('review_bc1');
+function loadScript(url) {
+    var script = document.querySelector('script[src^="' + url + '"]');
+    if (script) {
+        // we're assuming that file injection = file loaded
+        // NOTE this assumption is not correct if these files are loaded dynamically by other sources
+        return;
+    }
 
-    var CATALOG_ID = 6;
-    var DCC = 'HMP';
-    add_summary_data(CATALOG_ID, DCC);
+    script = document.createElement('script');
+    script.setAttribute("type", "text/javascript");
+    script.setAttribute("src", url);
+    document.getElementsByTagName('head')[0].appendChild(script);
+}
+
+$(document).ready(function() {
+    var catalog_id = get_catalog_id();
+    var dcc = null;
+    // the DCC review page assumes that the specified catalog contains data for a single DCC only
+    var dcc_list_url = DASHBOARD_API_URL + '/dcc';
+    if (catalog_id != null) {
+        chaiseConfig.defaultCatalog = catalog_id;
+        dcc_list_url += '?catalogId=' + catalog_id;
+    }
+
+    loadScript("/chaise/lib/navbar/navbar.app.js");
+
+    register_dropdowns(catalog_id, 'review_bc1');
+    update_chart(catalog_id, 'review_bc1');
+    
+    get_json_retry(dcc_list_url, function(data) {
+        if (data.length != 1) {
+	    console.log('WARNING: DERIVA CATALOG_ID  ' + catalog_id + ' contains ' + ((data.length > 1) ? 'data from multiple DCCs' : 'no data'));
+        }
+	if (data.length > 0) {
+	    dcc = data[0];
+	    add_summary_data(catalog_id, dcc);
+        }
+    });
 });
