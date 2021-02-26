@@ -1,14 +1,16 @@
-/* global d3 add_tooltip colorizer */
+/* global d3 add_legend add_tooltip colorizer ellipsize */
 
 function update_donut_chart_title(chart_id, dropdown) {
     const heading = d3.select('#' + chart_id + '-title');
     var dvalue = d3.select('#' + chart_id + '-' + dropdown + ' option:checked').text();
     var new_title;
+
     if (dropdown == 'data_type') {
         new_title = 'Subjects by Assay and Anatomy across Programs';
     } else if (dropdown == 'dcc') {
         new_title = 'Samples by Anatomy and CF Program';
     }
+
     heading.text(new_title);
 }
 
@@ -67,7 +69,7 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
     const outer_radius = hh;
     const inner_radius = outer_radius / 2.0;
     // console.log("hw=" + hw + " hh=" + hh + " cx=" + cx + " cy=" + cy + " outer_radius=" + outer_radius);
-    
+
     const chart = svg.append('g')
         .attr('transform', `translate(${margin}, ${top_margin})`);
 
@@ -118,7 +120,7 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
     var large_number_formatter = d3.format('.2s');
     var tooltip = null;
     var cat2path = {};
-    
+
     // donut chart
     chart.selectAll('slices')
         .data(data_ready)
@@ -154,7 +156,7 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
                 brick_value = comma_formatter(d.data.value);
             }
             $('#' + svg_id + '-brick-value').text(brick_value + ' ' + units);
-	    let text = $('#' + svg_id + '-brick-category');
+            let text = $('#' + svg_id + '-brick-category');
             text.append('tspan').text(brick_name).each(ellipsize(190, 5));
             tooltip.attr('transform', 'translate(' + xPosition + ',' + yPosition + ')');
         });
@@ -273,7 +275,7 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
                 return (midangle < Math.PI ? 'start' : 'end');
             });
     }
-    
+
     // download icon
     svg.append('image')
         .attr('x', svg_width - 125)
@@ -302,11 +304,11 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
     var mouseover_fn = function(d, e) {
         d3.select(cat2path[d.data.key]).attr('stroke', '#000');
     };
-    
+
     var mouseout_fn = function(d, e) {
         d3.select(cat2path[d.data.key]).attr('stroke', 'none');
     };
-    
+
     var text_fn = function(d) {
         var value = d.data.value;
         if (value > 999999) {
@@ -316,7 +318,7 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
         }
         return value + ' ' + units; 
     };
-    
+
     var x_offset = 0;
     var y_offset = 0;
     var chart_width = svg_width - legend_width - (2 * margin);

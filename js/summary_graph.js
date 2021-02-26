@@ -52,10 +52,9 @@ function get_time_zone_diff(d) {
 
 $(document).ready(function() {
     var catalog_id = get_catalog_id();
-
+  
     // chart 1 - stacked bar graph
     register_dropdowns(catalog_id, 'sbc1');
     update_chart(catalog_id, 'sbc1');
     window.addEventListener('resize', function() { update_chart(catalog_id, 'sbc1'); });
-    
 });

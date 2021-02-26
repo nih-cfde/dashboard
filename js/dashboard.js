@@ -1,4 +1,4 @@
-/* global draw_donut_chart register_dropdowns register_donut_dropdown register_export_buttons update_chart */
+/* global draw_donut_chart register_dropdowns register_donut_dropdown register_export_buttons update_chart update_donut_chart */
 
 // TODO - copied from dcc_review.js
 function get_formatted_date(d) {
@@ -63,7 +63,7 @@ $(document).ready(function() {
 
     var dc1_data = null;
     var dc2_data = null;
-    
+
     // chart 3 - donut graph
     var count = 'subjects';
     var group1 = 'assay';
@@ -105,8 +105,8 @@ $(document).ready(function() {
     // display a single chart, hide the others
     function showChart(cnum) {
         for (var i = 1; i <= 4; ++i) {
-	    $('#chart' + i).hide();
-	    $('#thumb' + i).removeClass('selected');
+	        $('#chart' + i).hide();
+	        $('#thumb' + i).removeClass('selected');
         }
         $('#chart' + cnum).show();
         if (cnum == 1) update_chart(catalog_id, 'sbc1');
@@ -119,24 +119,24 @@ $(document).ready(function() {
     // display all charts
     function showAllCharts() {
         for (var i = 1; i <= 4; ++i) {
-	    $('#chart' + i).show();
-	    $('#thumb' + i).addClass('selected');
+     	    $('#chart' + i).show();
+    	    $('#thumb' + i).addClass('selected');
         }
         update_chart(catalog_id, 'sbc1');
         update_chart(catalog_id, 'sbc2');
         update_donut_chart('dc1', dc1_data, 'data_type', 'subjects');
         update_donut_chart('dc2', dc2_data, 'dcc', 'samples');
     }
-    
+
     // enable interactive chart selection by clicking thumbnails
     for (var i = 1; i <= 4; ++i) {
         const cnum = i;
         $('#thumb' + cnum).off('click');
         $('#thumb' + cnum).click(function() {
-	    showChart(cnum);
+            showChart(cnum);
         });
     }
-    
+
     $('#expand_all').click(function() {
         showAllCharts();
     });
