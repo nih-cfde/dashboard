@@ -133,7 +133,7 @@ function get_chaise_uri(catalog_id, entity, DCC_RID="") {
     }
 }
 
-function add_summary_data(catalog_id, DCC) {
+function add_summary_data(catalog_id, DCC, num_dccs) {
     var data_totals_table = $('#data_total_table');
     var data_preview_table = $('#data_preview_table');
     var dcc_summary_url = DASHBOARD_API_URL + '/dcc/' + DCC;
@@ -156,7 +156,13 @@ function add_summary_data(catalog_id, DCC) {
 	var data_url = DERIVA_URL + '/chaise/recordset/#registry/CFDE:datapackage'; // /RID=' + data['datapackage_RID'];
         $('#datapackage_link').prop('href', data_url);
         $('#datapackage_link').prepend(data_url);
-        $('#data_snapshot_title').prepend(data['moniker'] + ' ');
+	$('#data_review_title')[0].innerHTML = data['moniker'] +  ' Data Review';
+	
+	if (num_dccs == 1) {
+            $('#data_snapshot_title')[0].innerHTML = data['moniker'] +  ' Data Snapshot';
+	} else {
+            $('#data_snapshot_title')[0].innerHTML =  'Data Snapshot';
+	}
         var d = new Date(data['last_updated']);
         var formatted_date = get_formatted_date(d);
         $('#last_updated').append('Last updated: ' + formatted_date);
@@ -233,7 +239,7 @@ $(document).ready(function() {
         }
 	if (data.length > 0) {
 	    dcc = data[0];
-	    add_summary_data(catalog_id, dcc);
+	    add_summary_data(catalog_id, dcc, data.length);
         }
     });
 });
