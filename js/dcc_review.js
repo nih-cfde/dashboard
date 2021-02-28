@@ -97,13 +97,14 @@ var ENTITY_FKEYS = {
 // entity - 'subject', 'biosample', 'file', 'project', or 'X_with_Y'
 //           where X in ('subjects', 'biosamples', 'files')
 //           and Y in ('subject', 'biosample', 'file')
-function get_chaise_uri(catalog_id, entity) {
+function get_chaise_uri(catalog_id, entity, DCC_RID="") {
     var base_uri = DERIVA_URL + '/chaise/recordset/#' + catalog_id;
 
-    // TODO - this depends on hard-coded foreign key names
     // Chaise/DERIVA facet string to show only top-level subprojects
-    var project_facet_str = LZString.compressToEncodedURIComponent('{"and":[{"source":[{"inbound":["CFDE","project_in_project_child_fkey"]},{"outbound":["CFDE","project_in_project_parent_fkey"]},{"inbound":["CFDE","project_in_project_transitive_member_fkey"]},{"outbound":["CFDE","project_in_project_transitive_leader_fkey"]},"RID"],"not_null":true},{"source":[{"inbound":["CFDE","project_in_project_child_fkey"]},{"outbound":["CFDE","project_in_project_parent_fkey"]},{"inbound":["CFDE","project_in_project_child_fkey"]},{"outbound":["CFDE","project_in_project_parent_fkey"]},"RID"],"choices":[null]}]}');
-
+    var top_project_facet_str = LZString.compressToEncodedURIComponent('{"and":[{"source":[{"inbound":["CFDE","project_in_project_child_fkey"]},{"outbound":["CFDE","project_in_project_parent_fkey"]},"RID"],"choices":["' + DCC_RID + '"]}]}');
+    // Chaise/DERIVA facet string to show all subprojects
+    var all_project_facet_str = LZString.compressToEncodedURIComponent('{"and":[{"source":[{"inbound":["CFDE","project_in_project_child_fkey"]},{"outbound":["CFDE","project_in_project_parent_fkey"]},{"inbound":["CFDE","project_in_project_transitive_member_fkey"]},{"outbound":["CFDE","project_in_project_transitive_leader_fkey"]},"RID"],"choices":["' + DCC_RID + '"]}]}');
+    
     var i = entity.indexOf('_with_');
 
     // single entity, no explicit join (except for project)
@@ -114,7 +115,7 @@ function get_chaise_uri(catalog_id, entity) {
         }
         var chaise_uri = base_uri + '/CFDE:' + entity;
         if (entity == 'project') {
-	    chaise_uri += '/*::facets::' + project_facet_str + '@sort(RID)';
+	    chaise_uri += '/*::facets::' + all_project_facet_str + '@sort(RID)';
         }
         return chaise_uri;
     }
@@ -141,39 +142,24 @@ function add_summary_data(catalog_id, DCC) {
     // counts for top-level entities, except project
     get_json_retry(dcc_summary_url, function(data) {
         Object.keys(data).forEach(function(key) {
-            if (key.endsWith('_count')) {
+            if (key.endsWith('_count') && (!key.startsWith('toplevel_project'))) {
                 var entity =  key.slice(0, key.length - '_count'.length);
                 var name = 'Total ' + key.charAt(0).toUpperCase() + key.slice(1, key.length - '_count'.length) + 's';
-                var chaise_uri = get_chaise_uri(catalog_id, entity);
+                var chaise_uri = get_chaise_uri(catalog_id, entity, data['RID']);
                 var markup = '<tr><td>' + name + '</td><td><a href="' + chaise_uri + '">' + data[key].toLocaleString() + '</a></td></tr>';
                 data_totals_table.append(markup);
                 data_preview_table.append(markup);
-            }
-        });
+	    }
+	});
 
         $('#dcc_name').append(data['complete_name']);
-	// https://app-dev.nih-cfde.org/chaise/record/#registry/CFDE:datapackage/RID=4HE
-	var data_url = DERIVA_URL + '/chaise/recordset/#registry/CFDE:datapackage';
+	var data_url = DERIVA_URL + '/chaise/recordset/#registry/CFDE:datapackage'; // /RID=' + data['datapackage_RID'];
         $('#datapackage_link').prop('href', data_url);
         $('#datapackage_link').prepend(data_url);
         $('#data_snapshot_title').prepend(data['moniker'] + ' ');
         var d = new Date(data['last_updated']);
         var formatted_date = get_formatted_date(d);
         $('#last_updated').append('Last updated: ' + formatted_date);
-    });
-
-    // counts for top-level projects (i.e., those linked to a sub-project)
-    var chaise_uri = get_chaise_uri(catalog_id, 'project');
-    // TODO - add project count to DCC summary endpoint
-    var dcc_projects_url = DASHBOARD_API_URL + '/dcc/' + DCC + '/projects';
-    if (catalog_id != null) dcc_projects_url += '?catalogId=' + catalog_id;
-
-    get_json_retry(dcc_projects_url, function(data) {
-        var name = 'Total Projects';
-        var value = data.length;
-        var markup = '<tr><td>' + name + '</td><td><a href="' + chaise_uri + '">' + value + '</a></td></tr>';
-        data_totals_table.append(markup);
-        data_preview_table.append(markup);
     });
 
     // counts for top-level entities with links to other entities of a specified type (e.g., Subjects with File)
@@ -186,7 +172,7 @@ function add_summary_data(catalog_id, DCC) {
         // remove "_count", append an 's' at the end of the first word, make
         // first and last words title case, and replace "_" with " "
         Object.keys(data).forEach(function(key) {
-            if (key.endsWith('_count')) {
+	    if (key.endsWith('_count') && (!key.startsWith('toplevel_project'))) {
                 var name = key.slice(0, key.length - '_count'.length);
                 name = name.charAt(0).toUpperCase() + name.slice(1);
                 var idx = name.indexOf('_');
@@ -237,7 +223,7 @@ $(document).ready(function() {
     }
 
     loadScript("/chaise/lib/navbar/navbar.app.js");
-
+    
     register_dropdowns(catalog_id, 'review_bc1');
     update_chart(catalog_id, 'review_bc1');
     
