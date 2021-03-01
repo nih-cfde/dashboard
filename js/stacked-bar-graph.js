@@ -2,6 +2,7 @@
 
 var XVALS = ['dcc', 'data_type', 'assay', 'species', 'anatomy'];
 var YVALS = ['files', 'volume', 'samples', 'subjects'];
+var REQUESTNUMS = {};
 
 var chart_data = {};
 
@@ -116,17 +117,27 @@ function update_chart(catalog_id, chart_id) {
     // to retrieve data from.
     var data_url = DASHBOARD_API_URL + '/stats/' + [y_axis, x_axis, MAX_GRAPH_GROUP1, group_by, MAX_GRAPH_GROUP2].join('/');
     if (catalog_id != null) data_url += '?catalogId=' + catalog_id;
+
+    if (!(chart_id in REQUESTNUMS)) {
+	REQUESTNUMS[chart_id] = 0;
+    }
+    const requestnum = ++REQUESTNUMS[chart_id];
     
     var data_fn = function(data) {
-        $('#' + chart_id).replaceWith('<svg id="' + chart_id + '"/>');
-        register_export_buttons(chart_id, data);
-        draw_chart(chart_id, data, x_axis, y_axis);
+	// ignore out-of-sequence responses
+	if (requestnum == REQUESTNUMS[chart_id]) {
+            $('#' + chart_id).replaceWith('<svg id="' + chart_id + '"/>');
+            register_export_buttons(chart_id, data);
+            draw_chart(chart_id, data, x_axis, y_axis);
+	}
     };
     var fail_fn = function(jqXHR, status, error) {
-        console.error('Error loading data for chart combination.');
-        show_error(chart_id);
+	// ignore out-of-sequence responses
+	if (requestnum == REQUESTNUMS[chart_id]) {
+            console.error('Error loading data for chart combination.');
+            show_error(chart_id);
+	}
     };
-    
     get_json_retry(data_url, data_fn, fail_fn);
 }
 
