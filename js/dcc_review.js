@@ -153,7 +153,9 @@ function add_summary_data(catalog_id, DCC, num_dccs) {
 	});
 
         $('#dcc_name').append(data['complete_name']);
-	var data_url = DERIVA_URL + '/chaise/recordset/#registry/CFDE:datapackage'; // /RID=' + data['datapackage_RID'];
+	var data_url = DERIVA_URL + '/chaise/recordset/#registry/CFDE:datapackage';
+	if (data['datapackage_RID'] != null) data_url += '/RID=' + data['datapackage_RID'];
+	
         $('#datapackage_link').prop('href', data_url);
         $('#datapackage_link').prepend(data_url);
 	$('#data_review_title')[0].innerHTML = data['moniker'] +  ' Data Review';
