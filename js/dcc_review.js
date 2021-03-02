@@ -233,7 +233,8 @@ $(document).ready(function() {
     loadScript("/chaise/lib/navbar/navbar.app.js");
     
     register_dropdowns(catalog_id, 'review_bc1');
-    update_chart(catalog_id, 'review_bc1');
+    // workaround for #63
+    setTimeout(() => { update_chart(catalog_id, 'review_bc1')}, 2000);
     
     get_json_retry(dcc_list_url, function(data) {
         if (data.length != 1) {
