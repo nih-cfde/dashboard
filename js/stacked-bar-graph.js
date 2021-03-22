@@ -38,6 +38,7 @@ function update_dropdowns(chart_id) {
     
     // is the current selection valid?
     var is_valid = x_axis_val != group_by_val;
+    var x_opts = document.getElementById(chart_id + '-x-axis').options;
     var y_opts = document.getElementById(chart_id + '-y-axis').options;
     var gb_opts = document.getElementById(chart_id + '-group-by').options;
 
@@ -59,7 +60,6 @@ function update_dropdowns(chart_id) {
 	    }
 	}
 
-	y_axis_val = new_y;
 	group_by_val = new_gb;
 	
         for (y_idx = 0; y_idx < y_opts.length; ++y_idx) {
@@ -73,13 +73,13 @@ function update_dropdowns(chart_id) {
         }
     }
 
-    // enable y_axis choices that are valid given current x_axis, group_by
-    for (y_idx = 0; y_idx < y_opts.length; ++y_idx) {
-	is_ok = (x_axis_val != group_by_val);
-        y_opts[y_idx].disabled = ! is_ok;
+    // enable x_axis choices that are valid given current group_by
+    for (x_idx = 0; x_idx < x_opts.length; ++x_idx) {
+	is_ok = (x_opts[x_idx].value != group_by_val);
+        x_opts[x_idx].disabled = ! is_ok;
     }
 
-    // enable group_by choices that are valid given current x_axis, y_axis
+    // enable group_by choices that are valid given current x_axis
     for (gb_idx = 0; gb_idx < gb_opts.length; ++gb_idx) {
 	is_ok = (x_axis_val != gb_opts[gb_idx].value);
         gb_opts[gb_idx].disabled = ! is_ok;
