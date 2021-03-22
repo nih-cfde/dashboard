@@ -197,7 +197,7 @@ function add_summary_data(catalog_id, DCC, num_dccs) {
                     name = name.slice(0, idx + 1) + name.charAt(idx + 1).toUpperCase() + name.slice(idx + 2);
                 }
 
-                var chaise_uri = get_chaise_uri(catalog_id, name.toLowerCase());
+                var chaise_uri = get_chaise_uri(catalog_id, name.toLowerCase(), data['RID']);
                 name = name.replace(/_/g, ' ');
                 var markup = '<tr><td>' + name + '</td><td><a href="' + chaise_uri + '">' + data[key].toLocaleString() + '</a></td></tr>';
                 data_breakdown_table.append(markup);
