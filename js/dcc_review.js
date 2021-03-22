@@ -135,7 +135,6 @@ function get_chaise_uri(catalog_id, entity, DCC_RID="") {
 
 function add_summary_data(catalog_id, DCC, num_dccs) {
     var data_totals_table = $('#data_total_table');
-    var data_preview_table = $('#data_preview_table');
     var dcc_summary_url = DASHBOARD_API_URL + '/dcc/' + DCC;
     if (catalog_id != null) dcc_summary_url += '?catalogId=' + catalog_id;
 
@@ -148,7 +147,6 @@ function add_summary_data(catalog_id, DCC, num_dccs) {
                 var chaise_uri = get_chaise_uri(catalog_id, entity, data['RID']);
                 var markup = '<tr><td>' + name + '</td><td><a href="' + chaise_uri + '">' + data[key].toLocaleString() + '</a></td></tr>';
                 data_totals_table.append(markup);
-                data_preview_table.append(markup);
 	    }
 	});
 
