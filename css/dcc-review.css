@@ -28,8 +28,11 @@ body {
 ----------------------------------------*/
 
 .main_data_content {
-	display: flex;
-	flex-direction: flex-start;
+        display: flex;
+        flex: 1 1 auto;
+        width: 1270px;
+    	flex-direction: row;
+	align-content: flex-start;
 }
 .main_data_content_left {
 	flex:0 0 400px;
@@ -103,7 +106,7 @@ body {
 /* Data Snapshot
 ----------------------------------------*/
 .data_snapshot {
-	flex:0 0 100%;
+       flex:1 0 100%;
 }
 .data_snapshot_border {
         border:1px solid #cccccc;
