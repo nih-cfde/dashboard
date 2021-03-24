@@ -24,9 +24,9 @@ navbar header {
 
 /* banner at top of page */
 navbar header.row::before {
-    content: "The data displayed on this page is not official and only for testing purposes.";
+    content: "Staging Server. The data and features of this page are not official and are only for testing purposes.";
     height: 30px;
-    background-color: #7e4544;
+    background-color: #7e4475;
     color: white;
     padding: 10px 0px;
     width: 100%;

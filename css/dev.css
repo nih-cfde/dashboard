@@ -1,0 +1,145 @@
+/**
+ * Caution: This file is used to resolve CSS conflicts between the
+ * portal/dashboard and the Chaise navbar. However, any styles here also affect
+ * the Chaise UI.
+ */
+
+body {
+  overflow-x: hidden;
+}
+
+/* remove style defined from chaise */
+body .content {
+    padding-top: 0px;
+}
+
+navbar {
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+
+navbar header {
+  background: none;
+  padding: 0px;
+}
+
+/* banner at top of page */
+navbar header.row::before {
+    content: "Development Server. The data and features of this page are not official and are only for testing purposes.";
+    height: 30px;
+    background-color: #447e71;
+    color: white;
+    padding: 10px 0px;
+    width: 100%;
+    text-align: center;
+}
+
+navbar header.row {
+  display: block;
+}
+
+navbar .navbar {
+  display: block;
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+navbar .navbar-brand {
+  margin-right: 0px;
+}
+
+navbar .navbar-nav {
+  -ms-flex-direction: unset;
+  flex-direction: unset;
+}
+
+navbar #login-link {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 40px;
+    border: 1px solid white;
+    border-radius: 4px;
+}
+
+/* external link icon to use in navbar */
+navbar a span.external-link-icon:not(:empty):not(.external-link-no-icon)::after {
+    display: inline-block;
+    font-size: .85rem;
+    font-family: 'Glyphicons Halflings';
+    content: "\e164";
+    padding-left: 2px;
+}
+
+/* lock icon to use in navbar */
+navbar a.disable-link::after {
+    display: inline-block;
+    font-size: .85rem;
+    font-family: 'Glyphicons Halflings';
+    content: "\e033";
+    padding-left: 2px;
+}
+
+/* patches a style for submenu positions */
+navbar .navbar-nav .dropdown-menu {
+    position: absolute;
+}
+
+/* patches a style for submenu positions */
+.navbar-nav .dropdown-submenu>.dropdown-menu {
+    position: fixed;
+}
+
+/* disable the | navbar menu option */
+navbar .navbar-nav .dropdown:nth-child(5) a {
+    pointer-events: none;
+}
+
+/* hide caret shown from other stylesheet */
+navbar .navbar-nav .dropdown>.dropdown-toggle::after {
+    content: none;
+}
+
+.navbar-inverse {
+  background-color: #336699;
+  border: none;
+}
+
+.navbar-inverse .navbar-brand,
+.navbar-inverse .navbar-nav>li>a,
+.navbar-inverse .navbar-nav.navbar-right>li>a {
+    color: #FFF;
+}
+
+.navbar-inverse .navbar-nav>li>a:hover,
+.navbar-inverse .navbar-nav>li>a:focus,
+.navbar-inverse .navbar-nav.navbar-right>li>a:hover {
+    color: #C1C1C1;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.navbar-inverse .navbar-nav>.open>a,
+.navbar-inverse .navbar-nav>.open>a:focus,
+.navbar-inverse .navbar-nav>.open>a:hover,
+.navbar-inverse .navbar-nav.navbar-right>.open>a:hover {
+    color: #fff;
+    background-color: #3046a4;
+}
+
+.navbar-brand {
+  padding: 5px 15px;
+}
+
+#brand-image {
+  height: 40px;
+  width: auto;
+}
+
+#form-controls .container,
+#sbc1-form-controls .container,
+#sbc2-form-controls .container,
+#dc1-form-controls .container,
+#dc2-form-controls .container {
+  width: 100%;
+}
