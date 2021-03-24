@@ -134,7 +134,6 @@ function get_chaise_uri(catalog_id, entity, DCC_RID="") {
 }
 
 function add_summary_data(catalog_id, DCC, num_dccs) {
-    var data_totals_table = $('#data_total_table');
     var dcc_summary_url = DASHBOARD_API_URL + '/dcc/' + DCC;
     if (catalog_id != null) dcc_summary_url += '?catalogId=' + catalog_id;
 
@@ -145,8 +144,7 @@ function add_summary_data(catalog_id, DCC, num_dccs) {
                 var entity =  key.slice(0, key.length - '_count'.length);
                 var name = 'Total ' + key.charAt(0).toUpperCase() + key.slice(1, key.length - '_count'.length) + 's';
                 var chaise_uri = get_chaise_uri(catalog_id, entity, data['RID']);
-                var markup = '<tr><td>' + name + '</td><td><a href="' + chaise_uri + '">' + data[key].toLocaleString() + '</a></td></tr>';
-                data_totals_table.append(markup);
+		$('#' + key).html('<a href="' + chaise_uri + '">' + data[key].toLocaleString() + '</a>');
 	    }
 	});
 
@@ -171,7 +169,6 @@ function add_summary_data(catalog_id, DCC, num_dccs) {
     // counts for top-level entities with links to other entities of a specified type (e.g., Subjects with File)
     var dcc_linkcount_url = DASHBOARD_API_URL + '/dcc/' + DCC + '/linkcount';
     if (catalog_id != null) dcc_linkcount_url += '?catalogId=' + catalog_id;
-    var data_breakdown_table = $('#data_breakdown_table');
 
     get_json_retry(dcc_linkcount_url, function(data) {
         // iterate over keys like "subject_count" and "subject_with_biosample_count"
@@ -197,8 +194,7 @@ function add_summary_data(catalog_id, DCC, num_dccs) {
 
                 var chaise_uri = get_chaise_uri(catalog_id, name.toLowerCase(), data['RID']);
                 name = name.replace(/_/g, ' ');
-                var markup = '<tr><td>' + name + '</td><td><a href="' + chaise_uri + '">' + data[key].toLocaleString() + '</a></td></tr>';
-                data_breakdown_table.append(markup);
+		$('#data_breakdown_table >> #' + key).html('<a href="' + chaise_uri + '">' + data[key].toLocaleString() + '</a>');
             }
         });
     });
@@ -231,8 +227,7 @@ $(document).ready(function() {
     loadScript("/chaise/lib/navbar/navbar.app.js");
     
     register_dropdowns(catalog_id, 'review_bc1');
-    // workaround for #63
-    setTimeout(() => { update_chart(catalog_id, 'review_bc1')}, 2000);
+    update_chart(catalog_id, 'review_bc1');
     
     get_json_retry(dcc_list_url, function(data) {
         if (data.length != 1) {
