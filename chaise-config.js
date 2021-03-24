@@ -18,7 +18,7 @@ var chaiseConfig = {
         "g-c7e94.f19a4.5898.data.globus.org",   // dev
         "app-dev.nih-cfde.org",
         "g-3368fe.c0aba.03c0.data.globus.org",  // staging
-        "app-stagin.nih-cfde.org",
+        "app-staging.nih-cfde.org",
         "g-882990.aa98d.08cc.data.globus.org",  // production
         "app.nih-cfde.org"
     ]
