@@ -33,10 +33,11 @@ body {
         width: 1270px;
     	flex-direction: row;
 	align-content: flex-start;
+        margin-right: auto;
 }
 .main_data_content_left {
 	flex:0 0 400px;
-	height: 750px;
+	height: 625px;
 	margin-right: 20px;
 }
 .main_data_content_right {
@@ -132,24 +133,38 @@ body {
 }
 
 .reports_wrap {
-	flex:1;
+	flex:1 1 auto;
 	display: flex;
-	flex-direction: row;
+	width: 100%;
+	flex-direction: col;
 	flex-wrap: nowrap;
+        margin-left: auto;
+        margin-right: auto;
 }
 
-.provenance_report {
-    flex:1 1 45%;
+.howto_guides {
+    flex:1 1;
+    margin-right: 20px;
+    border:1px solid #cccccc;
+}
+
+.feature_request {
+    flex:1 1;
     margin-right: 20px;
     border:1px solid #cccccc;
 }
 
 .report_issues {
-    flex:1 1 45%;
+    flex:1 1;
     border:1px solid #cccccc;
 }
 
-.provenance_report_content {
+.howto_guides_content {
+	margin-left: 20px;
+	margin-top: 10px;
+}
+
+.feature_request_content {
 	margin-left: 20px;
 	margin-top: 10px;
 }
