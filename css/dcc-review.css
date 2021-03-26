@@ -33,6 +33,7 @@ body {
         width: 1270px;
     	flex-direction: row;
 	align-content: flex-start;
+	margin-left: auto;
         margin-right: auto;
 }
 .main_data_content_left {
@@ -135,7 +136,7 @@ body {
 .reports_wrap {
 	flex:1 1 auto;
 	display: flex;
-	width: 100%;
+	width: 1270px;
 	flex-direction: col;
 	flex-wrap: nowrap;
         margin-left: auto;
