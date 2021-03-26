@@ -48,6 +48,11 @@
 /* End - CSS from dcc-review.css
 ----------------------------------------*/
 
+main {
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .data_content {
     padding: 14px;
 }
@@ -80,6 +85,26 @@ svg {
   margin-bottom: 0px;
   margin-top: 10px;
   width: 600px;
+}
+
+.content__left {
+  flex: 1 0 280px;
+}
+
+.content__right {
+  flex: 1 0 940px;
+}
+
+@media (max-width:1300px) {
+    main {
+	padding: 3rem 1.5rem 1rem 1.5rem;
+    }
+}
+
+@media (min-width:1300px) {
+    .content__top {
+	justify-content: center;
+    }
 }
 
 /* 3 content boxes shown at bottom now */

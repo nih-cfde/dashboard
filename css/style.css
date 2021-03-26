@@ -170,7 +170,7 @@ main {
   align-content: flex-start;
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   min-height: 150px;
   padding: 2rem 0;
 }
