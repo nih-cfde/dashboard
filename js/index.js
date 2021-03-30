@@ -118,9 +118,9 @@ function add_summary_data(catalog_id) {
 
 // set/update Chaise URLs with the correct Chaise URL and de the catalog id
 function update_chaise_urls(catalog_id) {
-    // "Search all Collections" button
-    $('#search-collections').click(function() {
-        location.href = '/chaise/recordset/#' + catalog_id + '/CFDE:collection';
+    // "Search all Files" button
+    $('#search-all').click(function() {
+        location.href = '/chaise/recordset/#' + catalog_id + '/CFDE:file';
     });
 
     // all anchor links (i.e., <a href=...>)
