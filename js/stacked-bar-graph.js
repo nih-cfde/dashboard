@@ -87,7 +87,7 @@ function update_dropdowns(chart_id) {
 }
 
 function register_dropdowns(catalog_id, chart_id) {
-    $.each(['x-axis', 'y-axis', 'group-by'], function(i, id) {
+    $.each(['x-axis', 'y-axis', 'group-by', 'scale'], function(i, id) {
         $('#' + chart_id + '-' + id).change(function() {
             update_chart(catalog_id, chart_id);
         });
@@ -112,6 +112,7 @@ function update_chart(catalog_id, chart_id) {
     var x_axis = $('#' + chart_id + '-x-axis option:checked').val();
     var y_axis = $('#' + chart_id + '-y-axis option:checked').val();
     var group_by = $('#' + chart_id + '-group-by option:checked').val();
+    var scale = $('#' + chart_id + '-scale option:checked').val();
 
     // Given the x, y and group by information, we formulate the URL
     // to retrieve data from.
@@ -128,7 +129,7 @@ function update_chart(catalog_id, chart_id) {
 	if (requestnum == REQUESTNUMS[chart_id]) {
             $('#' + chart_id).replaceWith('<svg id="' + chart_id + '"/>');
             register_export_buttons(chart_id, data);
-            draw_chart(chart_id, data, x_axis, y_axis);
+            draw_chart(chart_id, data, x_axis, y_axis, scale);
 	}
     };
     var fail_fn = function(jqXHR, status, error) {
@@ -213,7 +214,8 @@ function add_tooltip(chart_id, svg) {
         .attr('class', 'chart_tooltip_value');
 }
 
-function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
+function draw_chart(svg_id, stacked_data, x_axis, y_axis, scale) {
+    var logScale = (scale == "log");
     update_chart_title(svg_id);
 
     var x_axis_label_rot = 25;
@@ -222,7 +224,7 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
 
     const y_map = {
         'files': 'File Count',
-        'volume': 'Data Volume (bytes)',
+        'volume': 'Data Volume in bytes',
         'samples': 'Sample Count',
         'subjects': 'Subject Count'
     };
@@ -246,25 +248,46 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
 
     // sort y-axis categories in descending order
     var categories = d3.keys(categories_h).sort((x, y) => categories_h[y] - categories_h[x]);
-
+    
     // For each element of the data (an object), we compute the
     // total and save it, because we will need to display the total
     // height/value of the stacked bar.
     stacked_data = compute_totals(stacked_data, categories);
 
-    // With the totals now calculated, we can use that to re-sort
-    // the array containing data. We want to display the chart
-    // in descending 'total' order.
+    // smallest at the top
     stacked_data.sort(function(a, b) { return b.total - a.total; });
+    
+    var add_cats = function(data, cats, col) {
+	var nc = cats.length;
+	for (var c = 0;c < nc;++c) {
+	    data[c].map(d => { d.push(col); d.push(cats[c]); });
+	}
+    };
 
-    var stack = d3.stack().keys(categories);
-    var series = stack(stacked_data);
+    var series = null;
+    
+    var sort_by_counts = function(counts) {
+	return function(a,b) {
+	    var c1 = a in counts ? counts[a] : 0;
+	    var c2 = b in counts ? counts[b] : 0;
+	    return logScale ? c1 - c2 : c2 - c1;
+	};
+    };
+    
+    for (var i = 0; i < stacked_data.length; ++i) {
+	var sorted_cats = [...categories].sort(sort_by_counts(stacked_data[i]));
+	var stack = d3.stack().keys(sorted_cats);
+	var series2 = stack([stacked_data[i]]);
+	add_cats(series2, sorted_cats, i);
 
-    // add x index to series so it's not lost when empty bars are filtered
-    series.forEach(s => {
-        var j = 0;
-        s.forEach(t => t.push(j++));
-    });
+	if (i == 0) {
+	    series = series2;
+	} else {
+	    for (var j = 0; j < series.length; ++j ) {
+		series[j] = series[j].concat(series2[j]);
+	    }
+	}
+    }
 
     const top_margin = 35;
     const bottom_margin = 80;
@@ -320,13 +343,23 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
     if (xbw < 35) {
         show_bar_totals = false;
     }
+
+    if (logScale) y_title = "log10 (" + y_title + ")";
     
     // Configure the y-axis scale. It goes from 0 to the maximum
     // value (the height of the tallest stacked bar). We have already
     // computed this and stored the total in each objects "total" key.
-    const yScale = d3.scaleLinear()
-        .range([height, 0])
-        .domain([0, 1.2 * d3.max(stacked_data.map((s) => s.total))]);
+    var yScale = null;
+
+    if (logScale) {
+	yScale = d3.scaleLog()
+            .range([height, 0])
+            .domain([1, 1.2 * d3.max(stacked_data.map((s) => s.total))]);
+    } else {
+	yScale = d3.scaleLinear()
+            .range([height, 0])
+            .domain([0, 1.2 * d3.max(stacked_data.map((s) => s.total))]);
+    }
 
     var num_bars = stacked_data.length;
     function maxlen_fn(text, index) {
@@ -365,7 +398,7 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
     // Add the y-axis
     chart.append('g')
         .call(
-            d3.axisLeft(yScale)
+            d3.axisLeft(yScale).ticks(5)
                 .tickFormat(function(d) { return y_formatter(d); })
         );
 
@@ -393,7 +426,11 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
         .append('text')
         .attr('class', 'bar-total')
         .attr('x', (a) => xScale(a[x_axis]) + xScale.bandwidth() / 2)
-        .attr('y', (a) => yScale(a.total) - 5)
+        .attr('y', function(a) {
+	    var t = a.total;
+	    if (logScale && (t < 1)) t = 1;
+	    return yScale(t) - 5;
+	})
         .attr('text-anchor', 'middle')
         .attr('fill', '#000')
         .text((a) => {
@@ -439,16 +476,30 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
         add_legend(svg_id, width, legend_width, chart, categories.slice(0, max_categories), null, title_fn, text_fn, left_margin, 0);
     }
 
-    groups.attr('fill', function(a, b) { return colorizer(b); })
-        .selectAll('rect')
+    groups.selectAll('rect')
         .data(function(d, i) { return series[i]; })
         .enter()
         .filter(function(s, j) { return ! isNaN(s[0]) && ! isNaN(s[1]); })
         .append('rect')
+	.attr('fill', function(s, j) {
+	    return colorizer(s[3]);
+	})
         .attr('x', function(s, j) { return xScale(stacked_data[s[2]][x_axis]); })
-        .attr('y', (s) => yScale(s[1]))
+        .attr('y', function(s) {
+	    return yScale(s[1]);
+	})
         .attr('width', xScale.bandwidth())
-        .attr('height', (s) => height - yScale(s[1] - s[0]))
+        .attr('height', function(s) {
+	    if (logScale) {
+		var s0 = s[0];
+		var s1 = s[1];
+		if (s0 < 1) s0 = 1;
+		if (s1 < 1) s1 = 1;
+		return (yScale(s0) - yScale(s1));
+	    } else {
+		return (yScale(s[0]) - yScale(s[1]));
+	    }
+	})
         .on('mouseenter', function(actual, i) {
             d3.select(this)
                 .transition()
@@ -464,7 +515,7 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
         .on('mouseover', function() { tooltip.style('display', null); })
         .on('mouseout', function() { tooltip.style('display', 'none'); })
         .on('mousemove', function(d, e) {
-            var brick_name = d3.select(this.parentNode).datum().key;
+            var brick_name = d3.select(this).datum()[3];
             var brick_value = 0;
             let coords = d3.mouse(this);
             let xPosition = coords[0];  // distance from y-axis on chart
@@ -558,7 +609,7 @@ function add_legend(svg_id, chart_width, legend_width, chart, categories, toolti
         .attr('x', chart_width + 28)
         .attr('width', 18)
         .attr('height', 18)
-        .attr('fill', function(d, i) { return colorizer(i); });
+        .attr('fill', function(d, i) { return colorizer(d); });
 
     legend.append('text')
         .attr('x', chart_width + 50)
