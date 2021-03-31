@@ -21,7 +21,16 @@ function register_donut_dropdown(chart_id, data, dropdown, units) {
     // populate dropdown menu with observed values from data
     var sel = $('#' + chart_id + '-' + dropdown);
     data.forEach(d => {
-	sel.append($('<option></option>').val(d[field]).text(d[field]));
+	// compute total, exclude any options where it's 0
+	var total = 0;
+	Object.keys(d).forEach(k => {
+	    if (k != field) {
+		total += d[k];
+	    }
+	});
+	if (total > 0) {
+	    sel.append($('<option></option>').val(d[field]).text(d[field]));
+	}
     });
     
     $.each([dropdown], function(i, id) {
