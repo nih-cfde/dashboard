@@ -4,34 +4,35 @@
     <title>CFDE Home</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="./css/style.css" type="text/css"/>
+    <link rel="stylesheet" href="./css/index.css" type="text/css"/>
     <script src="/chaise/lib/navbar/navbar.app.js"></script>
     <link rel="stylesheet" href="./css/components/normalize.css" type="text/css">
     <link rel="stylesheet" href="./css/components/bootstrap.min.css" type="text/css">
     <link rel="shortcut icon" type="image/png" href="./images/icons/CFDE-icon-1.png?v=2"/>
     <link rel="stylesheet" href="./css/fonts.css" type="text/css"/>
-    <link rel="stylesheet" href="./css/style.css" type="text/css"/>
-    <link rel="stylesheet" href="./css/index.css" type="text/css"/>
   </head>
   <body>
     <div id="wrap-navbar">
       <navbar></navbar>
     </div>
 
-    <div class="top_content">
-        <div class="top_content_section_left">
-            <div class="section_left_page_info">
-                <h1>Common Fund Data Ecosystem</h1>
-                <h2>Access and Work Across Multiple Common Fund (CF) program data sets</h2>
-                <p>More at: <a href="https://www.nih-cfde.org/" target="_blank">https://www.nih-cfde.org/ <i class="fas fa-external-link-alt"></i></a></p>
-            </div>
-        </div>
+    <main class="main">
+
+      <div class="top_content">
+	<div class="top_content_section_left">
+	  <div class="section_left_page_info">
+            <h1>Common Fund Data Ecosystem</h1>
+            <h2>Access and Work Across Multiple Common Fund (CF) program data sets</h2>
+	    <p>More at: <a href="https://www.nih-cfde.org/" target="_blank">https://www.nih-cfde.org/ <i class="fas fa-external-link-alt"></i></a></p>
+          </div>
+	</div>
 	<div class="top_content_section_right">
           <table id="data_preview_table" class="data_preview">
           </table>
-        </div><!-- end Top Content-Section-Right-->
-    </div><!-- End Top Content-->
+	</div><!-- end Top Content-Section-Right-->
+      </div><!-- End Top Content-->
 
-    <main class="main">
       <div class="content">
         <div class="content__top">
           <div class="content__left">
@@ -69,13 +70,14 @@
 	      <p id="last_updated" class="last-updated"></p>
             </div>
             <div class="data_content">
-            <div id="chart-container">
+            <div id="sbc1-container">
               <svg id="sbc1"/>
             </div>
             <div id="form-controls">
               <form>
                 <div class="container" style="width: 100%;">
-                  <div class="row" style="flex-wrap:nowrap">
+		  <!--                  <div class="row" style="flex-wrap:nowrap"> -->
+		    <div class="row"> 
                     <div class="col-md-4" id="sbc1-x-axis-container">
                       <label for="x-axis" class="form-label">X-axis</label>
                       <select class="custom-select" id="sbc1-x-axis" name="x-axis">
@@ -119,34 +121,27 @@
               <p>Participating Common Fund Programs</p>
             </div>
             <div class="data_content">
-              <div style="padding-bottom: 20px">
-                <div style="padding-left: 15px; float: left"><div style="background: black; padding: 0.5em"><a target="_blank" href="https://exrna.org"><img width="170px" src="images/exrna-logo-white.png"></a></div></div>
-                <div style="padding-right: 30px; float: right"><a target="_blank" href="https://gtexportal.org/home/"><img width="100px" src="images/GTEX.png"></a></div>
-                <div style="clear: both"></div>
-              </div>
-              <div style="padding-bottom: 20px">
-		<div style="padding-left: 20px; float: left"><a target="_blank" href="https://hmpdacc.org"><img width="150px" src="images/HMP.png"></a></div>
-                <div style="padding-left: 10px; float: right"><a target="_blank" href="https://hubmapconsortium.org"><img width="170px" src="images/hubmap-logo.png"></a></div>
-                <div style="clear: both"></div>
-              </div>
-              <div style="margin-bottom: 20px">
-                <div style="padding-left: 15px; float: left"><a target="_blank" href="https://lincsproject.org/"><img width="170px" src="images/LINCS.png"></a></div>
-                <div style="padding-right: 10px; float: right"><a target="_blank" href="https://portal.kidsfirstdrc.org/dashboard"><img width="150px" src="images/KidsFirst.png"></a></div>
-                <div style="clear: both"></div>
-              </div>
-             <div style="margin-bottom: 20px">
-                <div style="padding-left: 20px; float: left"><a target="_blank" href="https://www.metabolomicsworkbench.org"><img width="170px" src="images/Metabolomics.png"></a></div>
-                <div style="clear: both"></div>
-              </div>
+	      <div style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-around;">
+                <div style="padding-bottom: 20px;"><div style="background: black; padding: 0.5em"><a target="_blank" href="https://exrna.org"><img width="170px" src="images/exrna-logo-white.png"></a></div></div>
+                <div style="padding-bottom: 20px;"><a target="_blank" href="https://gtexportal.org/home/"><img width="100px" src="images/GTEX.png"></a></div>
+                <div style="flex-basis: 100%; height: 0px;"></div>
+		<div style="padding-bottom: 20px;"><a target="_blank" href="https://hmpdacc.org"><img width="150px" src="images/HMP.png"></a></div>
+                <div style="padding-bottom: 20px;"><a target="_blank" href="https://hubmapconsortium.org"><img width="170px" src="images/hubmap-logo.png"></a></div>
+		<div style="flex-basis: 100%; height: 0px;"></div>
+                <div style="padding-bottom: 20px;"><a target="_blank" href="https://lincsproject.org/"><img width="170px" src="images/LINCS.png"></a></div>
+                <div style="padding-bottom: 20px;"><a target="_blank" href="https://portal.kidsfirstdrc.org/dashboard"><img width="150px" src="images/KidsFirst.png"></a></div>
+		<div style="flex-basis: 100%; height: 0px;"></div>
+                <div style="padding-bottom: 20px;"><a target="_blank" href="https://www.metabolomicsworkbench.org"><img width="170px" src="images/Metabolomics.png"></a></div>
+	      </div>
             </div>
           </div>
           <div class="content__col middle">
             <div class="data_header">
               <p>Social Media</p>
             </div>
-            <div class="data_content">
-             <a class="twitter-timeline" data-width="400" data-height="400" href="https://twitter.com/CfdeNih?ref_src=twsrc%5Etfw">Tweets by CfdeNih</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-            </div>
+	    <div style="min-width: 400px;">
+              <a class="twitter-timeline" data-height="400" href="https://twitter.com/CfdeNih?ref_src=twsrc%5Etfw">Tweets by CfdeNih</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+	    </div>
           </div>
           <div class="content__col right">
               <div class="data_header">
@@ -202,9 +197,9 @@
     <script src="js/components/d3-5.16.0.min.js?ts=1616433204"></script>
     <script src="js/components/saveSvgAsPng.js?ts=1604093612"></script>
     <script src="js/components/d3-save-svg.min.js?ts=1604093612"></script>
-    <script src="js/stacked-bar-graph.js?ts=1616423188"></script>
+    <script src="js/stacked-bar-graph.js?ts=1618327631"></script>
     <script src="js/lz-string.min.js?ts=1607186913"></script>
     <script src="js/config.js?ts=1614304272"></script>
-    <script src="js/index.js?ts=1617074663"></script>
+    <script src="js/index.js?ts=1618327712"></script>
   </body>
 </html>
