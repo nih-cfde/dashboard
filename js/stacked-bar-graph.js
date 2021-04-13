@@ -126,7 +126,7 @@ function update_chart(catalog_id, chart_id) {
     var data_fn = function(data) {
 	// ignore out-of-sequence responses
 	if (requestnum == REQUESTNUMS[chart_id]) {
-            $('#' + chart_id).replaceWith('<svg id="' + chart_id + '"/>');
+            $('#' + chart_id).empty();
             register_export_buttons(chart_id, data);
             draw_chart(chart_id, data, x_axis, y_axis);
 	}
