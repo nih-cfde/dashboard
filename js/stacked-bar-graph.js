@@ -5,10 +5,9 @@ var YVALS = ['files', 'volume', 'samples', 'subjects'];
 var REQUESTNUMS = {};
 
 var chart_data = {};
+var chart_data_urls = {};
 
-function register_export_buttons(chart_id, data) {
-    chart_data[chart_id] = data;
-
+function register_export_buttons(chart_id) {
     // Prevent accumulations of click handlers by clearing any past
     // registrations of 'click' to the buttons by using jquery's off()
     // function.
@@ -118,6 +117,12 @@ function update_chart(catalog_id, chart_id) {
     var data_url = DASHBOARD_API_URL + '/stats/' + [y_axis, x_axis, MAX_GRAPH_GROUP1, group_by, MAX_GRAPH_GROUP2].join('/');
     if (catalog_id != null) data_url += '?catalogId=' + catalog_id;
 
+    // check cache
+    if (chart_data_urls[chart_id] == data_url) {
+        draw_chart(chart_id, chart_data[chart_id], x_axis, y_axis);
+	return;
+    }
+    
     if (!(chart_id in REQUESTNUMS)) {
 	REQUESTNUMS[chart_id] = 0;
     }
@@ -126,8 +131,9 @@ function update_chart(catalog_id, chart_id) {
     var data_fn = function(data) {
 	// ignore out-of-sequence responses
 	if (requestnum == REQUESTNUMS[chart_id]) {
-            $('#' + chart_id).empty();
-            register_export_buttons(chart_id, data);
+	    chart_data[chart_id] = data;
+	    chart_data_urls[chart_id] = data_url;
+            register_export_buttons(chart_id);
             draw_chart(chart_id, data, x_axis, y_axis);
 	}
     };
@@ -214,6 +220,7 @@ function add_tooltip(chart_id, svg) {
 }
 
 function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
+    $('#' + svg_id).empty();
     update_chart_title(svg_id);
 
     var x_axis_label_rot = 25;
@@ -237,7 +244,7 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
     stacked_data.forEach(d => {
         var keys = d3.keys(d);
         keys.forEach(k => {
-            if (k != x_axis) {
+            if ((k != x_axis) && (k != 'total')) {
                 if (! (k in categories_h)) categories_h[k] = 0;
                 categories_h[k] += d[k];
             }

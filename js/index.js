@@ -133,7 +133,7 @@ function update_chaise_urls(catalog_id) {
     });
 }
 
-const UPDATE_DELAY_SECS = 1;
+const UPDATE_DELAY_SECS = 0.5;
 var update_pending = false;
 var last_update_time = null;
 
