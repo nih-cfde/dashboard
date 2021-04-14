@@ -285,21 +285,6 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
             });
     }
 
-    // download icon
-    svg.append('image')
-        .attr('x', svg_width - 125)
-        .attr('y', 0)
-        .attr('id', svg_id + '-export-button')
-        .attr('height', 32)
-        .attr('width', 125)
-        .attr('xlink:href', './images/download_button.png')
-        .on('click', function() {
-            $('#export-modal').attr('name', svg_id + '-modal');
-            $('#export-modal').modal();
-        })
-        .append('title')
-        .text('Export chart');
-
     var max_categories = 16;
     const legend = chart.append('g');
 
@@ -332,4 +317,9 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
     var y_offset = 0;
     var chart_width = svg_width - legend_width - (2 * margin);
     add_legend(svg_id, chart_width, legend_width, legend, categories, tooltip, title_fn, text_fn, x_offset, y_offset, mouseover_fn, mouseout_fn);
+}
+
+function export_donut_chart_data(svg_id) {
+    $('#export-modal').attr('name', svg_id + '-modal');
+    $('#export-modal').modal();
 }

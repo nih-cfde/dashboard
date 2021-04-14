@@ -50,7 +50,7 @@ function get_time_zone_diff(d) {
     return timezone_standard;
 }
 
-const UPDATE_DELAY_SECS = 0.5;
+const UPDATE_DELAY_SECS = 0.05;
 var update_pending = false;
 var last_update_time = null;
 
@@ -59,7 +59,7 @@ function window_resized(catalog_id, chart_id) {
     const utime = last_update_time;
     setTimeout(function() {
       if (utime < last_update_time) return;
-      update_chart(catalog_id, 'sbc1'); 
+	update_chart(catalog_id, chart_id); 
     }, UPDATE_DELAY_SECS * 1000);
 }
 

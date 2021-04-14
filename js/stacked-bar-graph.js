@@ -420,19 +420,19 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
         .attr('text-anchor', 'middle')
         .text(y_title);
     
-    svg.append('image')
-        .attr('x', svg_width - 125)
-        .attr('y', 0)
-        .attr('id', svg_id + '-export-button')
-        .attr('height', 32)
-        .attr('width', 125)
-        .attr('xlink:href', './images/download_button.png')
-        .on('click', function() {
-            $('#export-modal').attr('name', svg_id + '-modal');
-            $('#export-modal').modal();
-        })
-        .append('title')
-        .text('Export chart');
+//    svg.append('image')
+//        .attr('x', svg_width - 125)
+//        .attr('y', 0)
+//        .attr('id', svg_id + '-export-button')
+//        .attr('height', 32)
+//        .attr('width', 125)
+//        .attr('xlink:href', './images/download_button.png')
+//        .on('click', function() {
+//            $('#export-modal').attr('name', svg_id + '-modal');
+//            $('#export-modal').modal();
+//        })
+//        .append('title')
+//        .text('Export chart');
 
     // limit categories
     var max_categories = 14;
@@ -512,7 +512,7 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
 }
 
 function add_legend(svg_id, chart_width, legend_width, chart, categories, tooltip, title_fn, text_fn, x_offset, y_offset, mouseover_fn, mouseout_fn) {
-    var top = 10;
+    var top = -10;
 
     // Create the legend
     var legend = chart.append('g').selectAll('.legend')
@@ -575,6 +575,11 @@ function add_legend(svg_id, chart_width, legend_width, chart, categories, toolti
         .style('font-size', '0.7rem')
         .text(title_fn).each(ellipsize(legend_width - 15, 5))
         .append('title').text(title_fn);
+}
+
+function export_chart_data(svg_id) {
+    $('#export-modal').attr('name', svg_id + '-modal');
+    $('#export-modal').modal();
 }
 
 function save_csv(filename, rows) {
