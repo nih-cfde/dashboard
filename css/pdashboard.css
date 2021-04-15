@@ -1,0 +1,53 @@
+
+.summary_chart {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    padding: 0rem;
+}
+
+.svg_container {
+    flex: 5 1 85%;
+    border: 1px solid #cccccc;
+    margin-right: 20px;
+    padding: 0.5rem;
+}
+
+.sbc1_checkboxes {
+    flex: 1 1 15%;
+    border: 1px solid #cccccc;
+    padding: 1rem;
+}
+
+.content__center {
+    border: 1px solid #cccccc;
+    flex: 1 1 100%;
+    margin: 0px 10px 10px 10px;
+}
+
+.content__left {
+    flex: 1 1 70%;
+    min-height: auto;
+}
+
+.content__right {
+    flex: 1 1 30%;
+    min-height: auto;
+}
+
+.content__bottom {
+  width: 100%;
+}
+
+svg {
+    min-height: 350px;
+}
+
+.sbc1_checkboxes {
+    flex: 1 1 15%;
+}
+
+.button {
+    margin: 0.5rem 0.5rem 1rem 0.5rem;
+}
