@@ -112,7 +112,7 @@ function add_summary_data(catalog_id) {
         $('#dcc_name').append(data['complete_name']);
         $('#dcc_link').prop('href', data['url']);
         $('#dcc_link').prepend(data['url']);
-        $('#data_snapshot_title').prepend(data['moniker'] + ' ');
+        $('#data_snapshot_title').prepend(data['abbreviation'] + ' ');
     });
 }
 

@@ -21,9 +21,9 @@ function update_dcc_list(catalog_id, chart_id) {
     
     get_json_retry(dcc_list_url, function(data) {
 	data.forEach(dcc => {
-	    $('<input />', { type: 'checkbox', id: 'dcc_cb'+cbid, value: dcc, checked: true }).appendTo(checkboxes);
+	    $('<input />', { type: 'checkbox', id: 'dcc_cb'+cbid, value: dcc['abbreviation'], checked: true }).appendTo(checkboxes);
 	    checkboxes.append("&nbsp;");
-	    $('<label />', { 'for': 'dcc_cb'+cbid, text: dcc }).appendTo(checkboxes);
+	    $('<label />', { 'for': 'dcc_cb'+cbid, text: dcc['abbreviation'], title: dcc['complete_name'] }).appendTo(checkboxes);
 	    checkboxes.append("<br clear='both'/>");
 	    cbid = cbid + 1;
 	});

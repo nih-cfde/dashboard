@@ -134,7 +134,7 @@ function get_chaise_uri(catalog_id, entity, DCC_RID="") {
 }
 
 function add_summary_data(catalog_id, DCC, num_dccs) {
-    var dcc_summary_url = DASHBOARD_API_URL + '/dcc/' + DCC;
+    var dcc_summary_url = DASHBOARD_API_URL + '/dcc/' + DCC['id'];
     if (catalog_id != null) dcc_summary_url += '?catalogId=' + catalog_id;
 
     // counts for top-level entities, except project
@@ -154,10 +154,10 @@ function add_summary_data(catalog_id, DCC, num_dccs) {
 	
         $('#datapackage_link').prop('href', data_url);
         $('#datapackage_link').prepend(data_url);
-	$('#data_review_title')[0].innerHTML = data['moniker'] +  ' Data Review';
+	$('#data_review_title')[0].innerHTML = data['abbreviation'] +  ' Data Review';
 	
 	if (num_dccs == 1) {
-            $('#data_snapshot_title')[0].innerHTML = data['moniker'] +  ' Data Snapshot';
+            $('#data_snapshot_title')[0].innerHTML = data['abbreviation'] +  ' Data Snapshot';
 	} else {
             $('#data_snapshot_title')[0].innerHTML =  'Data Snapshot';
 	}
@@ -167,7 +167,7 @@ function add_summary_data(catalog_id, DCC, num_dccs) {
     });
 
     // counts for top-level entities with links to other entities of a specified type (e.g., Subjects with File)
-    var dcc_linkcount_url = DASHBOARD_API_URL + '/dcc/' + DCC + '/linkcount';
+    var dcc_linkcount_url = DASHBOARD_API_URL + '/dcc/' + DCC['id'] + '/linkcount';
     if (catalog_id != null) dcc_linkcount_url += '?catalogId=' + catalog_id;
 
     get_json_retry(dcc_linkcount_url, function(data) {
@@ -231,10 +231,10 @@ $(document).ready(function() {
     
     get_json_retry(dcc_list_url, function(data) {
         if (data.length != 1) {
-	    console.log('WARNING: DERIVA CATALOG_ID  ' + catalog_id + ' contains ' + ((data.length > 1) ? 'data from multiple DCCs' : 'no data'));
+	    console.log('WARNING: DERIVA CATALOG_ID  ' + catalog_id + ' contains ' + ((data.length > 1) ? 'data from multiple DCsC' : 'no data'));
         }
 	if (data.length > 0) {
-	    dcc = data[0];
+	    dcc = data[6];
 	    add_summary_data(catalog_id, dcc, data.length);
         }
     });
