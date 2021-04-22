@@ -234,7 +234,7 @@ $(document).ready(function() {
 	    console.log('WARNING: DERIVA CATALOG_ID  ' + catalog_id + ' contains ' + ((data.length > 1) ? 'data from multiple DCsC' : 'no data'));
         }
 	if (data.length > 0) {
-	    dcc = data[6];
+	    dcc = data[0];
 	    add_summary_data(catalog_id, dcc, data.length);
         }
     });
