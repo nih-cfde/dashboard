@@ -111,11 +111,11 @@ function update_chart(catalog_id, chart_id) {
     var x_axis = $('#' + chart_id + '-x-axis option:checked').val();
     var y_axis = $('#' + chart_id + '-y-axis option:checked').val();
     var group_by = $('#' + chart_id + '-group-by option:checked').val();
-
+    
     // Given the x, y and group by information, we formulate the URL
     // to retrieve data from.
-    var data_url = DASHBOARD_API_URL + '/stats/' + [y_axis, x_axis, MAX_GRAPH_GROUP1, group_by, MAX_GRAPH_GROUP2].join('/');
-    if (catalog_id != null) data_url += '?catalogId=' + catalog_id;
+    var data_url = DASHBOARD_API_URL + '/stats/' + [y_axis, x_axis, group_by].join('/') + "?includeDCC=true";
+    if (catalog_id != null) data_url += '&catalogId=' + catalog_id;
 
     // check cache
     if (chart_data_urls[chart_id] == data_url) {
@@ -236,15 +236,64 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
 
     // Get the human readable y-axis name
     var y_title = y_map[y_axis];
-    
     var categories_h = {};
 
+    var include_dccs = {};
+    var n_checkboxes = 0;
+    var n_checked = 0;
+    
+    // apply optional filter by DCC to stacked_data, aggregate without 'dcc'
+    var cd = $('#' + svg_id + '-controls');
+    cd.find('input').each(function() {
+	++n_checkboxes;
+	if (this.checked) {
+	    include_dccs[this.value] = true;
+	    ++n_checked;
+	}
+    });
+
+    // filter stacked_data
+    if ((n_checkboxes > 0) && (n_checked < n_checkboxes)) {
+	new_stacked_data = [];
+	stacked_data.forEach(d => {
+	    if (include_dccs[d['dcc']]) {
+		new_stacked_data.push(d);
+	    }
+	});
+	stacked_data = new_stacked_data;
+    }
+
+    // aggregate by DCC
+    new_stacked_data = [];
+    new_by_x = {};
+    stacked_data.forEach(d => {
+	var dcc = d['dcc'];
+	var xval = d[x_axis];
+	if (!(xval in new_by_x)) {
+	    new_by_x[xval] = { };
+	    new_by_x[xval][x_axis] = xval;
+	    new_stacked_data.push(new_by_x[xval]);
+	}
+	// add counts
+	var keys = d3.keys(d);
+	keys.forEach(k => {
+	    if ((k != x_axis) && (k != 'dcc')) {
+		if (!(k in new_by_x[xval])) {
+		    new_by_x[xval][k] = d[k];
+		} else {
+		    new_by_x[xval][k] += d[k];
+		}
+	    }
+	});
+    });
+    stacked_data = new_stacked_data;
+    
     // Can't assume that y-axis keys will be the same in each list element,
     // must take union across them all.
     stacked_data.forEach(d => {
         var keys = d3.keys(d);
         keys.forEach(k => {
-            if ((k != x_axis) && (k != 'total')) {
+            if ((k != x_axis) && (k != 'total') && (k != 'dcc')) {
                 if (! (k in categories_h)) categories_h[k] = 0;
                 categories_h[k] += d[k];
             }
