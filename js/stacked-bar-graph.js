@@ -163,6 +163,93 @@ function compute_totals(data, keys) {
     return data;
 }
 
+function merge_within_groups_local(groups, max_atts, grouping1) {
+    var new_groups = [];
+    groups.forEach(group => {
+        var new_group = {};
+        var atts = [];
+
+	// sort attributes by count
+	var keys = d3.keys(group);
+	keys.forEach(k => {
+            if (k == grouping1) {
+                new_group[k] = group[k];
+	    } else {
+                atts.push({ 'att': k, 'count': group[k] });
+	    }
+	});
+
+        var sorted_atts = atts.sort((x, y) => y['count'] - x['count']);
+        var i = 0;
+
+	sorted_atts.map(a => a['att']).forEach(att => {
+            new_att = att;
+            if (i >= max_atts)
+		new_att = 'other';
+            if (!(new_att in new_group)) {
+                new_group[new_att] = 0;
+	    }
+            new_group[new_att] += group[att];
+            i += 1;
+	});
+        new_groups.push(new_group);
+    });
+
+    return new_groups;
+}
+
+function merge_groups(groups, max_groups, grouping1) {
+    // sort groups by total count, retain the max_groups with the highest counts
+    var groups_w_count = [];
+    groups.forEach(group => {
+        var gwc = { 'group': group, 'total': 0};
+        groups_w_count.push(gwc);
+	var keys = d3.keys(group);
+	keys.forEach(k => {
+            if (k != grouping1) {
+		gwc['total'] += group[k];
+	    }
+	});
+    });
+    
+    var sorted_gwc = groups_w_count.sort((x, y) => y['total'] - x['total']);
+    var sorted_groups = sorted_gwc.map(x => x['group']);
+
+    var new_groups = [];
+    var last_group = {};
+    var i = 0;
+
+    sorted_groups.forEach(group => {
+	// add group to list
+        if (i < max_groups) {
+	    new_groups.push(group);
+	}
+	// add group to last group
+        else {
+	    var keys = d3.keys(group);
+	    keys.forEach(k => {
+		if (k == grouping1) {
+                    last_group[k] = 'other';
+		} else {
+                    if (k in last_group) {
+                        last_group[k] += group[k];
+		    }
+                    else {
+			last_group[k] = group[k];
+		    }
+		}
+	    });
+	}
+        i += 1;
+    });
+
+    var gkeys = d3.keys(last_group);
+    if (gkeys.length > 0) {
+        new_groups.push(last_group);
+    }
+    return new_groups;
+}
+
 function ellipsize(width, padding) {
     return function () {
         let self = d3.select(this);
@@ -287,6 +374,12 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
 	});
     });
     stacked_data = new_stacked_data;
+
+    // apply group limits
+    if (MAX_GRAPH_GROUP1 != null) 
+	stacked_data = merge_within_groups_local(stacked_data, MAX_GRAPH_GROUP2, x_axis);
+    if (MAX_GRAPH_GROUP2 != null) 
+	stacked_data = merge_groups(stacked_data, MAX_GRAPH_GROUP1, x_axis);
     
     // Can't assume that y-axis keys will be the same in each list element,
     // must take union across them all.
