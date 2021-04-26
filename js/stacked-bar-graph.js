@@ -111,11 +111,11 @@ function update_chart(catalog_id, chart_id) {
     var x_axis = $('#' + chart_id + '-x-axis option:checked').val();
     var y_axis = $('#' + chart_id + '-y-axis option:checked').val();
     var group_by = $('#' + chart_id + '-group-by option:checked').val();
-
+    
     // Given the x, y and group by information, we formulate the URL
     // to retrieve data from.
-    var data_url = DASHBOARD_API_URL + '/stats/' + [y_axis, x_axis, MAX_GRAPH_GROUP1, group_by, MAX_GRAPH_GROUP2].join('/');
-    if (catalog_id != null) data_url += '?catalogId=' + catalog_id;
+    var data_url = DASHBOARD_API_URL + '/stats/' + [y_axis, x_axis, group_by].join('/') + "?includeDCC=true";
+    if (catalog_id != null) data_url += '&catalogId=' + catalog_id;
 
     // check cache
     if (chart_data_urls[chart_id] == data_url) {
@@ -161,6 +161,93 @@ function compute_totals(data, keys) {
     });
 
     return data;
+}
+
+function merge_within_groups_local(groups, max_atts, grouping1) {
+    var new_groups = [];
+    groups.forEach(group => {
+        var new_group = {};
+        var atts = [];
+
+	// sort attributes by count
+	var keys = d3.keys(group);
+	keys.forEach(k => {
+            if (k == grouping1) {
+                new_group[k] = group[k];
+	    } else {
+                atts.push({ 'att': k, 'count': group[k] });
+	    }
+	});
+
+        var sorted_atts = atts.sort((x, y) => y['count'] - x['count']);
+        var i = 0;
+
+	sorted_atts.map(a => a['att']).forEach(att => {
+            new_att = att;
+            if (i >= max_atts)
+		new_att = 'other';
+            if (!(new_att in new_group)) {
+                new_group[new_att] = 0;
+	    }
+            new_group[new_att] += group[att];
+            i += 1;
+	});
+        new_groups.push(new_group);
+    });
+
+    return new_groups;
+}
+
+function merge_groups(groups, max_groups, grouping1) {
+    // sort groups by total count, retain the max_groups with the highest counts
+    var groups_w_count = [];
+    groups.forEach(group => {
+        var gwc = { 'group': group, 'total': 0};
+        groups_w_count.push(gwc);
+	var keys = d3.keys(group);
+	keys.forEach(k => {
+            if (k != grouping1) {
+		gwc['total'] += group[k];
+	    }
+	});
+    });
+    
+    var sorted_gwc = groups_w_count.sort((x, y) => y['total'] - x['total']);
+    var sorted_groups = sorted_gwc.map(x => x['group']);
+
+    var new_groups = [];
+    var last_group = {};
+    var i = 0;
+
+    sorted_groups.forEach(group => {
+	// add group to list
+        if (i < max_groups) {
+	    new_groups.push(group);
+	}
+	// add group to last group
+        else {
+	    var keys = d3.keys(group);
+	    keys.forEach(k => {
+		if (k == grouping1) {
+                    last_group[k] = 'other';
+		} else {
+                    if (k in last_group) {
+                        last_group[k] += group[k];
+		    }
+                    else {
+			last_group[k] = group[k];
+		    }
+		}
+	    });
+	}
+        i += 1;
+    });
+
+    var gkeys = d3.keys(last_group);
+    if (gkeys.length > 0) {
+        new_groups.push(last_group);
+    }
+    return new_groups;
 }
 
 function ellipsize(width, padding) {
@@ -236,15 +323,70 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
 
     // Get the human readable y-axis name
     var y_title = y_map[y_axis];
-    
     var categories_h = {};
 
+    var include_dccs = {};
+    var n_checkboxes = 0;
+    var n_checked = 0;
+    
+    // apply optional filter by DCC to stacked_data, aggregate without 'dcc'
+    var cd = $('#' + svg_id + '-controls');
+    cd.find('input').each(function() {
+	++n_checkboxes;
+	if (this.checked) {
+	    include_dccs[this.value] = true;
+	    ++n_checked;
+	}
+    });
+
+    // filter stacked_data
+    if ((n_checkboxes > 0) && (n_checked < n_checkboxes)) {
+	new_stacked_data = [];
+	stacked_data.forEach(d => {
+	    if (include_dccs[d['dcc']]) {
+		new_stacked_data.push(d);
+	    }
+	});
+	stacked_data = new_stacked_data;
+    }
+
+    // aggregate by DCC
+    new_stacked_data = [];
+    new_by_x = {};
+    stacked_data.forEach(d => {
+	var dcc = d['dcc'];
+	var xval = d[x_axis];
+	if (!(xval in new_by_x)) {
+	    new_by_x[xval] = { };
+	    new_by_x[xval][x_axis] = xval;
+	    new_stacked_data.push(new_by_x[xval]);
+	}
+	// add counts
+	var keys = d3.keys(d);
+	keys.forEach(k => {
+	    if ((k != x_axis) && (k != 'dcc')) {
+		if (!(k in new_by_x[xval])) {
+		    new_by_x[xval][k] = d[k];
+		} else {
+		    new_by_x[xval][k] += d[k];
+		}
+	    }
+	});
+    });
+    stacked_data = new_stacked_data;
+
+    // apply group limits
+    if (MAX_GRAPH_GROUP1 != null) 
+	stacked_data = merge_within_groups_local(stacked_data, MAX_GRAPH_GROUP2, x_axis);
+    if (MAX_GRAPH_GROUP2 != null) 
+	stacked_data = merge_groups(stacked_data, MAX_GRAPH_GROUP1, x_axis);
+    
     // Can't assume that y-axis keys will be the same in each list element,
     // must take union across them all.
     stacked_data.forEach(d => {
         var keys = d3.keys(d);
         keys.forEach(k => {
-            if ((k != x_axis) && (k != 'total')) {
+            if ((k != x_axis) && (k != 'total') && (k != 'dcc')) {
                 if (! (k in categories_h)) categories_h[k] = 0;
                 categories_h[k] += d[k];
             }

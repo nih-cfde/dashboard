@@ -16,7 +16,7 @@ function window_resized(catalog_id, chart_id) {
 function update_dcc_list(catalog_id, chart_id) {
     var dcc_list_url = DASHBOARD_API_URL + '/dcc';
     if (catalog_id != null) dcc_list_url += '?catalogId=' + catalog_id;
-    var checkboxes = $('#sbc1-controls');
+    var checkboxes = $('#' + chart_id + '-controls');
     var cbid = 1;
     
     get_json_retry(dcc_list_url, function(data) {
@@ -26,14 +26,23 @@ function update_dcc_list(catalog_id, chart_id) {
 	    checkboxes.append("<br clear='both'/>");
 	    cbid = cbid + 1;
 	});
+
+	checkboxes.on("change", ":checkbox", function() {
+	    update_chart(catalog_id, chart_id);
+	});
+	checkboxes.on("change", ":button", function() {
+	    update_chart(catalog_id, chart_id);
+	});
     });
 }
 
-function select_all_dccs() {
-    var checkboxes = $('#sbc1-controls');
+function select_all_dccs(chart_id) {
+    var checkboxes = $('#' + chart_id + '-controls');
     checkboxes.children('input').each(function(i, cb) {
 	if (cb.type = 'checkbox') cb.checked = true;
     });
+    var catalog_id = get_catalog_id();
+    update_chart(catalog_id, chart_id);
 }
 
 $(document).ready(function() {
@@ -42,8 +51,8 @@ $(document).ready(function() {
     // chart 1 - stacked bar graph
     register_dropdowns(catalog_id, 'sbc1');
     window.onload = function() {
-	update_chart(catalog_id, 'sbc1');
 	update_dcc_list(catalog_id, 'sbc1');
+	update_chart(catalog_id, 'sbc1');
 	window.addEventListener('resize', function() { window_resized(catalog_id, 'sbc1'); });
     };
 });
