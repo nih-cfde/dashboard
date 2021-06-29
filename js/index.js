@@ -154,7 +154,6 @@ $(document).ready(function() {
     register_dropdowns(catalog_id, 'sbc1');
     window.onload = function() {
       update_chart(catalog_id, 'sbc1');
-      add_summary_data(catalog_id);
       window.addEventListener('resize', function() { window_resized(catalog_id, 'sbc1'); });
     };
 });
