@@ -112,15 +112,15 @@ function add_summary_data(catalog_id) {
         $('#dcc_name').append(data['complete_name']);
         $('#dcc_link').prop('href', data['url']);
         $('#dcc_link').prepend(data['url']);
-        $('#data_snapshot_title').prepend(data['moniker'] + ' ');
+        $('#data_snapshot_title').prepend(data['abbreviation'] + ' ');
     });
 }
 
 // set/update Chaise URLs with the correct Chaise URL and de the catalog id
 function update_chaise_urls(catalog_id) {
-    // "Search all Collections" button
-    $('#search-collections').click(function() {
-        location.href = '/chaise/recordset/#' + catalog_id + '/CFDE:collection';
+    // "Search all Files" button
+    $('#search-all').click(function() {
+        location.href = '/chaise/recordset/#' + catalog_id + '/CFDE:file';
     });
 
     // all anchor links (i.e., <a href=...>)
@@ -133,11 +133,28 @@ function update_chaise_urls(catalog_id) {
     });
 }
 
+const UPDATE_DELAY_SECS = 0.05;
+var update_pending = false;
+var last_update_time = null;
+
+function window_resized(catalog_id, chart_id) {
+    last_update_time = new Date().getTime();
+    const utime = last_update_time;
+    setTimeout(function() {
+      if (utime < last_update_time) return;
+      update_chart(catalog_id, chart_id); 
+    }, UPDATE_DELAY_SECS * 1000);
+}
+
 $(document).ready(function() {
     var catalog_id = get_catalog_id();
     if (catalog_id != null) update_chaise_urls(catalog_id);
+
     // chart 1 - stacked bar graph
     register_dropdowns(catalog_id, 'sbc1');
-    update_chart(catalog_id, 'sbc1');
-    add_summary_data(catalog_id);
+    window.onload = function() {
+      update_chart(catalog_id, 'sbc1');
+      add_summary_data(catalog_id);
+      window.addEventListener('resize', function() { window_resized(catalog_id, 'sbc1'); });
+    };
 });

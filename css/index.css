@@ -6,7 +6,7 @@
 	display: flex;
 	flex:0 0 200px;
 	align-content: flex-end;
-	padding-right: 50px;
+	padding: 0.5rem;
 }
 
 .top_content_section_right .data_preview {
@@ -84,7 +84,7 @@ svg {
   margin: 0 auto;
   margin-bottom: 0px;
   margin-top: 10px;
-  width: 600px;
+  width: auto;
 }
 
 .content__left {
@@ -92,13 +92,8 @@ svg {
 }
 
 .content__right {
-  flex: 1 0 940px;
-}
-
-@media (max-width:1300px) {
-    main {
-	padding: 3rem 1.5rem 1rem 1.5rem;
-    }
+  flex: 1 1 940px;
+  margin: 0px 10px 20px 10px;
 }
 
 @media (min-width:1300px) {
@@ -108,18 +103,20 @@ svg {
 }
 
 /* 3 content boxes shown at bottom now */
+.content__bottom {
+  justify-content: space-between;
+}
+
 .content__bottom .left {
-  flex: 1 0 400px;
-  margin-right: 20px;
+  flex: 1 1;
 }
 
 .content__bottom .middle {
-  flex: 1 0 400px;
-  margin-right: 20px;
+  flex: 1 1;
 }
 
 .content__bottom .right {
-  flex: 1 0 400px;
+  flex: 1 1;
 }
 
 .form-label {

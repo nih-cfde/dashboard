@@ -50,11 +50,26 @@ function get_time_zone_diff(d) {
     return timezone_standard;
 }
 
+const UPDATE_DELAY_SECS = 0.05;
+var update_pending = false;
+var last_update_time = null;
+
+function window_resized(catalog_id, chart_id) {
+    last_update_time = new Date().getTime();
+    const utime = last_update_time;
+    setTimeout(function() {
+      if (utime < last_update_time) return;
+	update_chart(catalog_id, chart_id); 
+    }, UPDATE_DELAY_SECS * 1000);
+}
+
 $(document).ready(function() {
     var catalog_id = get_catalog_id();
   
     // chart 1 - stacked bar graph
     register_dropdowns(catalog_id, 'sbc1');
-    update_chart(catalog_id, 'sbc1');
-    window.addEventListener('resize', function() { update_chart(catalog_id, 'sbc1'); });
+    window.onload = function() {
+	update_chart(catalog_id, 'sbc1');
+	window.addEventListener('resize', function() { window_resized(catalog_id, 'sbc1'); });
+    };
 });
