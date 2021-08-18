@@ -4,7 +4,6 @@ const UPDATE_DELAY_SECS = 0.05;
 var update_pending = false;
 var last_update_time = null;
 
-
 function window_resized(catalog_id, chart_id) {
     last_update_time = new Date().getTime();
     const utime = last_update_time;
@@ -112,6 +111,44 @@ function update_saved_queries() {
     });
 }
 
+var fav_dccs = [];
+
+function update_favorites() {
+    var favorites_url = DASHBOARD_API_URL + '/user/favorites';
+    
+    get_json_retry(favorites_url, function(data) {
+    
+        // favorite is a json object with keys "dcc", "anatomy", and "assays"
+        // and values are a arrays of objects with keys "name", "description"
+        // e.g. {"anatomy": [{"name": "blood", "description": "A fluid that is composed of blood plasma and erythrocytes."}, 
+        //                   {"name": "lung", "description": "Respiration organ that develops as an oupocketing of the esophagus."}]}
+        Object.keys(data).forEach(favorite_type => {
+            let ul;
+            if (favorite_type == "anatomy") 
+                ul = $('#favorite-anatomies');
+            else if (favorite_type == "dcc") 
+                ul = $('#favorite-dccs');
+            else if (favorite_type == "assays")
+                ul = $('#favorite-assays');
+            else
+                return; //continue
+
+            Object.keys(data[favorite_type]).forEach(key => {
+                list_index = key;
+                favorite_list = data[favorite_type][list_index];
+                ul.append($("<li class='favorite'>").text(favorite_list["name"]));
+                if (favorite_type == "dcc") {
+                    fav_dccs.push(favorite_list["abbrev"]);
+                }
+              });
+        });
+
+        // now that favorites are loaded, load chart
+        var catalog_id = get_catalog_id();
+        update_dcc_list(catalog_id, 'sbc1');
+    });
+}
+
 function update_dcc_list(catalog_id, chart_id) {
     var dcc_list_url = DASHBOARD_API_URL + '/dcc';
     if (catalog_id != null) dcc_list_url += '?catalogId=' + catalog_id;
@@ -120,7 +157,8 @@ function update_dcc_list(catalog_id, chart_id) {
     
     get_json_retry(dcc_list_url, function(data) {
 	data.forEach(dcc => {
-	    $('<input />', { type: 'checkbox', id: 'dcc_cb'+cbid, value: dcc['abbreviation'], class: 'form-check-input', checked: true }).appendTo(checkboxes);
+        let checkbox_selected = (fav_dccs.length && fav_dccs.includes(dcc['abbreviation']));
+	    $('<input />', { type: 'checkbox', id: 'dcc_cb'+cbid, value: dcc['abbreviation'], class: 'form-check-input', checked: checkbox_selected }).appendTo(checkboxes);
 	    $('<label />', { 'for': 'dcc_cb'+cbid, text: dcc['abbreviation'], title: dcc['complete_name'], class: 'form-check-label checkbox-inline' }).appendTo(checkboxes);
 	    checkboxes.append("<br clear='both'/>");
 	    cbid = cbid + 1;
@@ -132,6 +170,7 @@ function update_dcc_list(catalog_id, chart_id) {
 	checkboxes.on("change", ":button", function() {
 	    update_chart(catalog_id, chart_id);
 	});
+    update_chart(catalog_id, 'sbc1');
     });
 }
 
@@ -145,21 +184,18 @@ function select_all_dccs(chart_id) {
 }
 
 $(document).ready(function() {
+
+    console.log("ready")
     var catalog_id = get_catalog_id();
 
     // chart 1 - stacked bar graph
     register_dropdowns(catalog_id, 'sbc1');
+    
+    // locally, this event never fires; committing with temporary debug statements for testing on dev
     window.onload = function() {
-	update_dcc_list(catalog_id, 'sbc1');
-	update_chart(catalog_id, 'sbc1');
-	window.addEventListener('resize', function() { window_resized(catalog_id, 'sbc1'); });
+        console.log("onload")
+        update_favorites();
+        update_saved_queries();
+        window.addEventListener('resize', function() { window_resized(catalog_id, 'sbc1'); });
     };
-    update_saved_queries();
-
-    // format the saved query data as a datatable
-    //$('#saved_query_table').DataTable();
-    //$('.dataTables_length').addClass('bs-select');
-    //$('#saved_query_table').DataTable().draw();
-
-
 });
