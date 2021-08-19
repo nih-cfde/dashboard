@@ -133,6 +133,10 @@ function update_favorites() {
             else
                 return; //continue
 
+            if (data[favorite_type].length == 0) {
+                ul.append($("<li class='favorite'>To add a favorite, browse the portal data and click on the star located associated with a facet</li>"));  
+            }
+            
             Object.keys(data[favorite_type]).forEach(key => {
                 list_index = key;
                 favorite_list = data[favorite_type][list_index];
@@ -140,7 +144,7 @@ function update_favorites() {
                 if (favorite_type == "dcc") {
                     fav_dccs.push(favorite_list["abbrev"]);
                 }
-              });
+            });
         });
 
         // now that favorites are loaded, load chart
