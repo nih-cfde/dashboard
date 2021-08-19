@@ -79,11 +79,6 @@ navbar .navbar-nav .dropdown-menu {
     position: fixed;
 }
 
-/* disable the | navbar menu option */
-navbar .navbar-nav .dropdown:nth-child(5) a {
-    pointer-events: none;
-}
-
 /* hide caret shown from other stylesheet */
 navbar .navbar-nav .dropdown>.dropdown-toggle::after {
     content: none;
