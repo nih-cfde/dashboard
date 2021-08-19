@@ -136,7 +136,7 @@ function update_favorites() {
             Object.keys(data[favorite_type]).forEach(key => {
                 list_index = key;
                 favorite_list = data[favorite_type][list_index];
-                ul.append($("<li class='favorite'>").text(favorite_list["name"]));
+                ul.append($("<li class='favorite'><a href='" + favorite_list["url"] + "' target='_blank'>" + favorite_list["name"] + "</a></li>"));
                 if (favorite_type == "dcc") {
                     fav_dccs.push(favorite_list["abbrev"]);
                 }
@@ -185,15 +185,12 @@ function select_all_dccs(chart_id) {
 
 $(document).ready(function() {
 
-    console.log("ready")
     var catalog_id = get_catalog_id();
 
     // chart 1 - stacked bar graph
     register_dropdowns(catalog_id, 'sbc1');
     
-    // locally, this event never fires; committing with temporary debug statements for testing on dev
     window.onload = function() {
-        console.log("onload")
         update_favorites();
         update_saved_queries();
         window.addEventListener('resize', function() { window_resized(catalog_id, 'sbc1'); });
