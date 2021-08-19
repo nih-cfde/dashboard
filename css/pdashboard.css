@@ -61,3 +61,13 @@ svg {
     font-size: .85rem;
     /* padding-left: 10px; */
 }
+
+#favorite-nav-content .fade {
+    opacity: 1;
+    transition:opacity .15s linear;
+  }
+  
+#favorite-nav-content .fade:not(.show) {
+    opacity:0
+}
+  
