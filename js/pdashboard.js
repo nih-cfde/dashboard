@@ -69,45 +69,55 @@ function update_saved_queries() {
     var dataset = []
     
     get_json_retry(saved_queries_url, function(data) {
-        data.forEach(query => {
-            dataset.push([query['name'],query['creation_ts'],query['last_execution_ts'],query['description'],query['query']]);
-        });
-        var dt = $('#saved_query_table').DataTable( {
-            data: dataset,
-            columnDefs: [
-                {
-                    targets: [ 0 ],
-                    width: "50%",
-                    render: function ( data, type, row ) {
-                        value = data;
-                        if (data.length > 52)
-                            value = data.substr( 0, 52 ) + '…';
-                        return '<span class="row_hover" title="' + row[0] + ' - ' + row[3] + '"><a href="' + row[4] + '" target="_blank">'+ value +'</a></span>';
-                    }
+        if (data.length == 0) {
+            var dt = $('#saved_query_table');
+            dt.addClass('saved_query_message');
+            dt.append($("<tr><td class='saved_query_message'>To save a query, browse the data portal and click the 'saved queries' button in the upper-right corner of the screen.</td></tr>"));
+        }
+        else {
+            data.forEach(query => {
+                dataset.push([query['name'],query['creation_ts'],query['last_execution_ts'],query['description'],query['query']]);
+            });
+            var dt = $('#saved_query_table').DataTable( {
+                "language": {
+                    "emptyTable": "No saved queries"
                 },
-                {
-                    targets: [ 1, 2 ],
-                    width: "25%",
-                    render: function ( data, type, row ) {
-                        var d = new Date(data);
-                        value = get_formatted_date(d);
-                        return value;
+                data: dataset,
+                columnDefs: [
+                    {
+                        targets: [ 0 ],
+                        width: "50%",
+                        render: function ( data, type, row ) {
+                            value = data;
+                            if (data.length > 52)
+                                value = data.substr( 0, 52 ) + '…';
+                            return '<span class="row_hover" title="' + row[0] + ' - ' + row[3] + '"><a href="' + row[4] + '" target="chaise">'+ value +'</a></span>';
+                        }
+                    },
+                    {
+                        targets: [ 1, 2 ],
+                        width: "25%",
+                        render: function ( data, type, row ) {
+                            var d = new Date(data);
+                            value = get_formatted_date(d);
+                            return value;
+                        }
+                    },
+                    {
+                        "targets": [ 3, 4 ],
+                        "visible": false
                     }
-                },
-                {
-                    "targets": [ 3, 4 ],
-                    "visible": false
-                }
-            ],
-            columns: [
-                { title: "Query Name" },
-                { title: "Creation Date" },
-                { title: "Last Queried" },
-                { title: "Description" }, // col 3 which is invisible
-                { title: "Query"} // col 4 which is invisible
-            ]
-        });
-        dt.columns.adjust().draw();
+                ],
+                columns: [
+                    { title: "Query Name" },
+                    { title: "Creation Date" },
+                    { title: "Last Queried" },
+                    { title: "Description" }, // col 3 which is invisible
+                    { title: "Query"} // col 4 which is invisible
+                ]
+            });
+            dt.columns.adjust().draw();
+        }
     });
 }
 
@@ -134,13 +144,13 @@ function update_favorites() {
                 return; //continue
 
             if (data[favorite_type].length == 0) {
-                ul.append($("<li class='favorite'>To add a favorite, browse the portal data and click on the star associated with a facet.</li>"));  
+                ul.append($("<li class='favorite'>To add a favorite, browse the data portal and click on the star associated with a facet.</li>"));  
             }
             
             Object.keys(data[favorite_type]).forEach(key => {
                 list_index = key;
                 favorite_list = data[favorite_type][list_index];
-                ul.append($("<li class='favorite'><a href='" + favorite_list["url"] + "' target='_blank'>" + favorite_list["name"] + "</a></li>"));
+                ul.append($("<li class='favorite'><a href='" + favorite_list["url"] + "' target='chaise'>" + favorite_list["name"] + "</a></li>"));
                 if (favorite_type == "dcc") {
                     fav_dccs.push(favorite_list["abbreviation"]);
                 }
@@ -188,6 +198,9 @@ function select_all_dccs(chart_id) {
 }
 
 function redirect_unauth_user(){
+    if (window.location.hostname == "localhost") 
+        return;
+    
     var success_fn = function(data) {
         try {     
             var auth = false;
