@@ -50,7 +50,33 @@ function get_time_zone_diff(d) {
     return timezone_standard;
 }
 
+function redirect_auth_user() {
+    var success_fn = function(data) {
+        try {     
+            var auth = false;
+            data["attributes"].forEach(index => {
+                if (index["id"].indexOf('96a2546e-fa0f-11eb-be15-b7f12332d0e5') >= 0)
+                    auth = true;
+                    return;
+            });
+            if (auth)
+                window.location.replace("pdashboard.html");
+            
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    var error_fn = function(jqXHR, status, error) {
+        return;
+    };
+
+    var url = window.location.origin + "/authn/session";
+    $.getJSON(url, success_fn).fail(error_fn);
+}
+
 $(document).ready(function() {
+    redirect_auth_user();
     var catalog_id = get_catalog_id();
     
     // chart 1 - stacked bar graph
