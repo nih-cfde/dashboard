@@ -70,4 +70,9 @@ svg {
 #favorite-nav-content .fade:not(.show) {
     opacity:0
 }
+
+.saved_query_message {
+    font-size: .85rem;
+    border: 0px solid #FFF !important;
+}
   
