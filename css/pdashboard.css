@@ -51,3 +51,23 @@ svg {
 .button {
     margin: 0.5rem 0.5rem 1rem 0.5rem;
 }
+
+.favorite-container {
+    list-style-type: none;
+    padding: 10px;
+}
+
+.favorite {
+    font-size: .85rem;
+    /* padding-left: 10px; */
+}
+
+#favorite-nav-content .fade {
+    opacity: 1;
+    transition:opacity .15s linear;
+  }
+  
+#favorite-nav-content .fade:not(.show) {
+    opacity:0
+}
+  

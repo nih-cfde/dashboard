@@ -6,11 +6,11 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="./css/style.css" type="text/css"/>
     <link rel="stylesheet" href="./css/index.css" type="text/css"/>
-    <link rel="stylesheet" href="./css/pdashboard.css" type="text/css"/>
     <script src="/chaise/lib/navbar/navbar.app.js"></script>
     <link rel="stylesheet" href="./css/components/normalize.css" type="text/css">
     <link rel="stylesheet" href="./css/components/bootstrap.min.css" type="text/css">
     <link rel="stylesheet" href="./css/components/dataTables.bootstrap4.min.css" type="text/css">
+    <link rel="stylesheet" href="./css/pdashboard.css" type="text/css"/>
     <link rel="shortcut icon" type="image/png" href="./images/icons/CFDE-icon-1.png?v=2"/>
     <link rel="stylesheet" href="./css/fonts.css" type="text/css"/>
   </head>
@@ -33,7 +33,7 @@
 	</div><!-- end Top Content-Section-Right-->
       </div><!-- End Top Content-->
 
-      <div class="content">
+      <div>
         <div class="content__top">
           <div class="content__left">
 	    <div class="data_header">
@@ -52,7 +52,7 @@
                 <ul id="favorite-nav" class="nav nav-tabs" role="tablist">
                   
                 <li class="nav-item">
-                  <a class="nav-link active" href="#project" id="project-tab" role="tab" data-toggle="tab" aria-controls="project" aria-expanded="true">Projects</a>
+                  <a class="nav-link active" href="#program" id="program-tab" role="tab" data-toggle="tab" aria-controls="program" aria-expanded="true">CF Program</a>
                 </li>
                 
                 <li class="nav-item">
@@ -68,16 +68,16 @@
                 <!-- Content Panel -->
                 <div id="favorite-nav-content" class="tab-content">
                 
-                <div role="tabpanel" class="tab-pane fade show active" id="project" aria-labelledby="project-tab">
-                  <p>Projects in this div</p>
+                <div role="tabpanel" class="tab-pane fade show active" id="program" aria-labelledby="program-tab">
+                  <ul id="favorite-dccs" class="favorite-container"></ul>
                 </div>
                 
                 <div role="tabpanel" class="tab-pane fade" id="anatomy" aria-labelledby="anatomy-tab">
-                    <p>Anatomy in this div</p>
+                    <ul id="favorite-anatomies" class="favorite-container"></ul>
                 </div>
                 
                 <div role="tabpanel" class="tab-pane fade" id="assays" aria-labelledby="assays-tab">
-                  <p>Assays in this div</p>
+                  <ul id="favorite-assays" class="favorite-container"></ul>
                 </div>
               
                 
@@ -202,5 +202,7 @@
     <script src="js/lz-string.min.js?ts=1607186913"></script>
     <script src="js/config.js?ts=1619458908"></script>
     <script src="js/pdashboard.js?ts=1628708183"></script>
+
+    
   </body>
 </html>
