@@ -122,3 +122,19 @@ img.thumbnail_donut_chart {
   padding-top: 0.25em;
   margin-bottom: 0em;
 }
+
+.fade2 {
+  opacity: 1 important!;
+  transition:opacity .15s linear;
+}
+
+.close2 {
+  background-color: transparent;
+  border: 0;
+  float: right;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #000;
+  opacity: .5;
+}
