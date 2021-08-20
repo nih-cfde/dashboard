@@ -118,7 +118,7 @@ function update_favorites() {
     
     get_json_retry(favorites_url, function(data) {
     
-        // favorite is a json object with keys "dcc", "anatomy", and "assays"
+        // favorite is a json object with keys "dcc", "anatomy", and "assay"
         // and values are a arrays of objects with keys "name", "description"
         // e.g. {"anatomy": [{"name": "blood", "description": "A fluid that is composed of blood plasma and erythrocytes."}, 
         //                   {"name": "lung", "description": "Respiration organ that develops as an oupocketing of the esophagus."}]}
@@ -128,13 +128,13 @@ function update_favorites() {
                 ul = $('#favorite-anatomies');
             else if (favorite_type == "dcc") 
                 ul = $('#favorite-dccs');
-            else if (favorite_type == "assays")
+            else if (favorite_type == "assay")
                 ul = $('#favorite-assays');
             else
                 return; //continue
 
             if (data[favorite_type].length == 0) {
-                ul.append($("<li class='favorite'>To add a favorite, browse the portal data and click on the star located associated with a facet</li>"));  
+                ul.append($("<li class='favorite'>To add a favorite, browse the portal data and click on the star associated with a facet.</li>"));  
             }
             
             Object.keys(data[favorite_type]).forEach(key => {
@@ -142,7 +142,7 @@ function update_favorites() {
                 favorite_list = data[favorite_type][list_index];
                 ul.append($("<li class='favorite'><a href='" + favorite_list["url"] + "' target='_blank'>" + favorite_list["name"] + "</a></li>"));
                 if (favorite_type == "dcc") {
-                    fav_dccs.push(favorite_list["abbrev"]);
+                    fav_dccs.push(favorite_list["abbreviation"]);
                 }
             });
         });
@@ -187,16 +187,43 @@ function select_all_dccs(chart_id) {
     update_chart(catalog_id, chart_id);
 }
 
+function redirect_unauth_user(){
+    var success_fn = function(data) {
+        try {     
+            var auth = false;
+            data["attributes"].forEach(index => {
+                if (index["id"].indexOf('96a2546e-fa0f-11eb-be15-b7f12332d0e5') >= 0)
+                    auth = true;
+                    return;
+            });
+            if (auth)
+                return;
+            
+            window.location.replace("udashboard.html");
+        } catch (error) {
+            console.log(error);
+            window.location.replace("udashboard.html");
+        }
+    };
+
+    var error_fn = function(jqXHR, status, error) {
+        window.location.replace("udashboard.html");
+    };
+
+    var url = window.location.origin + "/authn/session";
+    $.getJSON(url, success_fn).fail(error_fn);
+}
+
+
 $(document).ready(function() {
 
     var catalog_id = get_catalog_id();
-
+    redirect_unauth_user();
     // chart 1 - stacked bar graph
     register_dropdowns(catalog_id, 'sbc1');
-    
+    update_favorites();
+    update_saved_queries();
     window.onload = function() {
-        update_favorites();
-        update_saved_queries();
         window.addEventListener('resize', function() { window_resized(catalog_id, 'sbc1'); });
     };
 });
