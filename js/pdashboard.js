@@ -111,7 +111,7 @@ function update_saved_queries() {
                 columns: [
                     { title: "Search Name" },
                     { title: "Creation Date" },
-                    { title: "Last Queried" },
+                    { title: "Last Searched" },
                     { title: "Description" }, // col 3 which is invisible
                     { title: "Search"} // col 4 which is invisible
                 ]
