@@ -72,7 +72,7 @@ function update_saved_queries() {
         if (data.length == 0) {
             var dt = $('#saved_query_table');
             dt.addClass('saved_query_message');
-            dt.append($("<tr><td class='saved_query_message'>To save a search, browse the data portal and click the 'saved searches' button in the upper-right corner of the screen.</td></tr>"));
+            dt.append($("<tr><td class='saved_query_message'>You have no saved searches. Use the Data Browser menu (above) to run and save searches.</td></tr>"));
         }
         else {
             data.forEach(query => {
