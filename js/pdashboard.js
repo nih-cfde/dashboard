@@ -72,7 +72,7 @@ function update_saved_queries() {
         if (data.length == 0) {
             var dt = $('#saved_query_table');
             dt.addClass('saved_query_message');
-            dt.append($("<tr><td class='saved_query_message'>To save a query, browse the data portal and click the 'saved queries' button in the upper-right corner of the screen.</td></tr>"));
+            dt.append($("<tr><td class='saved_query_message'>To save a search, browse the data portal and click the 'saved searches' button in the upper-right corner of the screen.</td></tr>"));
         }
         else {
             data.forEach(query => {
@@ -80,7 +80,7 @@ function update_saved_queries() {
             });
             var dt = $('#saved_query_table').DataTable( {
                 "language": {
-                    "emptyTable": "No saved queries"
+                    "emptyTable": "No saved searches"
                 },
                 data: dataset,
                 columnDefs: [
@@ -109,11 +109,11 @@ function update_saved_queries() {
                     }
                 ],
                 columns: [
-                    { title: "Query Name" },
+                    { title: "Search Name" },
                     { title: "Creation Date" },
                     { title: "Last Queried" },
                     { title: "Description" }, // col 3 which is invisible
-                    { title: "Query"} // col 4 which is invisible
+                    { title: "Search"} // col 4 which is invisible
                 ]
             });
             dt.columns.adjust().draw();
