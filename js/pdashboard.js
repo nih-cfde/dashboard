@@ -152,7 +152,7 @@ function update_favorites() {
                 favorite_list = data[favorite_type][list_index];
                 ul.append($("<li class='favorite'><a href='" + favorite_list["url"] + "' target='chaise'>" + favorite_list["name"] + "</a></li>"));
                 if (favorite_type == "dcc") {
-                    fav_dccs.push(favorite_list["abbreviation"]);
+                    fav_dccs.push(favorite_list["id"]);
                 }
             });
         });
@@ -171,7 +171,7 @@ function update_dcc_list(catalog_id, chart_id) {
     
     get_json_retry(dcc_list_url, function(data) {
 	data.forEach(dcc => {
-        let checkbox_selected = (fav_dccs.length && fav_dccs.includes(dcc['abbreviation']));
+        let checkbox_selected = (fav_dccs.length && fav_dccs.includes(dcc['id']));
 	    $('<input />', { type: 'checkbox', id: 'dcc_cb'+cbid, value: dcc['abbreviation'], class: 'form-check-input', checked: checkbox_selected }).appendTo(checkboxes);
 	    $('<label />', { 'for': 'dcc_cb'+cbid, text: dcc['abbreviation'], title: dcc['complete_name'], class: 'form-check-label checkbox-inline' }).appendTo(checkboxes);
 	    checkboxes.append("<br clear='both'/>");
