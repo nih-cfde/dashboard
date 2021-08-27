@@ -76,7 +76,7 @@ function update_saved_queries() {
         }
         else {
             data.forEach(query => {
-                dataset.push([query['name'],query['creation_ts'],query['last_execution_ts'],query['description'],query['query']]);
+                dataset.push([query['name'],query['table_name'],query['creation_ts'],query['last_execution_ts'],query['description'],query['query']]);
             });
             var dt = $('#saved_query_table').DataTable( {
                 "language": {
@@ -86,17 +86,21 @@ function update_saved_queries() {
                 columnDefs: [
                     {
                         targets: [ 0 ],
-                        width: "50%",
+                        width: "40%",
                         render: function ( data, type, row ) {
                             value = data;
                             if (data.length > 52)
                                 value = data.substr( 0, 52 ) + '…';
-                            return '<span class="row_hover" title="' + row[0] + ' - ' + row[3] + '"><a href="' + row[4] + '" target="chaise">'+ value +'</a></span>';
+                            return '<span class="row_hover" title="' + row[0] + ' - ' + row[4] + '"><a href="' + row[5] + '" target="chaise">'+ value +'</a></span>';
                         }
                     },
                     {
-                        targets: [ 1, 2 ],
-                        width: "25%",
+                        targets: [ 1 ],
+                        width: "15%",
+                    },
+                    {
+                        targets: [ 2, 3 ],
+                        width: "20%",
                         render: function ( data, type, row ) {
                             var d = new Date(data);
                             value = get_formatted_date(d);
@@ -104,12 +108,13 @@ function update_saved_queries() {
                         }
                     },
                     {
-                        "targets": [ 3, 4 ],
+                        "targets": [ 4, 5 ],
                         "visible": false
                     }
                 ],
                 columns: [
                     { title: "Search Name" },
+		    { title: "Table" },
                     { title: "Creation Date" },
                     { title: "Last Searched" },
                     { title: "Description" }, // col 3 which is invisible
