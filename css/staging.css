@@ -131,6 +131,73 @@ navbar .navbar-nav .dropdown>.dropdown-toggle::after {
   width: auto;
 }
 
+/* ===== Styles and colors for status icons ===== */
+
+.cfde_noinfo, .cfde_pending, .cfde_success,
+.cfde_retired, .cfde_rejected, .cfde_error {
+  padding-left: 17px;
+  position: relative;
+}
+
+.cfde_noinfo::before, .cfde_pending::before, .cfde_success::before,
+.cfde_retired::before, .cfde_rejected::before, .cfde_error::before {
+  content: "";
+  left: 0px;
+  top: -1px;
+  width: 14px;
+  height: 14px;
+  position: absolute;
+  font-family: "Font Awesome 5 Free";
+}
+
+.cfde_noinfo::before {
+  /* light grey filled circle */
+  /* fas fa-circle */
+  content: "\f111";
+  color: grey;
+  font-weight: 900;
+}
+
+.cfde_pending::before {
+  /* green hollow circle with a checkmark */
+  /* far fa-check-circle */
+  content: "\f058";
+  color: green;
+  font-weight: 500;
+}
+
+.cfde_success::before {
+  /* green filled circle with checkmark */
+  /* fas fa-check-circle */
+  content: "\f058";
+  color: green;
+  font-weight: 900;
+}
+
+.cfde_retired::before {
+  /* green hollow circle */
+  /* far fa-circle */
+  content: "\f111";
+  color: green;
+  font-weight: 500;
+}
+
+.cfde_rejected::before {
+  /* red filled circle with an X */
+  /* fas fa-times-circle */
+  content: "\f057";
+  color: red;
+  font-weight: 900;
+}
+
+.cfde_error::before {
+  /* yellow (or orange) solid circle with exclamation mark */
+  /* fas fa-exclamation-circle */
+  content: "\f06a";
+  color: orange;
+  font-weight: 900;
+}
+
 #form-controls .container,
 #sbc1-form-controls .container,
 #sbc2-form-controls .container,
