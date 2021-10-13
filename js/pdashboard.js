@@ -241,7 +241,6 @@ $(document).ready(function() {
     register_dropdowns(catalog_id, 'sbc1');
     update_favorites();
     update_saved_queries();
-    window.onload = function() {
-        window.addEventListener('resize', function() { window_resized(catalog_id, 'sbc1'); });
-    };
+    window.addEventListener('resize', function() { window_resized(catalog_id, 'sbc1'); });
+
 });

@@ -7,15 +7,51 @@
     padding: 0rem;
 }
 
-.svg_container {
-    flex: 5 1 85%;
-    border: 1px solid #cccccc;
-    margin-right: 20px;
-    padding: 0.5rem;
+
+#chart-container {
+    height: 350px;
+    margin: auto;
 }
 
+#sbc1-controls input {
+    margin-left: 0rem;
+}
+
+#sbc1-controls label {
+    margin-left: 1.2rem;
+}
+
+
+#chart-container-1 {
+    display: inline-block;
+    width: 60%;
+    vertical-align: top;
+}
+
+#sbc1-group-by-container {
+    padding-bottom: 20px;
+    margin-top: -12px;
+}
+  
+#sbc1-group-by-and-legend-container {
+    width:20%;
+    display: inline-block;
+    padding-left: 8px;
+}
+
+#sbc1_container {
+    /* padding: 2%; */
+    padding: 10px;
+    max-height: 250px;
+    overflow-y: scroll;
+    border: 0px;
+}
+
+
+  
 .checkboxes {
-    flex: 1 1 15%;
+    margin: 15px;
+    flex: 1 1 10%;
     border: 1px solid #cccccc;
     padding: 1rem 1rem 1rem 0rem;
 }
@@ -42,10 +78,6 @@
 
 svg {
     min-height: 350px;
-}
-
-.checkboxes {
-    flex: 1 1 15%;
 }
 
 .button {

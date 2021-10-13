@@ -129,13 +129,13 @@ function update_chart(catalog_id, chart_id) {
     const requestnum = ++REQUESTNUMS[chart_id];
     
     var data_fn = function(data) {
-	// ignore out-of-sequence responses
-	if (requestnum == REQUESTNUMS[chart_id]) {
-	    chart_data[chart_id] = data;
-	    chart_data_urls[chart_id] = data_url;
+        // ignore out-of-sequence responses
+        if (requestnum == REQUESTNUMS[chart_id]) {
+            chart_data[chart_id] = data;
+            chart_data_urls[chart_id] = data_url;
             register_export_buttons(chart_id);
             draw_chart(chart_id, data, x_axis, y_axis);
-	}
+        }
     };
     var fail_fn = function(jqXHR, status, error) {
 	// ignore out-of-sequence responses
@@ -250,12 +250,20 @@ function merge_groups(groups, max_groups, grouping1) {
     return new_groups;
 }
 
+function getComputedLength() {
+    return function () {
+        let self = d3.select(this);
+        let textLength = self.node().getComputedTextLength();
+        return textLength;
+    };
+}
+
 function ellipsize(width, padding) {
     return function () {
         let self = d3.select(this);
         let textLength = self.node().getComputedTextLength();
         let text = self.text();
-
+        
         while (textLength > (width - 2 * padding) && text.length > 0) {
             text = text.slice(0, -1);
             self.text(text + '...');
@@ -267,9 +275,9 @@ function ellipsize(width, padding) {
 // set the color palette
 var colorizer = d3.scaleOrdinal()
     .range([
-        '#c0653d', '#f0593b', '#eb7e23', '#edb21e', '#f2cb2e',
-        '#d0c596', '#a28c33', '#96c93e', '#7da34a', '#80cbb3',
-        '#1bbcc0', '#138eae', '#76c8ed', '#aa8ec2', '#ef7e34'
+        '#c0653d', '#138eae', '#f2cb2e', '#96c93e', '#aa8ec2',
+        '#eb7e23', '#ffffff', '#edb21e', '#76c8ed', '#f0593b', 
+        '#d0c596', '#80cbb3', '#7da34a', '#1bbcc0', '#a28c33'
     ]);
 
 function show_error(chart_id) {
@@ -290,27 +298,37 @@ function add_tooltip(chart_id, svg) {
 
     let rect = tooltip.append('rect')
         .attr('width', 190)
-        .attr('height', 50)
+        .attr('height', 70)
         .attr('class', 'chart_tooltip_rect');
 
     let text1 = tooltip.append('text')
         .attr('class', 'chart_tooltip_title')
-        .attr('id', chart_id + '-brick-category')
+        .attr('id', chart_id + '-x-category')
         .attr('x', 5)
         .attr('dy', '1.8em');
+    text1.append('text').text('value here');
+    
+    tooltip.append('text')
+        .attr('x', 5)
+        .attr('dy', '3.2em')
+        .attr('id', chart_id + '-z-category')
+        .attr('class', 'chart_tooltip_title');
 
     tooltip.append('text')
         .attr('x', 5)
-        .attr('dy', '3.4em')
-        .attr('id', chart_id + '-brick-value')
-        .attr('class', 'chart_tooltip_value');
+        .attr('dy', '4.6em')
+        .attr('id', chart_id + '-y-category')
+        .attr('class', 'chart_tooltip_title');
+        // .attr('class', 'chart_tooltip_value');
+
+    
 }
 
 function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
     $('#' + svg_id).empty();
     update_chart_title(svg_id);
 
-    var x_axis_label_rot = 25;
+    var x_axis_label_rot = -35;
     var x_axis_label_dx = '-.8em';
     var x_axis_label_dy = '.5em';
 
@@ -375,12 +393,6 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
     });
     stacked_data = new_stacked_data;
 
-    // apply group limits
-    if (MAX_GRAPH_GROUP1 != null) 
-	stacked_data = merge_within_groups_local(stacked_data, MAX_GRAPH_GROUP2, x_axis);
-    if (MAX_GRAPH_GROUP2 != null) 
-	stacked_data = merge_groups(stacked_data, MAX_GRAPH_GROUP1, x_axis);
-    
     // Can't assume that y-axis keys will be the same in each list element,
     // must take union across them all.
     stacked_data.forEach(d => {
@@ -418,7 +430,7 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
     const top_margin = 35;
     const bottom_margin = 80;
     var left_margin = 60;
-    var right_margin = 30;
+    var right_margin = 10;
     
     // svg_width determined by enclosing div
     const svg = d3.select('#' + svg_id);
@@ -440,8 +452,8 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
     if (svg_width < 400) {
         legend_width = 0;
         right_margin = 10;
-        x_axis_label_rot = 90;
-        x_axis_label_dx = '1em';
+        x_axis_label_rot = -90;
+        x_axis_label_dx = '-1em';
         x_axis_label_dy = '-0.5em';
         d3.select('#' + svg_id + '-last_updated').style('display', 'none');
         d3.select('#' + svg_id + '-form-row').style('flex-wrap', 'wrap');
@@ -450,7 +462,7 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
         d3.select('#' + svg_id + '-form-row').style('flex-wrap', 'nowrap');
     }
     
-    const width = svg_width - left_margin - right_margin - legend_width;
+    const width = svg_width - left_margin - right_margin; // - legend_width;
     const height = svg_height - top_margin - bottom_margin;
     svg.attr('height', svg_height);
 
@@ -480,7 +492,8 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
     var num_bars = stacked_data.length;
     function maxlen_fn(text, index) {
         // final bar has less space due to color key
-        return ((x_axis_label_rot != 90) && (index + 1 == num_bars)) ? 13 : 28;
+        // return ((x_axis_label_rot != 90) && (index + 1 == num_bars)) ? 13 : 28;
+        return (x_axis_label_rot != -90)  ? 20 : 14;
     }
 
     var tlc = 0;
@@ -501,6 +514,7 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
         .attr('transform', `translate(0, ${height})`)
         .call(d3.axisBottom(xScale))
         .selectAll('.tick text')
+        .style("text-anchor", "end")
         .call(trim_labels, maxlen_fn)
         .attr('dx', x_axis_label_dx)
         .attr('dy', x_axis_label_dy)
@@ -562,30 +576,22 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
         .attr('text-anchor', 'middle')
         .text(y_title);
     
-//    svg.append('image')
-//        .attr('x', svg_width - 125)
-//        .attr('y', 0)
-//        .attr('id', svg_id + '-export-button')
-//        .attr('height', 32)
-//        .attr('width', 125)
-//        .attr('xlink:href', './images/download_button.png')
-//        .on('click', function() {
-//            $('#export-modal').attr('name', svg_id + '-modal');
-//            $('#export-modal').modal();
-//        })
-//        .append('title')
-//        .text('Export chart');
-
     // limit categories
-    var max_categories = 14;
+    // var max_categories = 14;
     add_tooltip(svg_id, svg);
     var tooltip = d3.select('#' + svg_id + '-tooltip');
     var title_fn = function(d) { return d; };
     var text_fn = function(d) { return d; };
 
-    //    add_legend(svg_id, width, chart, categories.slice(0,max_categories), tooltip, title_fn, text_fn, left_margin, 0);
     if (legend_width > 0) {
-        add_legend(svg_id, width, legend_width, chart, categories.slice(0, max_categories), null, title_fn, text_fn, left_margin, 0);
+        legend_height = categories.length * 20;
+        $('#' + svg_id + '_container').empty();
+        var legendSVG = d3.select('#' + svg_id + '_container')
+            .append('svg')
+            .attr('height', legend_height)
+            .attr('width', '100%')
+            .attr('preserveAspectRatio', 'xMinYMin');
+        add_legend(svg_id, 0, legend_width, legendSVG, categories, null, title_fn, text_fn, left_margin, 0);
     }
 
     groups.attr('fill', function(a, b) { return colorizer(b); })
@@ -613,7 +619,9 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
         .on('mouseover', function() { tooltip.style('display', null); })
         .on('mouseout', function() { tooltip.style('display', 'none'); })
         .on('mousemove', function(d, e) {
-            var brick_name = d3.select(this.parentNode).datum().key;
+            var brick_num = d3.select(this.parentNode).datum();
+            let series_idx = d3.select(this).datum()[2];
+            var brick_name = brick_num.key;
             var brick_value = 0;
             let coords = d3.mouse(this);
             let xPosition = coords[0];  // distance from y-axis on chart
@@ -626,10 +634,30 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
             } else {
                 brick_value = comma_formatter(d[1] - d[0]);
             }
+            var x_axis_selection = $('#' + svg_id + '-x-axis option:checked').val();
+            var x_axis_val = stacked_data[series_idx][x_axis_selection];
+            var y_axis_val = brick_value;
+            var group_val = brick_name;
+            var group_key = $('#' + svg_id + '-group-by option:checked').text();
+            var x_axis_key = $('#' + svg_id + '-x-axis option:checked').text();
+            var y_axis_key = $('#' + svg_id + '-y-axis option:checked').text();
+            x_cat_text = $('#' + svg_id + '-x-category').text(x_axis_key + ": " + x_axis_val);
+            z_cat_text = $('#' + svg_id + '-z-category').text(group_key + ": " + group_val);
+            y_cat_text = $('#' + svg_id + '-y-category').text(y_axis_key + ": " + y_axis_val);
 
-            $('#' + svg_id + '-brick-value').text(brick_value);
-            let text = $('#' + svg_id + '-brick-category');
-            text.append('tspan').text(brick_name).each(ellipsize(190, 5));
+            x_cat_text.each( function() {
+                let self = d3.select(this);
+                let textLength = self.node().getComputedTextLength();
+            });
+
+            let x_width = 0;
+            let y_width = 0;
+            let z_width = 0;
+            x_cat_text.each( function() { x_width = d3.select(this).node().getComputedTextLength();});
+            y_cat_text.each( function() { y_width = d3.select(this).node().getComputedTextLength();});
+            z_cat_text.each( function() { z_width = d3.select(this).node().getComputedTextLength();});
+            tip_width = Math.max(x_width, y_width, z_width);
+            $('.chart_tooltip_rect').width(tip_width + 10);
 
             // Get the series index that we are hovering over so we can compute the
             // the x value to use (if we wish to lock it down).
@@ -638,15 +666,15 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
             // let tooltipX = seriesX;
 
             let tooltipX = xPosition + left_margin - (tooltip_width / 2);
-            let tooltipY = yPosition - 50;  // Get the tooltip above the mouse position
+            let tooltipY = yPosition - 45;  // Get the tooltip above the mouse position
 
             // Prevent the tooltip from starting from out-of-bounds
             if (tooltipX < 1) {
                 tooltipX = 1;
             }
 
-            if (tooltipY < 1) {
-                tooltipY = 1;
+            if (tooltipY < -10) {
+                tooltipY = -10;
             }
 
             tooltip.attr('transform', 'translate(' + tooltipX + ',' + tooltipY + ')');
@@ -654,7 +682,7 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
 }
 
 function add_legend(svg_id, chart_width, legend_width, chart, categories, tooltip, title_fn, text_fn, x_offset, y_offset, mouseover_fn, mouseout_fn) {
-    var top = -10;
+    var top = 0;
 
     // Create the legend
     var legend = chart.append('g').selectAll('.legend')
@@ -666,16 +694,16 @@ function add_legend(svg_id, chart_width, legend_width, chart, categories, toolti
             return 'translate(0,' + (top + i * 20) + ')';
         })
         .on('mouseover', function(d, e) {
-	    if (tooltip != null) tooltip.style('display', null);
-	    if (mouseover_fn != null) mouseover_fn(d, e);
+	        if (tooltip != null) tooltip.style('display', null);
+	        if (mouseover_fn != null) mouseover_fn(d, e);
         })
         .on('mouseout', function(d, e) {
-	    if (tooltip != null) tooltip.style('display', 'none');
-	    if (mouseout_fn != null) mouseout_fn(d, e);
+	        if (tooltip != null) tooltip.style('display', 'none');
+	        if (mouseout_fn != null) mouseout_fn(d, e);
         })
         .on('mousemove', function(d, e) {
-	    if (tooltip == null) return;
-	    var tooltip_title = title_fn(d);
+	        if (tooltip == null) return;
+	        var tooltip_title = title_fn(d);
             var tooltip_text = text_fn(d);
 
             let coords = d3.mouse(this);
@@ -683,13 +711,9 @@ function add_legend(svg_id, chart_width, legend_width, chart, categories, toolti
             let yPosition = coords[1];  // distance from top of chart
 
             let tooltip_width = $('.chart_tooltip_rect').width();
-            $('#' + svg_id + '-brick-value').text(tooltip_text).each(ellipsize(190, 5));
-            let text = $('#' + svg_id + '-brick-category');
-            text.append('tspan').text(tooltip_title).each(ellipsize(190, 5));
-
             let tooltipX = xPosition + x_offset - tooltip_width;
             let tooltipY = yPosition + y_offset - 50;  // Get the tooltip above the mouse position
-	    tooltipY += (top + e * 20);
+	        tooltipY += (top + e * 20);
 	    
             // Prevent the tooltip from starting from out-of-bounds
             if (tooltipX < 1) {
@@ -704,18 +728,19 @@ function add_legend(svg_id, chart_width, legend_width, chart, categories, toolti
         });
     
     legend.append('rect')
-        .attr('x', chart_width + 28)
+        // .attr('x', chart_width + 28)
+        .attr('x', chart_width)
         .attr('width', 18)
         .attr('height', 18)
         .attr('fill', function(d, i) { return colorizer(i); });
 
     legend.append('text')
-        .attr('x', chart_width + 50)
+        .attr('x', chart_width + 25)
         .attr('y', 8)
         .attr('dy', '.35em')
         .attr('font-family', 'sans-serif')
         .style('font-size', '0.7rem')
-        .text(title_fn).each(ellipsize(legend_width - 15, 5))
+        .text(title_fn) //.each(ellipsize(legend_width - 15, 5))
         .append('title').text(title_fn);
 }
 

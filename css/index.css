@@ -61,6 +61,72 @@ main {
     font-size: 1.25rem;
 }
 
+#browse-by-feature-container {
+  text-align: center;
+  display: flex;
+  justify-content: space-evenly;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 10px 0;
+}
+
+#search-by-container {
+  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px 20px;
+}
+
+#sbc1-group-by-and-legend-container {
+  width:24%;
+  display: inline-block;
+}
+
+#sbc1-container {
+  display: inline-block;
+  width: 75%;
+  vertical-align: top;
+}
+
+.export-button {
+  bottom: 0;
+  position: absolute;
+  right: 0;
+  padding: 0px;
+  margin: 0px;
+}
+
+#sbc1_container {
+  /* padding: 2%; */
+  padding: 10px;
+  max-height: 200px;
+  overflow-y: scroll;
+  border: 0px;
+  
+}
+
+#sbc1-group-by-container {
+  padding-bottom: 20px;
+}
+/* #sbc1_container::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+}
+
+#sbc1_container::-webkit-scrollbar-track {
+  background-color: blue;
+  width: 20px;
+} */
+
+  
+/* #sbc1_container::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, .5);
+    box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+} */
+
 #chart-container {
   height: 350px;
   margin: auto;

@@ -116,6 +116,19 @@ function add_summary_data(catalog_id) {
     });
 }
 
+function add_counts(catalog_id) {
+    var summary_url = DASHBOARD_API_URL + '/dcc_info';
+
+    // counts for top-level entities
+    get_json_retry(summary_url, function(data) {
+        Object.keys(data).forEach(function(key) {
+            if (key.endsWith('_count')) {
+                $('#' + key).append(data[key].toLocaleString());
+            }
+        });
+    });
+}
+
 // set/update Chaise URLs with the correct Chaise URL and de the catalog id
 function update_chaise_urls(catalog_id) {
     // "Search all Files" button
@@ -152,8 +165,7 @@ $(document).ready(function() {
 
     // chart 1 - stacked bar graph
     register_dropdowns(catalog_id, 'sbc1');
-    window.onload = function() {
-      update_chart(catalog_id, 'sbc1');
-      window.addEventListener('resize', function() { window_resized(catalog_id, 'sbc1'); });
-    };
+    update_chart(catalog_id, 'sbc1');
+    add_counts(catalog_id);
+    window.addEventListener('resize', function() { window_resized(catalog_id, 'sbc1'); });    
 });

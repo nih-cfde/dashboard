@@ -86,18 +86,41 @@
 			<div class="data_header snapshot">
                           <p id="data_snapshot_title" class="snapshot_head">Data Snapshot</p>
                           <p id="last_updated" class="last-updated"></p>
-			  <p id="review_bc1-export" class="export"><a href="javascript: export_chart_data('review_bc1')"><img src='images/download_button.png' style='width: 125px; height: 32px;' title='Export chart'></a></p>
+			  
 			</div>
 			<div class="data_snapshot_content">
 
-                          <div id="chart-container-1" style="height:450px;">
-                            <svg id="review_bc1"/>
-                          </div>
+        <div id="chart-container-1" style="height:450px;">
+          <svg id="review_bc1"></svg>
+        </div>
+
+        <div id="review_bc1-group-by-and-legend-container">
+          <div id="review_bc1-group-by-container">
+            <label for="group-by" class="form-label">Group by</label>
+            <select class="custom-select" id="review_bc1-group-by" name="groupby">
+              <option value="anatomy">Anatomy</option>
+              <option selected value="assay">Assay</option>
+              <option value="dcc">CF Program</option>
+              <option value="data_type">Data Type</option>
+              <option value="species">Species</option>
+            </select>
+          </div>
+          <div id="review_bc1_container"></div>
+        </div>
 
 			  <div id="form-controls">
 			    <form>
 			      <div class="container" style="width: 100%;">
 				<div class="row" style="flex-wrap:nowrap">
+          <div class="col-md-4" id="review_bc1-y-axis-container">
+				    <label for="y-axis" class="form-label">Y-axis</label>
+				    <select class="custom-select" id="review_bc1-y-axis" name="y-axis">
+				      <option value="volume">Data volume</option>
+				      <option selected value="files">File count</option>
+				      <option value="samples">Sample count</option>
+				      <option value="subjects">Subject count</option>
+				    </select>
+				  </div>
 				  <div class="col-md-4" id="review_bc1-x-axis-container">
 				    <label for="x-axis" class="form-label">X-axis</label>
 				    <select class="custom-select" id="review_bc1-x-axis" name="x-axis">
@@ -107,24 +130,10 @@
 				      <option value="species">Species</option>
 				    </select>
 				  </div>
-				  <div class="col-md-4" id="review_bc1-y-axis-container">
-				    <label for="y-axis" class="form-label">Y-axis</label>
-				    <select class="custom-select" id="review_bc1-y-axis" name="y-axis">
-				      <option value="volume">Data volume</option>
-				      <option selected value="files">File count</option>
-				      <option value="samples">Sample count</option>
-				      <option value="subjects">Subject count</option>
-				    </select>
-				  </div>
-				  <div class="col-md-4" id="review_bc1-group-by-container">
-				    <label for="group-by" class="form-label">Stack by</label>
-				    <select class="custom-select" id="review_bc1-group-by" name="groupby">
-				      <option value="anatomy">Anatomy</option>
-				      <option selected value="assay">Assay</option>
-				      <option value="data_type">Data Type</option>
-				      <option value="species">Species</option>
-				    </select>
-				  </div>
+				  
+          <div class="col-md-4" id="sbc1-download-button-container">
+            <p id="review_bc1-export" class="export-button"><a href="javascript: export_chart_data('review_bc1')"><img src='images/download_button.png' style='width: 125px; height: 32px;' title='Export chart'></a></p>
+          </div>
 				</div>
 			      </div>
 			    </form>

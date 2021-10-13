@@ -96,10 +96,27 @@
 	      
 	      <div class="summary_chart">
 		
-		<div id="sbc1_container" class="svg_container">
-		  <svg id="sbc1"/>
+    <div id="chart-container-1" class="chart-container">
+		  <svg id="sbc1"></svg>
 		</div>
-		
+
+    <div id="sbc1-group-by-and-legend-container">
+      <div id="sbc1-group-by-container">
+        <label for="group-by" class="form-label">Group by</label>
+        <select class="custom-select" id="sbc1-group-by" name="groupby">
+          <option value="anatomy">Anatomy</option>
+          <option selected value="assay">Assay</option>
+          <option value="dcc">CF Program</option>
+          <option value="data_type">Data Type</option>
+          <option value="species">Species</option>
+        </select>
+      </div>
+      <div id="sbc1_container"></div>
+    </div>
+
+
+
+
 		<div class="checkboxes">
 		  <div id="sbc1-controls" class="form-group form-check">
 		    <button type="button" class="form-control btn btn-primary" onclick='select_all_dccs("sbc1")' style='margin-bottom: 1rem;'>Show All</button><br clear='both'/>
@@ -110,8 +127,17 @@
 
 		<div style='margin: 1em;'>
 		  <form>
-                    <div class="container">
+        <div class="container">
 		      <div class="row"> 
+      <div class="col-md-4" id="sbc1-y-axis-container">
+        <label for="y-axis" class="form-label">Y-axis</label>
+        <select class="custom-select" id="sbc1-y-axis" name="y-axis">
+                            <option value="volume">Data volume</option>
+                            <option selected value="files">File count</option>
+                            <option value="samples">Sample count</option>
+                            <option value="subjects">Subject count</option>
+        </select>
+      </div>
 			<div class="col-md-4" id="sbc1-x-axis-container">
 			  <label for="x-axis" class="form-label">X-axis</label>
 			  <select class="custom-select" id="sbc1-x-axis" name="x-axis">
@@ -122,25 +148,8 @@
                             <option value="species">Species</option>
 			  </select>
 			</div>
-			<div class="col-md-4" id="sbc1-y-axis-container">
-			  <label for="y-axis" class="form-label">Y-axis</label>
-			  <select class="custom-select" id="sbc1-y-axis" name="y-axis">
-                            <option value="volume">Data volume</option>
-                            <option selected value="files">File count</option>
-                            <option value="samples">Sample count</option>
-                            <option value="subjects">Subject count</option>
-			  </select>
-			</div>
-			<div class="col-md-4" id="sbc1-group-by-container">
-			  <label for="group-by" class="form-label">Stack by</label>
-			  <select class="custom-select" id="sbc1-group-by" name="groupby">
-                            <option value="anatomy">Anatomy</option>
-                            <option selected value="assay">Assay</option>
-                            <option value="dcc">CF Program</option>
-                            <option value="data_type">Data Type</option>
-                            <option value="species">Species</option>
-			  </select>
-			</div>
+			
+
                       </div>
                     </div>
 		  </form>

@@ -76,49 +76,57 @@
           <div id="chart1" class="chart">
             <div class="data_header">
               <p id="sbc1-title">Chart 1</p>
-	      <p id="sbc1-last_updated" class="last-updated"></p>
-	      <p id="sbc1-export" class="export"><a href="javascript: export_chart_data('sbc1')"><img src='images/download_button.png' style='width: 125px; height: 32px;' title='Export chart'></a></p>
+      	      <p id="sbc1-last_updated" class="last-updated"></p>
             </div>
             <div class="data_content">
+
               <div id="chart-container-1" class="chart-container">
-                <svg id="sbc1"/>
+                <svg id="sbc1"></svg>
               </div>
+
+              <div id="sbc1-group-by-and-legend-container">
+                <div id="sbc1-group-by-container">
+                  <label for="group-by" class="form-label">Group by</label>
+                  <select class="custom-select" id="sbc1-group-by" name="groupby">
+                    <option value="anatomy">Anatomy</option>
+                    <option selected value="assay">Assay</option>
+                    <option value="dcc">CF Program</option>
+                    <option value="data_type">Data Type</option>
+                    <option value="species">Species</option>
+                  </select>
+                </div>
+                <div id="sbc1_container" />
+              </div>
+            </div>
+
               <div id="sbc1-form-controls">
                 <form>
                   <div class="container" style="width: 100%;">
-                    <div class="row" style="flex-wrap:nowrap">
+                    <div class="row">
+                      <div class="col-md-4" id="sbc1-y-axis-container">
+                        <label for="y-axis" class="form-label">Y-axis</label>
+                        <select class="custom-select" id="sbc1-y-axis" name="y-axis">
+                          <option value="volume">Data volume</option>
+                          <option selected value="files">File count</option>
+                          <option value="samples">Sample count</option>
+                          <option value="subjects">Subject count</option>
+                        </select>
+                      </div>
                       <div class="col-md-4" id="sbc1-x-axis-container">
-                        <label for="sbc1-x-axis" class="form-label">X-axis</label>
-                        <select class="custom-select" id="sbc1-x-axis"
-				name="x-axis">
-			  <option value="anatomy">Anatomy</option>
+                        <label for="x-axis" class="form-label">X-axis</label>
+                        <select class="custom-select" id="sbc1-x-axis" name="x-axis">
+                          <option value="anatomy">Anatomy</option>
                           <option value="assay">Assay</option>
                           <option value="dcc">CF Program</option>
                           <option selected value="data_type">Data Type</option>
                           <option value="species">Species</option>
                         </select>
                       </div>
-                      <div class="col-md-4" id="sbc1-y-axis-container">
-                        <label for="sbc1-y-axis" class="form-label">Y-axis</label>
-                        <select class="custom-select" id="sbc1-y-axis"
-                          name="y-axis">
-                          <option selected value="files">File count</option>
-                          <option value="volume">Data volume</option>
-                          <option value="samples">Sample count</option>
-                          <option value="subjects">Subject count</option>
-                        </select>
+  
+                      <div class="col-md-4" id="sbc1-download-button-container">
+                        <p id="sbc1-export" class="export-button"><a href="javascript: export_chart_data('sbc1')"><img src='images/download_button.png' style='width: 125px; height: 32px;' title='Export chart'></a></p>  
                       </div>
-                      <div class="col-md-4" id="sbc1-group-by-container">
-                        <label for="sbc1-group-by" class="form-label">Stack by</label>
-                        <select class="custom-select" id="sbc1-group-by"
-				name="groupby">
-			  <option value="anatomy">Anatomy</option>
-                          <option selected value="assay">Assay</option>
-                          <option value="dcc">CF Program</option>
-                          <option value="data_type">Data Type</option>
-                          <option value="species">Species</option>
-                        </select>
-                      </div>
+                      
                     </div>
                   </div>
                 </form>
@@ -130,27 +138,30 @@
           <div class="data_header">
 	    <p id="sbc2-title">Chart 2</p>
 	    <p id="sbc2-last_updated" class="last-updated"></p>
-	    <p id="sbc2-export" class="export"><a href="javascript: export_chart_data('sbc2')"><img src='images/download_button.png' style='width: 125px; height: 32px;' title='Export chart'></a></p>
           </div>
           <div class="data_content">
             <div id="chart-container-2" class="chart-container">
               <svg id="sbc2" />
             </div>
+
+            <div id="sbc2-group-by-and-legend-container">
+              <div id="sbc2-group-by-container">
+                <label for="group-by" class="form-label">Group by</label>
+                <select class="custom-select" id="sbc2-group-by" name="groupby">
+                  <option value="anatomy">Anatomy</option>
+                  <option selected value="assay">Assay</option>
+                  <option value="dcc">CF Program</option>
+                  <option value="data_type">Data Type</option>
+                  <option value="species">Species</option>
+                </select>
+              </div>
+              <div id="sbc2_container"></div>
+          </div>
+
             <div id="sbc2-form-controls">
               <form>
-                <div class="container">
+                <div class="container" style="width: 100%;">
                   <div class="row" style="flex-wrap:nowrap">
-                    <div class="col-md-4" id="sbc2-x-axis-container">
-                      <label for="sbc2-x-axis" class="form-label">X-axis</label>
-                      <select class="custom-select" id="sbc2-x-axis"
-                        name="x-axis">
-                        <option value="dcc">CF Program</option>
-                        <option selected value="data_type">Data Type</option>
-                        <option value="assay">Assay</option>
-                        <option value="species">Species</option>
-                        <option value="anatomy">Anatomy</option>
-                      </select>
-                    </div>
                     <div class="col-md-4" id="sbc2-y-axis-container">
                       <label for="sbc2-y-axis" class="form-label">Y-axis</label>
                       <select class="custom-select" id="sbc2-y-axis"
@@ -162,16 +173,20 @@
                           count</option>
                       </select>
                     </div>
-                    <div class="col-md-4" id="sbc2-group-by-container">
-                      <label for="sbc2-group-by" class="form-label">Stack by</label>
-                      <select class="custom-select" id="sbc2-group-by"
-                        name="groupby">
-                        <option selected value="dcc">CF Program</option>
-                        <option value="data_type">Data Type</option>
+                    <div class="col-md-4" id="sbc2-x-axis-container">
+                      <label for="sbc2-x-axis" class="form-label">X-axis</label>
+                      <select class="custom-select" id="sbc2-x-axis"
+                        name="x-axis">
+                        <option value="dcc">CF Program</option>
+                        <option selected value="data_type">Data Type</option>
                         <option value="assay">Assay</option>
                         <option value="species">Species</option>
                         <option value="anatomy">Anatomy</option>
                       </select>
+                    </div>
+                    
+                    <div class="col-md-4" id="sbc2-download-button-container">
+                      <p id="sbc2-export" class="export-button"><a href="javascript: export_chart_data('sbc2')"><img src='images/download_button.png' style='width: 125px; height: 32px;' title='Export chart'></a></p>  
                     </div>
                   </div>
                 </div>

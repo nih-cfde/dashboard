@@ -10,7 +10,8 @@
     <link rel="stylesheet" href="./css/components/normalize.css" type="text/css">
     <link rel="stylesheet" href="./css/components/bootstrap.min.css" type="text/css">
     <link rel="shortcut icon" type="image/png" href="./images/icons/CFDE-icon-1.png?v=2"/>
-    <link rel="stylesheet" href="./css/fonts.css" type="text/css"/>
+    <link rel="stylesheet" href="./css/components/all.min.css">
+    
   </head>
   <body>
     <div id="wrap-navbar">
@@ -36,22 +37,52 @@
               <p>Start your search</p>
             </div>
             <div class="data_content">
-              <button id="search-all" type="button" class="btn btn-primary" onclick="location.href = '/chaise/recordset/#1/CFDE:file';">SEARCH ALL FILES</button>
+              <h5>Click to search by:</h5>
 
               <div class="browse_by_feature">
-                <h4>View Data By</h4>
-                <ul>
-                  <li><a href="/chaise/recordset/#1/CFDE:collection">Collection</a></li>
-                  <li><a href="/chaise/recordset/#1/CFDE:biosample">Biosample</a></li>
-                  <li><a href="/chaise/recordset/#1/CFDE:subject">Subject</a></li>
-                  <li><a href="/chaise/recordset/#1/CFDE:file">File</a></li>
-                </ul>
-
-                <h4>Example Data Views</h4>
-                <ul>
-                  <li><a href="/chaise/record/#1/CFDE:assay_type/id=OBI%3A0001271">All data related to RNA-seq</a></li>
-		  <li><a href="/chaise/record/#1/CFDE:anatomy/id=UBERON%3A0002106">All data related to spleen</a></li>
-                </ul>
+                <div id="browse-by-feature-container">
+                  <p>
+                    <a href="/chaise/recordset/#1/CFDE:anatomy" style="color:#c0653d">
+                      <i class="fas fa-solid fa-lungs fa-4x"></i>
+                      <br/>Anatomy
+                      <br/><span id="anatomy_count"/>
+                    </a>
+                  </p>
+                  <p>
+                    <a href="/chaise/recordset/#1/CFDE:assay_type" style="color:#138eae">
+                      <i class="fas fa-solid fa-eye-dropper fa-4x"></i>
+                      <br/>Assay
+                      <br/><span id="assay_count">&nbsp;</span>
+                    </a>
+                  </p>
+                  
+                </div>
+                
+                <div id="search-by-container">
+                  <p>
+                    <a href="/chaise/recordset/#1/CFDE:file" style="color:#96c93e">
+                      <i class="fas fa-solid fa-file fa-4x"></i>
+                      <br/>File
+                      <br/><span id="file_count">&nbsp;</span>
+                    </a>
+                  </p>
+                    
+                  <p>
+                    <a href="/chaise/recordset/#1/CFDE:biosample" style="color: #eb7e23">
+                      <i class="fas fa-solid fa-vial fa-4x""></i>
+                      <br/>Biosample
+                      <br/><span id="biosample_count">&nbsp;</span>
+                    </a>
+                  </p>
+                  <p>
+                    <a href="/chaise/recordset/#1/CFDE:subject" style="color:#aa8ec2">
+                      <i class="fas fa-solid fa-user fa-4x"></i>
+                      <br/>Subject
+                      <br/><span id="subject_count">&nbsp;</span>
+                    </a>
+                  </p>
+                </div>
+                
               <div style="clear: both"></div>
               </div>
             </div>
@@ -61,16 +92,40 @@
             <div class="data_header snapshot">
               <p id="summary_view_title" class="snapshot_head">Preview the data</p>
 	      <p id="last_updated" class="last-updated"></p>
-	      <p id="sbc1-export" class="export"><a href="javascript: export_chart_data('sbc1')"><img src='images/download_button.png' style='width: 125px; height: 32px;' title='Export chart'></a></p>
+	      
             </div>
             <div class="data_content">
             <div id="sbc1-container">
-              <svg id="sbc1"/>
+              <svg id="sbc1"></svg>
             </div>
+            <div id="sbc1-group-by-and-legend-container">
+              <div id="sbc1-group-by-container">
+                <label for="group-by" class="form-label">Group by</label>
+                <select class="custom-select" id="sbc1-group-by" name="groupby">
+                  <option value="anatomy">Anatomy</option>
+                  <option selected value="assay">Assay</option>
+                  <option value="dcc">CF Program</option>
+                  <option value="data_type">Data Type</option>
+                  <option value="species">Species</option>
+                </select>
+              </div>
+              <div id="sbc1_container"></div>
+            </div>
+                                              
+            
             <div id="form-controls">
               <form>
                 <div class="container" style="width: 100%;">
-		    <div class="row"> 
+		              <div class="row">
+                    <div class="col-md-4" id="sbc1-y-axis-container">
+                      <label for="y-axis" class="form-label">Y-axis</label>
+                      <select class="custom-select" id="sbc1-y-axis" name="y-axis">
+                        <option value="volume">Data volume</option>
+                        <option selected value="files">File count</option>
+                        <option value="samples">Sample count</option>
+                        <option value="subjects">Subject count</option>
+                      </select>
+                    </div>
                     <div class="col-md-4" id="sbc1-x-axis-container">
                       <label for="x-axis" class="form-label">X-axis</label>
                       <select class="custom-select" id="sbc1-x-axis" name="x-axis">
@@ -81,25 +136,13 @@
                         <option value="species">Species</option>
                       </select>
                     </div>
-                    <div class="col-md-4" id="sbc1-y-axis-container">
-                      <label for="y-axis" class="form-label">Y-axis</label>
-                      <select class="custom-select" id="sbc1-y-axis" name="y-axis">
-                        <option value="volume">Data volume</option>
-                        <option selected value="files">File count</option>
-                        <option value="samples">Sample count</option>
-                        <option value="subjects">Subject count</option>
-                      </select>
+                    
+
+                    <div class="col-md-4" id="sbc1-download-button-container">
+                      <p id="sbc1-export" class="export-button"><a href="javascript: export_chart_data('sbc1')"><img src='images/download_button.png' style='width: 125px; height: 32px;' title='Export chart'></a></p>  
                     </div>
-                    <div class="col-md-4" id="sbc1-group-by-container">
-                      <label for="group-by" class="form-label">Stack by</label>
-                      <select class="custom-select" id="sbc1-group-by" name="groupby">
-                        <option value="anatomy">Anatomy</option>
-                        <option selected value="assay">Assay</option>
-                        <option value="dcc">CF Program</option>
-                        <option value="data_type">Data Type</option>
-                        <option value="species">Species</option>
-                      </select>
-                    </div>
+                    
+                    
                   </div>
                 </div>
               </form>

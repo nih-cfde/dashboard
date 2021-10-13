@@ -1,5 +1,6 @@
 .main {
   overflow-y: hidden;
+  display: block;
 }
 
 .data_content {
@@ -10,6 +11,18 @@
 #chart-container {
   height: 350px;
   margin: auto;
+}
+
+#chart-container-1 {
+  display: inline-block;
+  width: 75%;
+  vertical-align: top;
+}
+
+#chart-container-2 {
+  display: inline-block;
+  width: 75%;
+  vertical-align: top;
 }
 
 svg {
@@ -27,18 +40,84 @@ svg {
   margin-bottom: 20px;
 }
 
+#sbc1-container {
+  display: inline-block;
+  width: 75%;
+}
+
+#sbc2-container {
+  display: inline-block;
+  width: 75%;
+}
+
+#sbc1_container {
+  /* padding: 2%; */
+  padding: 10px;
+  max-height: 200px;
+  overflow-y: scroll;
+  border: 0px;
+}
+
+#sbc2_container {
+  /* padding: 2%; */
+  padding: 10px;
+  max-height: 200px;
+  overflow-y: scroll;
+  border: 0px;
+}
+
+#sbc1_container::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+}
+
+#sbc2_container::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 7px;
+}
+
+#sbc1_container::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, .5);
+    box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+}
+
+#sbc2_container::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, .5);
+  box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+}
+
+#sbc1-group-by-container {
+  padding-bottom: 20px;
+}
+
+#sbc2-group-by-container {
+  padding-bottom: 20px;
+}
+
+#sbc1-group-by-and-legend-container {
+  width:24%;
+  display: inline-block;
+}
+
+#sbc2-group-by-and-legend-container {
+  width:24%;
+  display: inline-block;
+}
+
 #sbc1-form-controls {
   margin: 0 auto;
   margin-bottom: 0px;
   position: relative;
-  width: 600px;
+  width: 800px;
 }
 
 #sbc2-form-controls {
   margin: 0 auto;
   margin-bottom: 0px;
   position: relative;
-  width: 600px;
+  width: 800px;
 }
 
 #dc1-form-controls {
@@ -66,8 +145,17 @@ svg {
   flex-direction: row;
   flex-wrap: wrap;
   margin: auto;
-  width: 940px;
+  width: 1200px;
 }
+
+.export-button {
+  bottom: 0;
+  position: absolute;
+  right: 0;
+  padding: 0px;
+  margin: 0px;
+}
+
 
 div.thumbnail_chart {
   color: blue;

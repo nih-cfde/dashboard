@@ -2,6 +2,30 @@ body {
 
 }
 
+#chart-container-1 {
+    display: inline-block;
+    width: 70%;
+    vertical-align: top;
+}
+
+#review_bc1-group-by-container {
+    padding-bottom: 20px;
+    /* margin-top: -12px; */
+}
+
+#review_bc1-group-by-and-legend-container {
+    width:28%;
+    display: inline-block;
+    padding-left: 0px;
+}
+
+#review_bc1_container {
+	padding: 10px;
+    max-height: 300px;
+    overflow-y: scroll;
+    border: 0px;
+}
+
 .top_content_section_right {
 	display: flex;
 	flex:0 0 200px;
