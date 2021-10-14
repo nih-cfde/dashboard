@@ -1,5 +1,19 @@
 /* globals draw_chart register_export_buttons show_error */
 
+const UPDATE_DELAY_SECS = 0.05;
+var update_pending = false;
+var last_update_time = null;
+
+function window_resized(catalog_id, chart_id) {
+    console.log("In window_resized");
+    last_update_time = new Date().getTime();
+    const utime = last_update_time;
+    setTimeout(function() {
+      if (utime < last_update_time) return;
+      update_chart(catalog_id, chart_id); 
+    }, UPDATE_DELAY_SECS * 1000);
+}
+
 function populate_chart(catalog_id, chart_id) {
 
     // summary info to display
@@ -238,4 +252,6 @@ $(document).ready(function() {
 	    add_summary_data(catalog_id, dcc, data.length);
         }
     });
+
+    window.addEventListener('resize', function() { window_resized(catalog_id, 'review_bc1'); });
 });

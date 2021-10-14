@@ -54,7 +54,6 @@ body {
 .main_data_content {
         display: flex;
         flex: 1 1 auto;
-        width: 1270px;
     	flex-direction: row;
 	align-content: flex-start;
 	margin-left: auto;
@@ -66,7 +65,7 @@ body {
 	margin-right: 20px;
 }
 .main_data_content_right {
-	flex:1 0 auto;
+	flex:1 1 auto;
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
