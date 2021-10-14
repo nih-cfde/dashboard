@@ -276,7 +276,7 @@ function ellipsize(width, padding) {
 var colorizer = d3.scaleOrdinal()
     .range([
         '#c0653d', '#138eae', '#f2cb2e', '#96c93e', '#aa8ec2',
-        '#eb7e23', '#ffffff', '#edb21e', '#76c8ed', '#f0593b', 
+        '#eb7e23', '#000000', '#edb21e', '#76c8ed', '#f0593b', 
         '#d0c596', '#80cbb3', '#7da34a', '#1bbcc0', '#a28c33'
     ]);
 
