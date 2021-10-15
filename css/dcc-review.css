@@ -55,9 +55,10 @@ body {
         display: flex;
         flex: 1 1 auto;
     	flex-direction: row;
-	align-content: flex-start;
-	margin-left: auto;
+		align-content: flex-start;
+		margin-left: auto;
         margin-right: auto;
+		width: 1270px;
 }
 .main_data_content_left {
 	flex:0 0 400px;
