@@ -96,7 +96,6 @@ navbar .navbar-nav .dropdown>.dropdown-toggle::after {
 }
 
 .navbar-inverse .navbar-nav>li>a:hover,
-.navbar-inverse .navbar-nav>li>a:focus,
 .navbar-inverse .navbar-nav.navbar-right>li>a:hover {
     color: #C1C1C1;
     background-color: transparent;
