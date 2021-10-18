@@ -13,6 +13,93 @@ function window_resized(catalog_id, chart_id) {
     }, UPDATE_DELAY_SECS * 1000);
 }
 
+
+var hidWidth;
+var scrollBarWidths = 40;
+
+var widthOfList = function(){
+  var itemsWidth = 0;
+  $('.list a').each(function(){
+    var itemWidth = $(this).outerWidth();
+    itemsWidth+=itemWidth;
+  });
+  return itemsWidth;
+};
+
+var widthOfHidden = function(){
+    var ww = 0 - $('.wrapper').outerWidth();
+    var hw = (($('.wrapper').outerWidth())-widthOfList()-getLeftPosi())-scrollBarWidths;
+    var rp = $(document).width() - ($('.nav-item.nav-link').last().offset().left + $('.nav-item.nav-link').last().outerWidth());
+    
+    if (ww>hw) {
+        //return ww;
+        return (rp>ww?rp:ww);
+    }
+    else {
+        //return hw;
+        return (rp>hw?rp:hw);
+    }
+};
+
+var getLeftPosi = function(){
+    
+    var ww = 0 - ($('.wrapper').outerWidth() + 10);
+    var lp = $('.list').position().left;
+    if (ww>lp) {
+        return ww;
+    }
+    else {
+        return lp;
+    }
+};
+
+var reAdjust = function() {
+  
+  // check right pos of last nav item
+  var doc_width = $(document).width();
+  var nav_item_offset_left = $('.nav-item.nav-link').last().offset().left + 170;
+  var nav_item_outerwidth = $('.nav-item.nav-link').last().outerWidth();
+  var rp = doc_width - (nav_item_offset_left + nav_item_outerwidth);
+
+  if (($('.wrapper').outerWidth()) < widthOfList() && (rp<0)) {
+    $('.scroller-right').show().css('display', 'flex');
+  }
+  else {
+    $('.scroller-right').hide();
+  }
+  
+  if (getLeftPosi()<0) {
+    $('.scroller-left').show().css('display', 'flex');
+  }
+   else {
+    // $('.item').animate({left:"-="+getLeftPosi()+"px"},'slow');
+    $('.item').animate({left:"-=200px"},'slow');
+  	$('.scroller-left').hide();
+   }
+}
+
+$('.scroller-right').click(function() {
+  $('.scroller-left').fadeIn('slow');
+  $('.scroller-right').fadeOut('slow');
+  
+  //$('.list').animate({left:"+="+widthOfHidden()+"px"},'slow',function(){
+  $('.list').animate({left:"-=200px"},'slow',function(){
+    reAdjust();
+  });
+});
+
+$('.scroller-left').click(function() {
+  $('.scroller-right').fadeIn('slow');
+  $('.scroller-left').fadeOut('slow');
+  
+  //$('.list').animate({left:"-="+getLeftPosi()+"px"},'slow',function(){
+  $('.list').animate({left:"+=200px"},'slow',function(){
+    reAdjust();
+  });
+});    
+
+
+
 // TODO - copied from dcc_review.js
 function get_formatted_date(d) {
     // Returns a date as a string in the following format: "2020-10-09 17:32:32 - 0400"
@@ -145,8 +232,18 @@ function update_favorites() {
                 ul = $('#favorite-dccs');
             else if (favorite_type == "assay")
                 ul = $('#favorite-assays');
-            else
+            else if (favorite_type == "disease")
+                ul = $('#favorite-diseases');
+            else if (favorite_type == "taxon")
+                ul = $('#favorite-taxon');
+            else if (favorite_type == "data_type")
+                ul = $('#favorite-data-type');
+            else if (favorite_type == "file_format")
+                ul = $('#favorite-file-format');
+            else {
+                console.log("Invalid favorite type");
                 return; //continue
+            }
 
             if (data[favorite_type].length == 0) {
                 ul.append($("<li class='favorite'>To add a favorite, browse the data portal and click on the star associated with a facet.</li>"));  
@@ -241,6 +338,7 @@ $(document).ready(function() {
     register_dropdowns(catalog_id, 'sbc1');
     update_favorites();
     update_saved_queries();
-    window.addEventListener('resize', function() { window_resized(catalog_id, 'sbc1'); });
+    reAdjust();
+    window.addEventListener('resize', function() { window_resized(catalog_id, 'sbc1'); reAdjust(); });
 
 });

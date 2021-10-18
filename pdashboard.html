@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="./css/pdashboard.css" type="text/css"/>
     <link rel="shortcut icon" type="image/png" href="./images/icons/CFDE-icon-1.png?v=2"/>
     <link rel="stylesheet" href="./css/fonts.css" type="text/css"/>
+    <link rel="stylesheet" href="./css/components/all.min.css"/>
   </head>
   <body>
     <div id="wrap-navbar">
@@ -48,44 +49,47 @@
             <div class="data_header">
               <p id="summary_view_title" class="snapshot_head">Favorites</p>
             </div>
-            <div class="data_content" style="min-height: 300px;">
-                <ul id="favorite-nav" class="nav nav-tabs" role="tablist">
-                  
-                <li class="nav-item">
-                  <a class="nav-link active" href="#program" id="program-tab" role="tab" data-toggle="tab" aria-controls="program" aria-expanded="true">CF Program</a>
-                </li>
-                
-                <li class="nav-item">
-                  <a class="nav-link" href="#anatomy" role="tab" id="anatomy-tab" data-toggle="tab" aria-controls="anatomy">Anatomy</a>
-                </li>
-                
-                <li class="nav-item">
-                  <a class="nav-link" href="#assays" role="tab" id="assays-tab" data-toggle="tab" aria-controls="assays">Assays</a>
-                </li>
-                
-                </ul>
-                
-                <!-- Content Panel -->
-                <div id="favorite-nav-content" class="tab-content">
-                
+            
+            <div class="w-100 pt-3" style="min-height: 300px">
+              <div class="scroller float-left mt-2" style="display:flex"><div class="scroller-left"><i class="fa fa-chevron-left"></i></div></div>
+              <div class="scroller scroller-right float-right mt-2"><i class="fa fa-chevron-right"></i></div>
+              <div class="wrapper">
+                  <nav class="nav nav-tabs list mt-2" id="myTab" role="tablist">
+                    <a class="nav-item nav-link active" href="#program" id="program-tab" role="tab" data-toggle="tab" aria-controls="program" aria-expanded="true">CF Program</a>
+                    <a class="nav-item nav-link" href="#anatomy" role="tab" id="anatomy-tab" data-toggle="tab" aria-controls="anatomy">Anatomy</a>
+                    <a class="nav-item nav-link" href="#assays" role="tab" id="assays-tab" data-toggle="tab" aria-controls="assays">Assay</a>
+                    <a class="nav-item nav-link" href="#disease" role="tab" id="disease-tab" data-toggle="tab" aria-controls="diseases">Disease</a>
+                    <a class="nav-item nav-link" href="#taxon" role="tab" id="taxon-tab" data-toggle="tab" aria-controls="taxon">Taxononmy</a>
+                    <a class="nav-item nav-link" href="#data-type" role="tab" id="data-type-tab" data-toggle="tab" aria-controls="data_type">Data Type</a>
+                    <a class="nav-item nav-link" href="#file-format" role="tab" id="file-format-tab" data-toggle="tab" aria-controls="file">File Format</a>
+                    
+                  </nav>
+              </div>
+              <div class="tab-content p-3" id="myTabContent">
                 <div role="tabpanel" class="tab-pane fade show active" id="program" aria-labelledby="program-tab">
                   <ul id="favorite-dccs" class="favorite-container"></ul>
                 </div>
-                
                 <div role="tabpanel" class="tab-pane fade" id="anatomy" aria-labelledby="anatomy-tab">
-                    <ul id="favorite-anatomies" class="favorite-container"></ul>
+                  <ul id="favorite-anatomies" class="favorite-container"></ul>
                 </div>
-                
                 <div role="tabpanel" class="tab-pane fade" id="assays" aria-labelledby="assays-tab">
                   <ul id="favorite-assays" class="favorite-container"></ul>
                 </div>
-              
-                
+                <div role="tabpanel" class="tab-pane fade" id="disease" aria-labelledby="diseases-tab">
+                  <ul id="favorite-diseases" class="favorite-container"></ul>
                 </div>
-                
-                
-            </div>
-
+                <div role="tabpanel" class="tab-pane fade" id="taxon" aria-labelledby="taxon-tab">
+                  <ul id="favorite-taxon" class="favorite-container"></ul>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="data-type" aria-labelledby="data-type-tab">
+                  <ul id="favorite-data-type" class="favorite-container"></ul>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="file-format" aria-labelledby="file-format-tab">
+                  <ul id="favorite-file-format" class="favorite-container"></ul>
+                </div>
+          
+              </div>
+          </div>
 	        </div>
 	  </div>
 	</div><!-- End content__top-->
@@ -114,9 +118,6 @@
       </div>
       <div id="sbc1_container"></div>
     </div>
-
-
-
 
 		<div class="checkboxes">
 		  <div id="sbc1-controls" class="form-group form-check">
@@ -150,7 +151,6 @@
                             <option value="disease">Disease</option>
 			  </select>
 			</div>
-			
 
                       </div>
                     </div>
