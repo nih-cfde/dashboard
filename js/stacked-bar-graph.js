@@ -298,11 +298,11 @@ function add_tooltip(chart_id, svg) {
 
     let rect = tooltip.append('rect')
         .attr('width', 190)
-        .attr('height', 70)
+        .attr('height', 65)
         .attr('class', 'chart_tooltip_rect');
 
     let text1 = tooltip.append('text')
-        .attr('class', 'chart_tooltip_title')
+        .attr('class', 'chart_tooltip_value')
         .attr('id', chart_id + '-x-category')
         .attr('x', 5)
         .attr('dy', '1.8em');
@@ -312,13 +312,13 @@ function add_tooltip(chart_id, svg) {
         .attr('x', 5)
         .attr('dy', '3.2em')
         .attr('id', chart_id + '-z-category')
-        .attr('class', 'chart_tooltip_title');
+        .attr('class', 'chart_tooltip_value');
 
     tooltip.append('text')
         .attr('x', 5)
         .attr('dy', '4.6em')
         .attr('id', chart_id + '-y-category')
-        .attr('class', 'chart_tooltip_title');
+        .attr('class', 'chart_tooltip_value');
         // .attr('class', 'chart_tooltip_value');
 
     
@@ -641,14 +641,9 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
             var group_key = $('#' + svg_id + '-group-by option:checked').text();
             var x_axis_key = $('#' + svg_id + '-x-axis option:checked').text();
             var y_axis_key = $('#' + svg_id + '-y-axis option:checked').text();
-            x_cat_text = $('#' + svg_id + '-x-category').text(x_axis_key + ": " + x_axis_val);
-            z_cat_text = $('#' + svg_id + '-z-category').text(group_key + ": " + group_val);
-            y_cat_text = $('#' + svg_id + '-y-category').text(y_axis_key + ": " + y_axis_val);
-
-            x_cat_text.each( function() {
-                let self = d3.select(this);
-                let textLength = self.node().getComputedTextLength();
-            });
+            x_cat_text = $('#' + svg_id + '-x-category').html("<tspan class='chart_tooltip_title'>" + x_axis_key + ":</tspan> " + x_axis_val);
+            z_cat_text = $('#' + svg_id + '-z-category').html("<tspan class='chart_tooltip_title'>" + group_key + ":</tspan> " + group_val);
+            y_cat_text = $('#' + svg_id + '-y-category').html("<tspan class='chart_tooltip_title'>" + y_axis_key + ":</tspan> " + y_axis_val);
 
             let x_width = 0;
             let y_width = 0;
