@@ -60,8 +60,15 @@ var reAdjust = function() {
   var nav_item_offset_left = $('.nav-item.nav-link').last().offset().left + 170;
   var nav_item_outerwidth = $('.nav-item.nav-link').last().outerWidth();
   var rp = doc_width - (nav_item_offset_left + nav_item_outerwidth);
+  console.log("rp calculation = doc_width - (nav_item_offset_left + nav_item_outerwidth)");
+  console.log("rp calculation = " + doc_width + " - (" + nav_item_offset_left + " + " + nav_item_outerwidth + ")");
+  console.log("rp = " + rp);
+  var wrapper_width = $('.wrapper').outerWidth();
+  var width_of_list = widthOfList();
+  console.log("wrapper_width: " + wrapper_width);
+  console.log("width_of_list: " + width_of_list);
 
-  if (($('.wrapper').outerWidth()) < widthOfList() && (rp<0)) {
+  if ((wrapper_width < width_of_list) && rp<0) {
     $('.scroller-right').show().css('display', 'flex');
   }
   else {
@@ -80,7 +87,7 @@ var reAdjust = function() {
 
 $('.scroller-right').click(function() {
   $('.scroller-left').fadeIn('slow');
-  $('.scroller-right').fadeOut('slow');
+  //$('.scroller-right').fadeOut('slow');
   
   //$('.list').animate({left:"+="+widthOfHidden()+"px"},'slow',function(){
   $('.list').animate({left:"-=200px"},'slow',function(){
@@ -90,7 +97,7 @@ $('.scroller-right').click(function() {
 
 $('.scroller-left').click(function() {
   $('.scroller-right').fadeIn('slow');
-  $('.scroller-left').fadeOut('slow');
+//   $('.scroller-left').fadeOut('slow');
   
   //$('.list').animate({left:"-="+getLeftPosi()+"px"},'slow',function(){
   $('.list').animate({left:"+=200px"},'slow',function(){
