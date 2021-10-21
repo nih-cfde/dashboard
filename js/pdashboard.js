@@ -1,6 +1,7 @@
 /* global register_dropdowns update_chart */
 
 const UPDATE_DELAY_SECS = 0.05;
+var scrolling = false;
 var update_pending = false;
 var last_update_time = null;
 
@@ -60,13 +61,8 @@ var reAdjust = function() {
   var nav_item_offset_left = $('.nav-item.nav-link').last().offset().left + 170;
   var nav_item_outerwidth = $('.nav-item.nav-link').last().outerWidth();
   var rp = doc_width - (nav_item_offset_left + nav_item_outerwidth);
-  console.log("rp calculation = doc_width - (nav_item_offset_left + nav_item_outerwidth)");
-  console.log("rp calculation = " + doc_width + " - (" + nav_item_offset_left + " + " + nav_item_outerwidth + ")");
-  console.log("rp = " + rp);
   var wrapper_width = $('.wrapper').outerWidth();
   var width_of_list = widthOfList();
-  console.log("wrapper_width: " + wrapper_width);
-  console.log("width_of_list: " + width_of_list);
 
   if ((wrapper_width < width_of_list) && (rp < nav_item_outerwidth)) {
     $('.scroller-right').show().css('display', 'block');
@@ -75,19 +71,23 @@ var reAdjust = function() {
     $('.scroller-right').hide();
   }
   
-  console.log("left pos: " + getLeftPosi());
   var left_position = getLeftPosi();
   if (left_position < 0) {
     $('.scroller-left').css('display', 'block').show();
   }
   else {
-    $('.item').animate({left:"-=200px"},'slow');
   	$('.scroller-left').hide();
   }
+
+  scrolling = false;
 }
 
 $('.scroller-right').click(function() {
   $('.scroller-left').fadeIn('slow');
+  if (scrolling) { //prevent double click
+    return;
+  }
+  scrolling = true;
   $('.list').animate({left:"-=200px"},'slow',function(){
     reAdjust();
   });
@@ -95,12 +95,16 @@ $('.scroller-right').click(function() {
 
 $('.scroller-left').click(function() {
   $('.scroller-right').fadeIn('slow');
-//   $('.scroller-left').fadeOut('slow');
-  
-  //$('.list').animate({left:"-="+getLeftPosi()+"px"},'slow',function(){
-  $('.list').animate({left:"+=200px"},'slow',function(){
-    reAdjust();
-  });
+  if (scrolling) { //prevent double click
+    return;
+  }
+  scrolling = true;
+  var left_position = getLeftPosi();
+  if (left_position < 0) {
+    $('.list').animate({left:"+=200px"},'slow',function(){
+        reAdjust();
+    });
+  }
 });    
 
 
