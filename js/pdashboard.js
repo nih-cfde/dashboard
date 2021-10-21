@@ -68,28 +68,26 @@ var reAdjust = function() {
   console.log("wrapper_width: " + wrapper_width);
   console.log("width_of_list: " + width_of_list);
 
-  if ((wrapper_width < width_of_list) && rp<0) {
-    $('.scroller-right').show().css('display', 'flex');
+  if ((wrapper_width < width_of_list) && (rp < nav_item_outerwidth)) {
+    $('.scroller-right').show().css('display', 'block');
   }
   else {
     $('.scroller-right').hide();
   }
   
-  if (getLeftPosi()<0) {
-    $('.scroller-left').show().css('display', 'flex');
+  console.log("left pos: " + getLeftPosi());
+  var left_position = getLeftPosi();
+  if (left_position < 0) {
+    $('.scroller-left').css('display', 'block').show();
   }
-   else {
-    // $('.item').animate({left:"-="+getLeftPosi()+"px"},'slow');
+  else {
     $('.item').animate({left:"-=200px"},'slow');
   	$('.scroller-left').hide();
-   }
+  }
 }
 
 $('.scroller-right').click(function() {
   $('.scroller-left').fadeIn('slow');
-  //$('.scroller-right').fadeOut('slow');
-  
-  //$('.list').animate({left:"+="+widthOfHidden()+"px"},'slow',function(){
   $('.list').animate({left:"-=200px"},'slow',function(){
     reAdjust();
   });
