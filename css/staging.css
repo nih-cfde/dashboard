@@ -206,19 +206,24 @@ navbar .navbar-nav .dropdown>.dropdown-toggle::after {
 }
 
 /* Set column min width for submitted datapackage table */
-.s_CFDE.t_datapackage td table>thead {
+.s_CFDE.t_datapackage td table>thead,
+.s_CFDE.t_release td table>thead{
   display: none;
 }
 
-.s_CFDE.t_datapackage td table>tbody>tr {
+.s_CFDE.t_datapackage td table>tbody>tr,
+.s_CFDE.t_release td table>tbody>tr {
   vertical-align: top;
 }
 
-.s_CFDE.t_datapackage td table>tbody>tr>td:first-child {
+.s_CFDE.t_datapackage td table>tbody>tr>td:first-child,
+.s_CFDE.t_release td table>tbody>tr>td:first-child {
   min-width: 160px;
 }
 
 .s_CFDE.t_datapackage .c_submission_time,
-.s_CFDE.t_datapackage .c_HEsd_I3mFWuTZR1aj0e7GA {
+.s_CFDE.t_datapackage .c_HEsd_I3mFWuTZR1aj0e7GA,
+.s_CFDE.t_release .c_RID,
+.s_CFDE.t_release .c_status {
     min-width: 550px;
 }
