@@ -210,6 +210,11 @@ navbar .navbar-nav .dropdown>.dropdown-toggle::after {
   min-width: 160px;
 }
 
+.s_CFDE.t_datapackage td table>tbody>tr>td:last-child,
+.s_CFDE.t_release td table>tbody>tr>td:last-child {
+  width: 100%;
+}
+
 .s_CFDE.t_datapackage .c_submission_time,
 .s_CFDE.t_datapackage .c_HEsd_I3mFWuTZR1aj0e7GA,
 .s_CFDE.t_release .c_RID,
