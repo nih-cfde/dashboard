@@ -207,7 +207,7 @@ navbar .navbar-nav .dropdown>.dropdown-toggle::after {
 
 .s_CFDE.t_datapackage td table>tbody>tr>td:first-child,
 .s_CFDE.t_release td table>tbody>tr>td:first-child {
-  min-width: 160px;
+  min-width: 170px;
 }
 
 .s_CFDE.t_datapackage td table>tbody>tr>td:last-child,
