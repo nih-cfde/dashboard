@@ -1,4 +1,29 @@
-/* global d3 add_legend add_tooltip colorizer ellipsize */
+/* global d3 add_legend colorizer ellipsize */
+
+function add_donut_tooltip(chart_id, svg) {
+    // Prep the tooltip bits, initial display is hidden
+    var tooltip = svg.append('g')
+        .attr('id', chart_id + '-tooltip')
+        .attr('class', 'chart_tooltip')
+        .style('display', 'none');
+
+    let rect = tooltip.append('rect')
+        .attr('width', 190)
+        .attr('height', 50)
+        .attr('class', 'chart_tooltip_rect');
+
+    let text1 = tooltip.append('text')
+        .attr('class', 'chart_tooltip_title')
+        .attr('id', chart_id + '-brick-category')
+        .attr('x', 5)
+        .attr('dy', '1.8em');
+
+    tooltip.append('text')
+        .attr('x', 5)
+        .attr('dy', '3.4em')
+        .attr('id', chart_id + '-brick-value')
+        .attr('class', 'chart_tooltip_value');
+}
 
 function update_donut_chart_title(chart_id, dropdown) {
     const heading = d3.select('#' + chart_id + '-title');
@@ -146,14 +171,14 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
                 .duration(100)
                 .attr('stroke', '#000');
         })
-        .on('mouseleave', function(actual, i) {
-            d3.select(this)
-                .transition()
-                .duration(100)
-                .attr('stroke', 'none');
-        })
+        // .on('mouseleave', function(actual, i) {
+        //     d3.select(this)
+        //         .transition()
+        //         .duration(100)
+        //         .attr('stroke', 'none');
+        // })
         .on('mouseover', function() { tooltip.style('display', null); })
-        .on('mouseout', function() { tooltip.style('display', 'none'); })
+        // .on('mouseout', function() { tooltip.style('display', 'none'); })
         .on('mousemove', function(d, e) {
             var brick_name = d.data.key;
             var brick_value = 0;
@@ -288,7 +313,7 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
     var max_categories = 16;
     const legend = chart.append('g');
 
-    add_tooltip(svg_id, svg);
+    add_donut_tooltip(svg_id, svg);
     tooltip = d3.select('#' + svg_id + '-tooltip');
 
     var categories = data_ready.slice(0, max_categories);
