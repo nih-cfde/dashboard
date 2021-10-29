@@ -61,7 +61,18 @@
     display: inline-block;
     width: 60%;
     vertical-align: top;
-}
+    height:350px;
+    vertical-align: top;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    position: relative;
+  }
+  
+  #chart-inner-container-1 {
+    height:350px;
+    position: absolute;
+  }
+
 
 #sbc1-group-by-container {
     padding-bottom: 20px;

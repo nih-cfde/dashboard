@@ -6,6 +6,15 @@ body {
     display: inline-block;
     width: 70%;
     vertical-align: top;
+	height: 450px; 
+	overflow-x: scroll;
+	overflow-y: hidden;
+	position: relative;
+}
+
+#chart-inner-container-1 {
+	height:450px;
+	position: absolute;
 }
 
 #review_bc1-group-by-container {

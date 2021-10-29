@@ -85,10 +85,20 @@ main {
 }
 
 #sbc1-container {
+  height:300px;
   display: inline-block;
   width: 75%;
   vertical-align: top;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  position: relative;
 }
+
+#chart-inner-container {
+  height:300px;
+  position: absolute;
+}
+
 
 .export-button {
   bottom: 0;
@@ -134,7 +144,7 @@ main {
 
 svg {
   height: 100%;
-  width: 100%;
+  /* width: 100%; */
 }
 
 .bar-total {
