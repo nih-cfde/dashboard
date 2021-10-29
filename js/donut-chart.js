@@ -171,14 +171,14 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
                 .duration(100)
                 .attr('stroke', '#000');
         })
-        // .on('mouseleave', function(actual, i) {
-        //     d3.select(this)
-        //         .transition()
-        //         .duration(100)
-        //         .attr('stroke', 'none');
-        // })
+        .on('mouseleave', function(actual, i) {
+            d3.select(this)
+                .transition()
+                .duration(100)
+                .attr('stroke', 'none');
+        })
         .on('mouseover', function() { tooltip.style('display', null); })
-        // .on('mouseout', function() { tooltip.style('display', 'none'); })
+        .on('mouseout', function() { tooltip.style('display', 'none'); })
         .on('mousemove', function(d, e) {
             var brick_name = d.data.key;
             var brick_value = 0;
