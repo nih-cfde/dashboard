@@ -129,7 +129,7 @@ function get_chaise_uri(catalog_id, entity, DCC_RID="") {
         }
         var chaise_uri = base_uri + '/CFDE:' + entity;
         if (entity == 'project') {
-	    chaise_uri += '/*::facets::' + all_project_facet_str + '@sort(RID)';
+	    chaise_uri += '/*::facets::' + all_project_facet_str;
         }
         return chaise_uri;
     }
@@ -143,7 +143,7 @@ function get_chaise_uri(catalog_id, entity, DCC_RID="") {
         var to_fkey = fkey_str + '_' + to + '_fkey';
         var chaise_facet = '{"and":[{"source":[{"inbound":["CFDE","' + from_fkey + '"]},{"outbound":["CFDE","' + to_fkey + '"]},"RID"],"not_null":true}]}';
         var facet_str = LZString.compressToEncodedURIComponent(chaise_facet);
-        return base_uri + '/CFDE:' + from + '/*::facets::' + facet_str + '@sort(RID)';
+        return base_uri + '/CFDE:' + from + '/*::facets::' + facet_str;
     }
 }
 
