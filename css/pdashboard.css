@@ -68,10 +68,10 @@
     position: relative;
   }
   
-  #chart-inner-container-1 {
+#chart-inner-container-1 {
     height:350px;
     position: absolute;
-  }
+}
 
 
 #sbc1-group-by-container {
