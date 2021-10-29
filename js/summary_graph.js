@@ -68,8 +68,7 @@ $(document).ready(function() {
   
     // chart 1 - stacked bar graph
     register_dropdowns(catalog_id, 'sbc1');
-    window.onload = function() {
+
 	update_chart(catalog_id, 'sbc1');
 	window.addEventListener('resize', function() { window_resized(catalog_id, 'sbc1'); });
-    };
 });

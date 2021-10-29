@@ -67,13 +67,42 @@ main {
 }
 
 #chart-container {
-  height: 350px;
-  margin: auto;
+  display: inline-block;
+  width: 65%;
+  vertical-align: top;
+  height:350px;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  position: relative;
+}
+
+#chart-inner-container {
+  height:350px;
+  position: absolute;
+}
+
+#sbc1-group-by-container {
+  padding-bottom: 20px;
+  margin-top: -12px;
+}
+
+#sbc1-group-by-and-legend-container {
+  width:30%;
+  display: inline-block;
+  padding-left: 8px;
+}
+
+#sbc1_container {
+  /* padding: 2%; */
+  padding: 10px;
+  max-height: 250px;
+  overflow-y: scroll;
+  border: 0px;
 }
 
 svg {
   height: 100%;
-  width: 100%;
+  /* width: 100%; */
 }
 
 .bar-total {
