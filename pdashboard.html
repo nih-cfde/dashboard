@@ -1,222 +1,405 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>CFDE Personalized Dashboard</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="./css/style.css" type="text/css"/>
-    <link rel="stylesheet" href="./css/index.css" type="text/css"/>
-    <script src="/chaise/lib/navbar/navbar.app.js"></script>
-    <link rel="stylesheet" href="./css/components/normalize.css" type="text/css">
-    <link rel="stylesheet" href="./css/components/bootstrap.min.css" type="text/css">
-    <link rel="stylesheet" href="./css/components/dataTables.bootstrap4.min.css" type="text/css">
-    <link rel="stylesheet" href="./css/pdashboard.css" type="text/css"/>
-    <link rel="shortcut icon" type="image/png" href="./images/icons/CFDE-icon-1.png?v=2"/>
-    <link rel="stylesheet" href="./css/fonts.css" type="text/css"/>
-    <link rel="stylesheet" href="./css/components/all.min.css"/>
-  </head>
-  <body>
-    <div id="wrap-navbar">
-      <navbar></navbar>
-    </div>
 
-    <main class="main">
+<head>
+  <title>CFDE Personalized Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="./css/style.css" type="text/css" />
+  <link rel="stylesheet" href="./css/index.css" type="text/css" />
+  <script src="/chaise/lib/navbar/navbar.app.js"></script>
+  <link rel="stylesheet" href="./css/components/normalize.css" type="text/css">
+  <link rel="stylesheet" href="./css/components/bootstrap.min.css" type="text/css">
+  <link rel="stylesheet" href="./css/components/dataTables.bootstrap4.min.css" type="text/css">
+  <link rel="stylesheet" href="./css/pdashboard.css" type="text/css" />
+  <link rel="shortcut icon" type="image/png" href="./images/icons/CFDE-icon-1.png?v=2" />
+  <link rel="stylesheet" href="./css/fonts.css" type="text/css" />
+  <link rel="stylesheet" href="./css/components/all.min.css" />
+</head>
 
-      <div class="top_content">
-	<div class="top_content_section_left">
-	  <div class="section_left_page_info">
-            <h1>Common Fund Data Ecosystem</h1>
+<body>
+  <div id="wrap-navbar">
+    <navbar></navbar>
+  </div>
+
+  <main class="main">
+
+    <div class="top_content">
+      <div class="top_content_section_left">
+        <div class="section_left_page_info">
+          <h1>Common Fund Data Ecosystem</h1>
+        </div>
+      </div>
+      <div class="top_content_section_right">
+        <table id="data_preview_table" class="data_preview">
+        </table>
+      </div><!-- end Top Content-Section-Right-->
+    </div><!-- End Top Content-->
+
+    <div>
+      <div class="content__top">
+        <div class="content__left">
+          <div class="data_header">
+            <p>Saved Searches</p>
           </div>
-	</div>
-	<div class="top_content_section_right">
-          <table id="data_preview_table" class="data_preview">
-          </table>
-	</div><!-- end Top Content-Section-Right-->
-      </div><!-- End Top Content-->
+          <div class="data_content" style="min-height: 300px;">
+            <table id="saved_query_table" class="table table-striped table-bordered table-sm" cellspacing="0"
+              width="100%"></table>
+          </div>
+        </div>
 
-      <div>
-        <div class="content__top">
-          <div class="content__left">
-	    <div class="data_header">
-              <p>Saved Searches</p>
-            </div>
-            <div class="data_content" style="min-height: 300px;">
-              <table id="saved_query_table" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%"></table>
-            </div>
+        <div class="content__right">
+          <div class="data_header">
+            <p id="summary_view_title" class="snapshot_head">Favorites</p>
           </div>
 
-          <div class="content__right">
-            <div class="data_header">
-              <p id="summary_view_title" class="snapshot_head">Favorites</p>
+          <div class="w-100 pt-3" style="min-height: 300px">
+            <div class="scroller float-left mt-2" style="display:flex">
+              <div class="scroller-left"><i class="fa fa-chevron-left"></i></div>
             </div>
-            
-            <div class="w-100 pt-3" style="min-height: 300px">
-              <div class="scroller float-left mt-2" style="display:flex"><div class="scroller-left"><i class="fa fa-chevron-left"></i></div></div>
-              <div class="scroller scroller-right float-right mt-2"><i class="fa fa-chevron-right"></i></div>
-              <div class="wrapper">
-                  <nav class="nav nav-tabs list mt-2" id="myTab" role="tablist">
-                    <a class="nav-item nav-link active" href="#program" id="program-tab" role="tab" data-toggle="tab" aria-controls="program" aria-expanded="true">CF Program</a>
-                    <a class="nav-item nav-link" href="#anatomy" role="tab" id="anatomy-tab" data-toggle="tab" aria-controls="anatomy">Anatomy</a>
-                    <a class="nav-item nav-link" href="#assays" role="tab" id="assays-tab" data-toggle="tab" aria-controls="assays">Assay</a>
-                    <a class="nav-item nav-link" href="#disease" role="tab" id="disease-tab" data-toggle="tab" aria-controls="diseases">Disease</a>
-                    <a class="nav-item nav-link" href="#taxon" role="tab" id="taxon-tab" data-toggle="tab" aria-controls="taxon">Taxonomy</a>
-                    <a class="nav-item nav-link" href="#data-type" role="tab" id="data-type-tab" data-toggle="tab" aria-controls="data_type">Data Type</a>
-                    <a class="nav-item nav-link" href="#file-format" role="tab" id="file-format-tab" data-toggle="tab" aria-controls="file">File Format</a>
-                    
-                  </nav>
+            <div class="scroller scroller-right float-right mt-2"><i class="fa fa-chevron-right"></i></div>
+            <div class="wrapper">
+              <nav class="nav nav-tabs list mt-2" id="myTab" role="tablist">
+                <a class="nav-item nav-link active" href="#program" id="program-tab" role="tab" data-toggle="tab"
+                  aria-controls="program" aria-expanded="true">CF Program</a>
+                <a class="nav-item nav-link" href="#anatomy" role="tab" id="anatomy-tab" data-toggle="tab"
+                  aria-controls="anatomy">Anatomy</a>
+                <a class="nav-item nav-link" href="#assays" role="tab" id="assays-tab" data-toggle="tab"
+                  aria-controls="assays">Assay</a>
+                <a class="nav-item nav-link" href="#disease" role="tab" id="disease-tab" data-toggle="tab"
+                  aria-controls="diseases">Disease</a>
+                <a class="nav-item nav-link" href="#taxon" role="tab" id="taxon-tab" data-toggle="tab"
+                  aria-controls="taxon">Taxonomy</a>
+                <a class="nav-item nav-link" href="#data-type" role="tab" id="data-type-tab" data-toggle="tab"
+                  aria-controls="data_type">Data Type</a>
+                <a class="nav-item nav-link" href="#file-format" role="tab" id="file-format-tab" data-toggle="tab"
+                  aria-controls="file">File Format</a>
+                <a class="nav-item nav-link" href="#gene" role="tab" id="gene-tab" data-toggle="tab"
+                  aria-controls="gene">Gene</a>
+                <a class="nav-item nav-link" href="#compound" role="tab" id="compound-tab" data-toggle="tab"
+                  aria-controls="compound">Compound</a>
+
+              </nav>
+            </div>
+            <div class="tab-content p-3" id="favorite-nav-content">
+              <div role="tabpanel" class="tab-pane fade show active" id="program" aria-labelledby="program-tab">
+                <ul id="favorite-dccs" class="favorite-container"></ul>
               </div>
-              <div class="tab-content p-3" id="favorite-nav-content">
-                <div role="tabpanel" class="tab-pane fade show active" id="program" aria-labelledby="program-tab">
-                  <ul id="favorite-dccs" class="favorite-container"></ul>
-                </div>
-                <div role="tabpanel" class="tab-pane fade" id="anatomy" aria-labelledby="anatomy-tab">
-                  <ul id="favorite-anatomies" class="favorite-container"></ul>
-                </div>
-                <div role="tabpanel" class="tab-pane fade" id="assays" aria-labelledby="assays-tab">
-                  <ul id="favorite-assays" class="favorite-container"></ul>
-                </div>
-                <div role="tabpanel" class="tab-pane fade" id="disease" aria-labelledby="diseases-tab">
-                  <ul id="favorite-diseases" class="favorite-container"></ul>
-                </div>
-                <div role="tabpanel" class="tab-pane fade" id="taxon" aria-labelledby="taxon-tab">
-                  <ul id="favorite-taxon" class="favorite-container"></ul>
-                </div>
-                <div role="tabpanel" class="tab-pane fade" id="data-type" aria-labelledby="data-type-tab">
-                  <ul id="favorite-data-type" class="favorite-container"></ul>
-                </div>
-                <div role="tabpanel" class="tab-pane fade" id="file-format" aria-labelledby="file-format-tab">
-                  <ul id="favorite-file-format" class="favorite-container"></ul>
-                </div>
-          
+              <div role="tabpanel" class="tab-pane fade" id="anatomy" aria-labelledby="anatomy-tab">
+                <ul id="favorite-anatomies" class="favorite-container"></ul>
               </div>
-          </div>
-	        </div>
-	  </div>
-	</div><!-- End content__top-->
+              <div role="tabpanel" class="tab-pane fade" id="assays" aria-labelledby="assays-tab">
+                <ul id="favorite-assays" class="favorite-container"></ul>
+              </div>
+              <div role="tabpanel" class="tab-pane fade" id="disease" aria-labelledby="diseases-tab">
+                <ul id="favorite-diseases" class="favorite-container"></ul>
+              </div>
+              <div role="tabpanel" class="tab-pane fade" id="taxon" aria-labelledby="taxon-tab">
+                <ul id="favorite-taxon" class="favorite-container"></ul>
+              </div>
+              <div role="tabpanel" class="tab-pane fade" id="data-type" aria-labelledby="data-type-tab">
+                <ul id="favorite-data-type" class="favorite-container"></ul>
+              </div>
+              <div role="tabpanel" class="tab-pane fade" id="file-format" aria-labelledby="file-format-tab">
+                <ul id="favorite-file-format" class="favorite-container"></ul>
+              </div>
+              <div role="tabpanel" class="tab-pane fade" id="gene" aria-labelledby="compound-tab">
+                <ul id="favorite-gene" class="favorite-container"></ul>
+              </div>
+              <div role="tabpanel" class="tab-pane fade" id="compound" aria-labelledby="compound-tab">
+                <ul id="favorite-compound" class="favorite-container"></ul>
+              </div>
 
-        <div class="content__bottom">
-          <div class="content__center">
-	  <div class="data_content">
-	      
-	      <div class="summary_chart">
-		
-    <div id="chart-container-1" class="chart-container">
-      <div id="chart-inner-container">
-		    <svg id="sbc1"></svg>
-      </div>
-		</div>
-
-    <div id="sbc1-group-by-and-legend-container">
-      <div id="sbc1-group-by-container">
-        <label for="group-by" class="form-label">Group by</label>
-        <select class="custom-select" id="sbc1-group-by" name="groupby">
-          <option value="anatomy">Anatomy</option>
-          <option selected value="assay">Assay</option>
-          <option value="dcc">CF Program</option>
-          <option value="data_type">Data Type</option>
-          <option value="disease">Disease</option>
-          <option value="species">Species</option>
-        </select>
-      </div>
-      <div id="sbc1_container"></div>
-    </div>
-
-		<div class="checkboxes">
-		  <div id="sbc1-controls" class="form-group form-check">
-		    <button type="button" class="form-control btn btn-primary" onclick='select_all_dccs("sbc1")' style='margin-bottom: 1rem;'>Show All</button><br clear='both'/>
-		    <!-- DCC checkboxes added on page load -->
-		  </div>
-		</div>
-	      </div>
-
-		<div style='margin: 1em;'>
-		  <form>
-        <div class="container">
-		      <div class="row"> 
-      <div class="col-md-4" id="sbc1-y-axis-container">
-        <label for="y-axis" class="form-label">Y-axis</label>
-        <select class="custom-select" id="sbc1-y-axis" name="y-axis">
-                            <option value="volume">Data volume</option>
-                            <option selected value="files">File count</option>
-                            <option value="samples">Sample count</option>
-                            <option value="subjects">Subject count</option>
-        </select>
-      </div>
-			<div class="col-md-4" id="sbc1-x-axis-container">
-			  <label for="x-axis" class="form-label">X-axis</label>
-			  <select class="custom-select" id="sbc1-x-axis" name="x-axis">
-                            <option value="anatomy">Anatomy</option>
-                            <option value="assay">Assay</option>
-                            <option value="dcc">CF Program</option>
-                            <option selected value="data_type">Data Type</option>
-                            <option value="disease">Disease</option>
-                            <option value="species">Species</option>
-                            
-			  </select>
-			</div>
-
-                      </div>
-                    </div>
-		  </form>
-		</div><!-- End form_controls -->
-
-	      </div>
-	    
-	  </div><!-- End data_content -->
-	  </div>
-	</div><!-- End content__bottom-->
-       </div>
-      </div><!-- End content-->
-    </main>
-
-    <div id="export-modal" class="modal">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5>Choose how you wish to export this chart</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="close">
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="row justify-content-center export-row">
-              <button id="export-png" type="button" class="btn btn-primary">Export as PNG</button>
             </div>
-            <div class="row justify-content-center export-row">
-              <button id="export-svg" type="button" class="btn btn-primary">Export as SVG</button>
-            </div>
-            <div class="row justify-content-center export-row">
-              <button id="export-csv" type="button" class="btn btn-primary">Export data as CSV</button>
-            </div>
-
           </div>
         </div>
       </div>
+    </div><!-- End content__top-->
+
+    <div class="content__bottom">
+      <div class="content__center">
+        <div class="data_content">
+
+          <div class="summary_chart">
+
+
+            <div id="chart-container-1" class="chart-container">
+              <div id="chart-inner-container">
+                <svg id="sbc1"></svg>
+              </div>
+            </div>
+
+            <div id="sbc1-group-by-and-legend-container">
+              <div id="sbc1-group-by-container">
+                <label for="group-by" class="form-label">Group by</label>
+                <select class="custom-select" id="sbc1-group-by" name="groupby">
+                  <option value="anatomy">Anatomy</option>
+                  <option selected value="assay">Assay</option>
+                  <option value="dcc">CF Program</option>
+                  <option value="dcc">Compound</option>
+                  <option value="data_type">Data Type</option>
+                  <option value="disease">Disease</option>
+                  <option value="ethnicity">Ethnicity</option>
+                  <option value="race">Race</option>
+                  <option value="sex">Sex</option>
+                  <option value="species">Species</option>
+                </select>
+              </div>
+              <div id="sbc1_container"></div>
+            </div>
+
+            <div class="checkboxes">
+              <div id="sbc1-controls" class="form-group form-check">
+                <button type="button" class="form-control btn btn-primary" onclick='select_all_dccs("sbc1")'
+                  style='margin-bottom: 1rem;'>Show All</button><br clear='both' />
+                <!-- DCC checkboxes added on page load -->
+              </div>
+            </div>
+
+          </div>
+
+          <div style='margin: 1em;'>
+            <form>
+              <div class="container">
+                <div class="row">
+                  <div class="col-md-4" id="sbc1-y-axis-container">
+                    <label for="y-axis" class="form-label">Y-axis</label>
+                    <select class="custom-select" id="sbc1-y-axis" name="y-axis">
+                      <option value="volume">Data volume</option>
+                      <option selected value="files">File count</option>
+                      <option value="samples">Sample count</option>
+                      <option value="subjects">Subject count</option>
+                    </select>
+                  </div>
+                  <div class="col-md-4" id="sbc1-x-axis-container">
+                    <label for="x-axis" class="form-label">X-axis</label>
+                    <select class="custom-select" id="sbc1-x-axis" name="x-axis">
+                      <option value="anatomy">Anatomy</option>
+                      <option value="assay">Assay</option>
+                      <option value="dcc">CF Program</option>
+                      <option selected value="data_type">Data Type</option>
+                      <option value="disease">Disease</option>
+                      <option value="ethnicity">Ethnicity</option>
+                      <option value="race">Race</option>
+                      <option value="sex">Sex</option>
+                      <option value="species">Species</option>
+                    </select>
+                  </div>
+                  <div class="col-md-4" id="sbc1-download-button-container">
+                    <p id="sbc1-export" class="export-button"><a href="javascript: export_chart_data('sbc1')"><img
+                          src='images/download_button.png' style='width: 125px; height: 32px;' title='Export chart'></a>
+                    </p>
+                  </div>
+
+                </div>
+              </div>
+            </form>
+          </div><!-- End form_controls -->
+
+        </div>
+      </div><!-- End data_content -->
+
+      
+      <!--End content top--alt-->
+
+      <div class="data_content" style="width:50%; min-width: 575px">
+
+        <div class="content__top--alt">
+          <div id="chart3" class="donut_chart">
+             <!-- style='display: none;'> -->
+            <div class="data_header">
+              <p id="dc1-title">Chart 3</p>
+              <p id="dc1-last_updated" class="last-updated"></p>
+              <p id="dc1-export" class="export"><a href="javascript: export_chart_data('dc1')"><img
+                    src='images/download_button.png' style='width: 125px; height: 32px;' title='Export chart'></a></p>
+            </div>
+            <div class="data_content">
+              <div id="chart-container-3" class="chart-container" style="width:100%">
+                <svg id="dc1" style="overflow: auto;"></svg>
+              </div>
+              <div id="dc1-form-controls">
+                <form>
+                  <div class="container">
+                    <div class="row" style="flex-wrap:nowrap; justify-content: center;">
+                      <div id="dc1-data_type-container">
+                        <label for="dc1-data_type" class="form-label">Assay</label>
+                        <select class="custom-select" id="dc1-data_type" name="data_type" style='width: 85%;'>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+
+            </div>
+            <!--end data_content-->
+          </div>
+          <!--end chart bottom left -->
+        </div>
+      </div>
+      <div class="data_content" style="width:50%; min-width: 575px">
+        <div class="content__top--alt">
+          <div id="chart4" class="donut_chart">
+            <!-- style='display: none;'> -->
+            <div class="data_header">
+              <p id="dc2-title">Chart 4</p>
+              <p id="dc2-last_updated" class="last-updated"></p>
+              <p id="dc2-export" class="export"><a href="javascript: export_chart_data('dc2')"><img
+                    src='images/download_button.png' style='width: 125px; height: 32px;' title='Export chart'></a></p>
+            </div>
+            <div class="data_content">
+
+              <div id="chart-container-4" class="chart-container">
+                <svg id="dc2" style="overflow: auto;"></svg>
+              </div>
+              <div id="dc2-form-controls">
+                <form>
+                  <div class="container">
+                    <div class="row" style="flex-wrap:nowrap; justify-content: center;">
+                      <div class="col-md-6" id="dc2-dcc-container">
+                        <label for="dc2-dcc" class="form-label">CF Program</label>
+                        <select class="custom-select" id="dc2-dcc" name="dcc" style='width: 55%;'>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+
+            </div>
+            <!--end data_content-->
+
+          </div>
+          <!--end chart bottom right-->
+        </div>
+      <!--end content bottom-->
+      </div>
     </div>
 
-    <footer><!-- Footer text/content --></footer>
 
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LNZN3CXFQK"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
 
-      gtag('config', 'G-LNZN3CXFQK');
-    </script>
-    <script src="js/components/jquery-3.5.1.min.js?ts=1616433204"></script>
-    <script src="js/components/bootstrap-4.5.0.min.js?ts=1616433204"></script>
-    <script src="js/components/jquery.dataTables.min.js?ts=1628708121"></script>
-    <script src="js/components/dataTables.bootstrap4.min.js?ts=1628708121"></script>
-    <script src="js/components/d3-5.16.0.min.js?ts=1616433204"></script>
-    <script src="js/components/saveSvgAsPng.js?ts=1604093612"></script>
-    <script src="js/components/d3-save-svg.min.js?ts=1604093612"></script>
-    <script src="js/stacked-bar-graph.js?ts=1619448056"></script>
-    <script src="js/lz-string.min.js?ts=1607186913"></script>
-    <script src="js/config.js?ts=1619458908"></script>
-    <script src="js/pdashboard.js?ts=1630073323"></script>
 
-    
-  </body>
+
+    <!-- <div class="content__center">
+        <div class="data_content">
+          <div id="donut_container" style="display: flex;">
+            <div id="chart-container-2" style="width: 600px" class="chart-container">
+              <svg id="dc1" style="overflow: visible;"></svg>
+            </div>
+            <div id="dc1-form-controls">
+              <form>
+                <div class="container">
+                  <div class="row" style="flex-wrap:nowrap; justify-content: center;">
+                    <div id="dc1-data_type-container">
+                      <label for="dc1-data_type" class="form-label">Assay</label>
+                      <select class="custom-select" id="dc1-data_type" name="data_type" style='width: 85%;'>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+
+          <div id="donut_container" style="display: flex;">
+            <div id="chart-container-3" style="width: 600px" class="chart-container">
+              <svg id="dc2" style="overflow: visible;"></svg>
+            </div>
+            <div id="dc2-form-controls">
+              <form>
+                <div class="container">
+                  <div class="row" style="flex-wrap:nowrap; justify-content: center;">
+                    <div id="dc2-data_type-container">
+                      <label for="dc2-data_type" class="form-label">Assay</label>
+                      <select class="custom-select" id="dc2-data_type" name="data_type" style='width: 85%;'>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div> -->
+    <div class="chooser_content">
+
+      <!-- <div id="thumb1" class="thumbnail_chart selected">
+          <img src='images/chart-1.png' class="thumbnail_chart"></img><br>
+          File count by CF Program and Assay
+        </div>
+        
+        <div id="thumb2" class="thumbnail_chart">
+          <img src='images/chart-2.png' class="thumbnail_chart"></img><br>
+          Subject count by Data Type and CF Program
+        </div> -->
+
+      <!-- <div id="thumb3" class="thumbnail_chart">
+        <img src='images/chart-3.png' class="thumbnail_chart"></img><br>
+        Subjects by Assay and Anatomy across Programs
+      </div>
+
+      <div id="thumb4" class="thumbnail_chart">
+        <img src='images/chart-4.png' class="thumbnail_chart"></img><br>
+        Samples by Anatomy and CF Program
+      </div> -->
+
+    </div>
+  </main>
+
+  <div id="export-modal" class="modal">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5>Choose how you wish to export this chart</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row justify-content-center export-row">
+            <button id="export-png" type="button" class="btn btn-primary">Export as PNG</button>
+          </div>
+          <div class="row justify-content-center export-row">
+            <button id="export-svg" type="button" class="btn btn-primary">Export as SVG</button>
+          </div>
+          <div class="row justify-content-center export-row">
+            <button id="export-csv" type="button" class="btn btn-primary">Export data as CSV</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <!-- Footer text/content -->
+  </footer>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LNZN3CXFQK"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-LNZN3CXFQK');
+  </script>
+  <script src="js/components/jquery-3.5.1.min.js?ts=1616433204"></script>
+  <script src="js/components/bootstrap-4.5.0.min.js?ts=1616433204"></script>
+  <script src="js/components/jquery.dataTables.min.js?ts=1628708121"></script>
+  <script src="js/components/dataTables.bootstrap4.min.js?ts=1628708121"></script>
+  <script src="js/components/d3-5.16.0.min.js?ts=1616433204"></script>
+  <script src="js/components/saveSvgAsPng.js?ts=1604093612"></script>
+  <script src="js/components/d3-save-svg.min.js?ts=1604093612"></script>
+  <script src="js/stacked-bar-graph.js?ts=1619448056"></script>
+  <script src="js/donut-chart.js?ts=1618411368"></script>
+  <script src="js/lz-string.min.js?ts=1607186913"></script>
+  <script src="js/config.js?ts=1619458908"></script>
+  <script src="js/pdashboard.js?ts=1630073323"></script>
+
+
+</body>
+
 </html>
