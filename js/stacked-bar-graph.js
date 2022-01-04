@@ -1,11 +1,12 @@
 /* global d3 saveSvgAsPng d3_save_svg */
 
-var XVALS = ['dcc', 'data_type', 'assay', 'species', 'anatomy'];
+var XVALS = ['dcc', 'data_type', 'disease', 'assay', 'species', 'anatomy', 'sex', 'race', 'ethnicity', 'compound'];
 var YVALS = ['files', 'volume', 'samples', 'subjects'];
 var REQUESTNUMS = {};
 
 var chart_data = {};
 var chart_data_urls = {};
+var dcc_map = {};
 
 function register_export_buttons(chart_id) {
     // Prevent accumulations of click handlers by clearing any past
@@ -325,9 +326,20 @@ function add_tooltip(chart_id, svg) {
 
 }
 
+function update_dcc_map() {
+    var dcc_list_url = DASHBOARD_API_URL + '/dcc';
+    get_json_retry(dcc_list_url, function(data) {
+        data.forEach(dcc => {
+            dcc_map[dcc['abbreviation']] = dcc['complete_name'];
+        });
+    });
+}
+
 function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
+    
     $('#' + svg_id).empty();
     update_chart_title(svg_id);
+    update_dcc_map();
 
     var x_axis_label_rot = -35;
     var x_axis_label_dx = '-.8em';
@@ -665,6 +677,18 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
             var group_key = $('#' + svg_id + '-group-by option:checked').text();
             var x_axis_key = $('#' + svg_id + '-x-axis option:checked').text();
             var y_axis_key = $('#' + svg_id + '-y-axis option:checked').text();
+
+            if (x_axis_key == "CF Program") {
+                if (x_axis_val in dcc_map) {
+                    x_axis_val = x_axis_val + ":" + dcc_map[x_axis_val];
+                }
+            }
+            if (group_key == "CF Program") {
+                if (group_val in dcc_map) {
+                    // group_val = dcc_map[group_val];
+                    group_val = group_val + ":" + dcc_map[group_val];
+                }
+            }
             x_cat_text = $('#' + svg_id + '-x-category').html("<tspan class='chart_tooltip_title'>" + x_axis_key + ":</tspan> " + x_axis_val);
             z_cat_text = $('#' + svg_id + '-z-category').html("<tspan class='chart_tooltip_title'>" + group_key + ":</tspan> " + group_val);
             y_cat_text = $('#' + svg_id + '-y-category').html("<tspan class='chart_tooltip_title'>" + y_axis_key + ":</tspan> " + y_axis_val);
