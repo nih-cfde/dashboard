@@ -74,6 +74,76 @@
 }
 
 
+
+
+.data_header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+
+
+.data_content {
+    padding: 14px;
+    height: 100%;
+  }
+  
+
+
+div.thumbnail_chart {
+    color: blue;
+    cursor: pointer;
+    margin: 1em 1em 1em 0em;
+    padding: 0.5em;
+    text-align: center;
+    width: 210px;
+  }
+  
+  div.selected {
+    color: #a0a0a0;
+    cursor: auto;
+  }
+  
+  img.thumbnail_chart {
+    border: 2px solid blue;
+    margin: 0em 0em 0.5em 0em;
+    opacity: 1;
+    width: 180px;
+  }
+  
+  div.selected img {
+    border: 2px solid #a0a0a0;
+    opacity: 0.5;
+  }
+      
+  img.thumbnail_donut_chart {
+    width: 100px;
+    margin: 0em 0em 0.5em 0em;
+    border: 2px solid blue;
+    opacity: 1;
+  }
+  
+  #expand_all {
+    flex:0 1 auto;
+  }
+
+
+  #dc1 {
+    width: 100%;
+  }
+  
+  #dc2 {
+    width: 100%;
+  }
+
+
+
+
+
+
+
 #sbc1-group-by-container {
     padding-bottom: 20px;
     margin-top: -12px;
