@@ -10,7 +10,7 @@ function window_resized(catalog_id, chart_id) {
     const utime = last_update_time;
     setTimeout(function() {
       if (utime < last_update_time) return;
-      update_chart(catalog_id, chart_id); 
+      update_chart(catalog_id, chart_id);
     }, UPDATE_DELAY_SECS * 1000);
 }
 
@@ -34,7 +34,7 @@ function populate_chart(catalog_id, chart_id) {
         console.error('Error loading data for DCC review chart combination.');
         show_error(chart_id);
     };
-    
+
     get_json_retry(data_url, data_fn, fail_fn);
 }
 
@@ -111,14 +111,14 @@ var ENTITY_FKEYS = {
 // entity - 'subject', 'biosample', 'file', 'project', or 'X_with_Y'
 //           where X in ('subjects', 'biosamples', 'files')
 //           and Y in ('subject', 'biosample', 'file')
-function get_chaise_uri(catalog_id, entity, DCC_RID="") {
+function get_chaise_uri(catalog_id, entity, DCC_NID="") {
     var base_uri = DERIVA_URL + '/chaise/recordset/#' + catalog_id;
 
     // Chaise/DERIVA facet string to show only top-level subprojects
-    var top_project_facet_str = LZString.compressToEncodedURIComponent('{"and":[{"source":[{"inbound":["CFDE","project_in_project_child_fkey"]},{"outbound":["CFDE","project_in_project_parent_fkey"]},"RID"],"choices":["' + DCC_RID + '"]}]}');
+    var top_project_facet_str = LZString.compressToEncodedURIComponent('{"and":[{"source":[{"inbound":["CFDE","project_in_project_child_fkey"]},{"outbound":["CFDE","project_in_project_parent_fkey"]},"nid"],"choices":["' + DCC_NID + '"]}]}');
     // Chaise/DERIVA facet string to show all subprojects
-    var all_project_facet_str = LZString.compressToEncodedURIComponent('{"and":[{"source":[{"inbound":["CFDE","project_in_project_child_fkey"]},{"outbound":["CFDE","project_in_project_parent_fkey"]},{"inbound":["CFDE","project_in_project_transitive_member_fkey"]},{"outbound":["CFDE","project_in_project_transitive_leader_fkey"]},"RID"],"choices":["' + DCC_RID + '"]}]}');
-    
+    var all_project_facet_str = LZString.compressToEncodedURIComponent('{"and":[{"source":[{"inbound":["CFDE","project_in_project_child_fkey"]},{"outbound":["CFDE","project_in_project_parent_fkey"]},{"inbound":["CFDE","project_in_project_transitive_member_fkey"]},{"outbound":["CFDE","project_in_project_transitive_leader_fkey"]},"nid"],"choices":["' + DCC_NID + '"]}]}');
+
     var i = entity.indexOf('_with_');
 
     // single entity, no explicit join (except for project)
@@ -141,7 +141,7 @@ function get_chaise_uri(catalog_id, entity, DCC_RID="") {
         var fkey_str = ENTITY_FKEYS[from + ':' + to];
         var from_fkey = fkey_str + '_' + from + '_fkey';
         var to_fkey = fkey_str + '_' + to + '_fkey';
-        var chaise_facet = '{"and":[{"source":[{"inbound":["CFDE","' + from_fkey + '"]},{"outbound":["CFDE","' + to_fkey + '"]},"RID"],"not_null":true}]}';
+        var chaise_facet = '{"and":[{"source":[{"inbound":["CFDE","' + from_fkey + '"]},{"outbound":["CFDE","' + to_fkey + '"]},"nid"],"not_null":true}]}';
         var facet_str = LZString.compressToEncodedURIComponent(chaise_facet);
         return base_uri + '/CFDE:' + from + '/*::facets::' + facet_str;
     }
@@ -157,7 +157,8 @@ function add_summary_data(catalog_id, DCC, num_dccs) {
             if (key.endsWith('_count') && (!key.startsWith('toplevel_project'))) {
                 var entity =  key.slice(0, key.length - '_count'.length);
                 var name = 'Total ' + key.charAt(0).toUpperCase() + key.slice(1, key.length - '_count'.length) + 's';
-                var chaise_uri = get_chaise_uri(catalog_id, entity, data['RID']);
+                // database was changed to prefer using/sending "nid" instead of "RID" since RID will change from catalog to catalog
+                var chaise_uri = get_chaise_uri(catalog_id, entity, data['nid']);
 		$('#' + key).html('<a href="' + chaise_uri + '">' + data[key].toLocaleString() + '</a>');
 	    }
 	});
@@ -165,11 +166,11 @@ function add_summary_data(catalog_id, DCC, num_dccs) {
         $('#dcc_name').append(data['complete_name']);
 	var data_url = DERIVA_URL + '/chaise/recordset/#registry/CFDE:datapackage';
 	if (data['datapackage_RID'] != null) data_url += '/RID=' + data['datapackage_RID'];
-	
+
         $('#datapackage_link').prop('href', data_url);
         $('#datapackage_link').prepend(data_url);
 	$('#data_review_title')[0].innerHTML = data['abbreviation'] +  ' Data Review';
-	
+
 	if (num_dccs == 1) {
             $('#data_snapshot_title')[0].innerHTML = data['abbreviation'] +  ' Data Snapshot';
 	} else {
@@ -239,10 +240,10 @@ $(document).ready(function() {
     }
 
     loadScript("/chaise/lib/navbar/navbar.app.js");
-    
+
     register_dropdowns(catalog_id, 'review_bc1');
     update_chart(catalog_id, 'review_bc1');
-    
+
     get_json_retry(dcc_list_url, function(data) {
         if (data.length != 1) {
 	    console.log('WARNING: DERIVA CATALOG_ID  ' + catalog_id + ' contains ' + ((data.length > 1) ? 'data from multiple DCsC' : 'no data'));
