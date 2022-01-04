@@ -27,7 +27,7 @@ function add_donut_tooltip(chart_id, svg) {
 
 function update_donut_chart_title(chart_id, dropdown) {
     const heading = d3.select('#' + chart_id + '-title');
-    var dvalue = d3.select('#' + chart_id + '-' + dropdown + ' option:checked').text();
+    // var dvalue = d3.select('#' + chart_id + '-' + dropdown + ' option:checked').text();
     var new_title;
 
     if (dropdown == 'data_type') {
@@ -73,7 +73,6 @@ function update_donut_chart(chart_id, data, dropdown, units) {
 function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
     var dropdown_value = $('#' + svg_id + '-' + dropdown).val();
     update_donut_chart_title(svg_id, dropdown);
-
     const svg = d3.select('#' + svg_id);
     var svg_style = window.getComputedStyle(svg.node());
     var svg_height = parseInt(svg_style.height);
