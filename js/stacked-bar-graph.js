@@ -1,6 +1,6 @@
 /* global d3 saveSvgAsPng d3_save_svg */
 
-var XVALS = ['dcc', 'data_type', 'disease', 'assay', 'species', 'anatomy', 'sex', 'race', 'ethnicity', 'compound'];
+var XVALS = ['dcc', 'data_type', 'disease', 'assay', 'species', 'anatomy', 'sex', 'race', 'ethnicity'];
 var YVALS = ['files', 'volume', 'samples', 'subjects'];
 var REQUESTNUMS = {};
 
@@ -686,7 +686,7 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
             if (group_key == "CF Program") {
                 if (group_val in dcc_map) {
                     // group_val = dcc_map[group_val];
-                    group_val = group_val + ":" + dcc_map[group_val];
+                    group_val = group_val + ": " + dcc_map[group_val];
                 }
             }
             x_cat_text = $('#' + svg_id + '-x-category').html("<tspan class='chart_tooltip_title'>" + x_axis_key + ":</tspan> " + x_axis_val);
