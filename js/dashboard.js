@@ -13,23 +13,28 @@ function window_resized(catalog_id, chart_id) {
     }, UPDATE_DELAY_SECS * 1000);
 }
 
-// TODO - copied from dcc_review.js
+// TODO - copied from dcc_review.js; put into a cental location
+function pad_zeroes(number) {
+    if (number < 10) {
+        return '0' + number;
+    }
+    return number;
+}
+
 function get_formatted_date(d) {
     // Returns a date as a string in the following format: "2020-10-09 17:32:32 - 0400"
     var month = d.getMonth() + 1;
-
-    if (month < 10) {
-        month = '0' + month;
-    }
-
     var day = d.getDate();
+    var minutes = d.getMinutes();
+    var seconds = d.getSeconds();
 
-    if (day < 10) {
-        day = '0' + day;
-    }
+    month = pad_zeroes(month);
+    day = pad_zeroes(day);
+    minutes = pad_zeroes(minutes)
+    seconds = pad_zeroes(seconds);
 
     var formatted = d.getFullYear() + '-' + month + '-' + day
-            + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds()
+            + ' ' + d.getHours() + ':' + minutes + ':' + seconds
             + ' ' + get_time_zone_diff(d);
 
     return formatted;
