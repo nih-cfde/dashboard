@@ -10,13 +10,13 @@ body {
 	width: 1270px;
 	align-content: flex-start;
 	margin-left: auto;
-	margin-right: auto;"
+	margin-right: auto;
 }
 
 #fair_container {
 	max-width: 1270px;
 	flex: auto;
-	border: 1px solid #cccccc";
+	border: 1px solid #cccccc;
 }
 
 #fair_metrics_wrapper {
