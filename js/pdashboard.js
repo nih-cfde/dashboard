@@ -161,6 +161,15 @@ function get_time_zone_diff(d) {
 }
 // END copied from dcc_review.js
 
+function equalize_table_heights() {
+    var h1 = parseInt($('#personal_collections_table_wrapper').css('height'));
+    var h2 = parseInt($('#saved_query_table_wrapper').css('height'));
+    if (h1 > h2)
+        $('#saved_query_table_wrapper').height(h1);
+    else
+        $('#personal_collections_table_wrapper').height(h2);
+}
+
 function update_saved_queries() {
     var saved_queries_url = DASHBOARD_API_URL + '/user/saved_queries';
     
@@ -197,6 +206,7 @@ function update_saved_queries() {
                     {
                         targets: [ 2, 3 ],
                         width: "20%",
+                        class:"nowrap",
                         render: function ( data, type, row ) {
                             var d = new Date(data);
                             value = get_formatted_date(d);
@@ -210,7 +220,7 @@ function update_saved_queries() {
                 ],
                 columns: [
                     { title: "Search Name" },
-		    { title: "Table" },
+		            { title: "Table" },
                     { title: "Creation Date" },
                     { title: "Last Searched" },
                     { title: "Description" }, // col 3 which is invisible
@@ -218,9 +228,70 @@ function update_saved_queries() {
                 ]
             });
             dt.columns.adjust().draw();
+            equalize_table_heights();
         }
     });
 }
+
+
+function update_personal_collections() {
+    var personal_collections_url = DASHBOARD_API_URL + '/user/personal_collections';
+    
+    var dataset = []
+    
+    get_json_retry(personal_collections_url, function(data) {
+        if (data.length == 0) {
+            var dt = $('#personal_collections_table');
+            dt.addClass('saved_query_message');
+            dt.append($("<tr><td class='saved_query_message'>You have no Personal Collections. "
+                + "To create one, click on your profile name in the top-right corner of the menu (above) to select Personal Collections.</td></tr>"));
+        }
+        else {
+            data.forEach(query => {
+                dataset.push([query['name'],query['description'],query['creation_ts'],query['query']]);
+            });
+            var dt = $('#personal_collections_table').DataTable( {
+                "language": {
+                    "emptyTable": "No personal collections"
+                },
+                data: dataset,
+                columnDefs: [
+                    {
+                        targets: [ 0 ],
+                        width: "50%",
+                        render: function ( data, type, row ) {
+                            value = data;
+                            return '<span class="row_hover" title="' + row[0] + ' - ' + row[1] + '"><a href="' + row[3] + '" target="chaise">'+ value +'</a></span>';
+                        }
+                    },
+                    {
+                        targets: [ 1 ],
+                        width: "30%",
+                    },
+                    {
+                        targets: [ 2 ],
+                        width: "20%",
+                        class:"nowrap",
+                        render: function ( data, type, row ) {
+                            var d = new Date(data);
+                            value = get_formatted_date(d);
+                            return value;
+                        }
+                    }
+                ],
+                columns: [
+                    { title: "Collection Name" },
+		            { title: "Description" },
+                    { title: "Creation Date" }
+                    // { title: "Search"} // col 4 which is invisible
+                ]
+            });
+            dt.columns.adjust().draw();
+            equalize_table_heights();
+        }
+    });
+}
+
 
 var fav_dccs = [];
 
@@ -355,6 +426,7 @@ $(document).ready(function() {
     register_dropdowns(catalog_id, 'sbc1');
     update_favorites();
     update_saved_queries();
+    update_personal_collections();
     reAdjust();
 
     // chart 3 - donut graph
