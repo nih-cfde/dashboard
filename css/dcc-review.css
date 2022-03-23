@@ -2,6 +2,46 @@ body {
 
 }
 
+#fair_content {
+	flex: 1 1 auto;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	width: 1270px;
+	align-content: flex-start;
+	margin-left: auto;
+	margin-right: auto;"
+}
+
+#fair_container {
+	max-width: 1270px;
+	flex: auto;
+	border: 1px solid #cccccc";
+}
+
+#fair_metrics_wrapper {
+	display:flex;
+	flex: auto;
+	justify-content: center;
+	padding-bottom: 40px;
+	padding-top: 40px;
+	padding-left: 15px;
+}
+
+#fair_graph_left {
+	display: flex;  flex-grow: 1;
+	flex-basis: calc(100% / 2);
+     padding: 4px 8px;
+}
+                
+#fair_graph_right{
+	display: flex;  flex-grow: 1;
+	flex-basis: calc(100% / 2);
+     padding: 4px 8px;
+}
+
+
+
 #chart-container-1 {
     display: inline-block;
     width: 70%;
