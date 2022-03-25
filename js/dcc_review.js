@@ -180,8 +180,8 @@ function add_summary_data(catalog_id, DCC, num_dccs) {
       data_url += '/RID=' + data['datapackage_RID'];
     }
     
-    $('[id^datapackage_link]').prop('href', data_url);
-    $('[id^datapackage_link]').prepend(data_url);
+    $('[id^=datapackage_link]').prop('href', data_url);
+    $('[id^=datapackage_link]').prepend(data_url);
     $('#data_review_title')[0].innerHTML = data['abbreviation'] + ' Data Review';
 
     if (num_dccs == 1) {
