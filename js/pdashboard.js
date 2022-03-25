@@ -258,7 +258,7 @@ function update_personal_collections() {
                 columnDefs: [
                     {
                         targets: [ 0 ],
-                        width: "50%",
+                        width: "30%",
                         render: function ( data, type, row ) {
                             value = data;
                             return '<span class="row_hover" title="' + row[0] + ' - ' + row[1] + '"><a href="' + row[3] + '" target="chaise">'+ value +'</a></span>';
@@ -266,7 +266,7 @@ function update_personal_collections() {
                     },
                     {
                         targets: [ 1 ],
-                        width: "30%",
+                        width: "50%",
                     },
                     {
                         targets: [ 2 ],
