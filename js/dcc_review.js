@@ -179,9 +179,9 @@ function add_summary_data(catalog_id, DCC, num_dccs) {
     if (data['datapackage_RID'] != null) {
       data_url += '/RID=' + data['datapackage_RID'];
     }
-
-    $('#datapackage_link').prop('href', data_url);
-    $('#datapackage_link').prepend(data_url);
+    
+    $('[id^datapackage_link]').prop('href', data_url);
+    $('[id^datapackage_link]').prepend(data_url);
     $('#data_review_title')[0].innerHTML = data['abbreviation'] + ' Data Review';
 
     if (num_dccs == 1) {
@@ -375,12 +375,14 @@ function draw_metrics_chart(chart_id, data) {
     .append("rect")
     .attr("x", function (d) { return 0; })
     .attr("y", function (d) { return y1(d.name); })
-    .attr("width", function (d) {
-      if (x(d.fair_count) == 0)
-        return 1;
-      return (metrics_width(metrics_chart_width)) * d.fair_count / d.total_count })
+    .attr("width", function (d) { 
+        let bar_size = (metrics_width(metrics_chart_width)) * d.fair_count / d.total_count;
+        if (bar_size == 0)
+          return 1;
+        return bar_size;
+    })
     .attr("height", y1.bandwidth())
-    .attr("fill", "#8cc145")
+    .attr("fill", "#edb21e")
     .on("mouseover", function (d) { tooltip.text(d.fair_count + " / " + d.total_count); return tooltip.style("visibility", "visible"); })
     .on("mousemove", function () { return tooltip.style("top", (d3.event.pageY - 10) + "px").style("left", (d3.event.pageX + 15) + "px"); })
     .on("mouseout", function () { return tooltip.style("visibility", "hidden"); });
@@ -413,9 +415,14 @@ function draw_metrics_chart(chart_id, data) {
     .append("rect")
     .attr("x", function (d) { return x(0) })
     .attr("y", function (d) { return y2(d.name); })
-    .attr("width", function (d) { return (metrics_width(metrics_chart_width)) * d.fair_count / d.total_count })
+    .attr("width", function (d) { 
+        let bar_size = (metrics_width(metrics_chart_width)) * d.fair_count / d.total_count;
+        if (bar_size == 0)
+          return 1;
+        return bar_size;
+    })
     .attr("height", y2.bandwidth())
-    .attr("fill", "#8cc145")
+    .attr("fill", "#edb21e")
     .on("mouseover", function (d) { tooltip.text(d.fair_count + " / " + d.total_count); return tooltip.style("visibility", "visible"); })
     .on("mousemove", function () { return tooltip.style("top", (d3.event.pageY - 10) + "px").style("left", (d3.event.pageX + 10) + "px"); })
     .on("mouseout", function () { return tooltip.style("visibility", "hidden"); })
