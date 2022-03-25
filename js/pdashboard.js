@@ -244,7 +244,7 @@ function update_personal_collections() {
             var dt = $('#personal_collections_table');
             dt.addClass('saved_query_message');
             dt.append($("<tr><td class='saved_query_message'>You have no Personal Collections. "
-                + "To create one, click on your profile name in the top-right corner of the menu (above) to select Personal Collections.</td></tr>"));
+                + "To create one, click on your profile name in the top-right corner of the menu and select 'Personal Collections'.</td></tr>"));
         }
         else {
             data.forEach(query => {
