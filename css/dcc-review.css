@@ -40,7 +40,10 @@ body {
      padding: 4px 8px;
 }
 
-
+#raw_data_link_container {
+	padding-left: 20px;
+	padding-bottom: 20px;
+}
 
 #chart-container-1 {
     display: inline-block;
