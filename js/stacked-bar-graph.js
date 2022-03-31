@@ -749,6 +749,11 @@ function add_legend(svg_id, chart_width, legend_width, chart, categories, toolti
             var tooltip_title = title_fn(d);
             var tooltip_text = text_fn(d);
 
+            var brick_name = d.data.key;
+            $('#' + svg_id + '-brick-value').text(tooltip_text);
+            let text = $('#' + svg_id + '-brick-category');
+            text.append('tspan').text(brick_name).each(ellipsize(190, 5));
+
             let coords = d3.mouse(this);
             let xPosition = coords[0];  // distance from y-axis on chart
             let yPosition = coords[1];  // distance from top of chart
