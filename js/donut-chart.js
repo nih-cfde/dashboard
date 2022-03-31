@@ -16,7 +16,7 @@ function add_donut_tooltip(chart_id, svg) {
         .attr('class', 'chart_tooltip_title')
         .attr('id', chart_id + '-brick-category')
         .attr('x', 5)
-        .attr('dy', '1.8em');
+        .attr('dy', '1.3em');
 
     tooltip.append('text')
         .attr('x', 5)
@@ -334,7 +334,8 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
         } else {
             value = comma_formatter(d.data.value);
         }
-        return value + ' ' + units; 
+	text = value + ' ' + units;
+        return text
     };
 
     var x_offset = 0;
