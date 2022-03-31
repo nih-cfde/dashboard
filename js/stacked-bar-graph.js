@@ -459,19 +459,11 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
     
     let grandparent_width = $('#' + svg_id).parent().parent().width();
 
-    if (stacked_data.length > 12) {
-        svg_width = stacked_data.length * 40;
-        svg.attr("width", svg_width);
-    }
-    else {
+    svg_width = stacked_data.length * 40;
+    if (svg_width < grandparent_width) {
         svg_width = grandparent_width;
-        svg.attr("width", grandparent_width);
     }
-
-    
-    
-    
-    
+    svg.attr("width", svg_width);
 
     if (svg_width < 200) svg_width = 200;
     if (svg_height < 200) svg_height = 300;
