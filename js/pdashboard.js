@@ -324,6 +324,12 @@ function update_favorites() {
                 ul = $('#favorite-gene');
             else if (favorite_type == "compound")
                 ul = $('#favorite-compound');
+            else if (favorite_type == "analysis_type")
+                ul = $('#favorite-analysis-type');
+            else if (favorite_type == "phenotype")
+                ul = $('#favorite-phenotype');
+            else if (favorite_type == "protein")
+                ul = $('#favorite-protein');
             else {
                 console.log("Invalid favorite type");
                 return; //continue
