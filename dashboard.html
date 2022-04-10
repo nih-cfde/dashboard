@@ -13,19 +13,19 @@
                         return;
                 });
                 if (auth) {
-                    window.location.replace("pdashboard.html");
+                    window.location.replace("pdashboard.html" + location.search);
                 }
                 else {
-                    window.location.replace("udashboard.html");
+                    window.location.replace("udashboard.html" + location.search);
                 }
             } catch (error) {
                 console.log(error);
-                window.location.replace("udashboard.html");
+                window.location.replace("udashboard.html" + location.search);
             }
         };
 
         var error_fn = function(jqXHR, status, error) {
-            window.location.replace("udashboard.html");
+            window.location.replace("udashboard.html" + location.search);
         };
 
         var url = window.location.origin + "/authn/session";
