@@ -844,7 +844,8 @@ function save_csv(filename, rows) {
 function export2png(chart_id) {
     // Hide the export button
     $('#' + chart_id + '-export-button').hide();
-    saveSvgAsPng(document.getElementById(chart_id), 'export.png').then(function () {
+    let options = { backgroundColor: 'white' };
+    saveSvgAsPng(document.getElementById(chart_id), 'export.png', options).then(function () {
         // Re-display the export button
         $('#' + chart_id + '-export-button').show();
     });
