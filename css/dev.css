@@ -133,7 +133,8 @@ navbar .navbar-nav .dropdown>.dropdown-toggle::after {
 /* ===== Styles and colors for status icons ===== */
 
 .cfde_noinfo, .cfde_pending, .cfde_success,
-.cfde_retired, .cfde_rejected, .cfde_error {
+.cfde_retired, .cfde_rejected, .cfde_error
+.cfde_grey_disc, .cfde_green_disc, .cfde_yellow_disc {
   padding-left: 17px;
   position: relative;
 }
@@ -231,4 +232,35 @@ navbar .navbar-nav .dropdown>.dropdown-toggle::after {
 .s_CFDE.t_release .c_RID,
 .s_CFDE.t_release .c_status {
     min-width: 500px;
+}
+
+.markdown_container .cfde_grey_disc,
+.markdown_container .cfde_yellow_disc,
+.markdown_container .cfde_green_disc {
+    padding-left: 17px;
+    position: relative;
+}
+
+.markdown_container .cfde_grey_disc::before,
+.markdown_container .cfde_yellow_disc::before,
+.markdown_container .cfde_green_disc::before {
+    content: "";
+    left: 0px;
+    top: 2px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    position: absolute;
+}
+
+.markdown_container .cfde_grey_disc::before {
+    background-color: #AAAAAA;
+}
+
+.markdown_container .cfde_green_disc::before {
+    background-color: #008000;
+}
+
+.markdown_container .cfde_yellow_disc::before {
+    background-color: yellow;
 }
