@@ -8,20 +8,20 @@ var chart_data = {};
 var chart_data_urls = {};
 var dcc_map = {};
 
-function register_export_buttons(chart_id) {
+function register_export_buttons(chart_id, data, x_axis, y_axis) {
     // Prevent accumulations of click handlers by clearing any past
     // registrations of 'click' to the buttons by using jquery's off()
     // function.
     $('#export-png').off('click');
     $('#export-png').click(function () {
         var chart_id = $('#export-modal').attr('name').split('-')[0];
-        export2png(chart_id);
+        export2png(chart_id, data, x_axis, y_axis);
     });
 
     $('#export-svg').off('click');
     $('#export-svg').click(function () {
         var chart_id = $('#export-modal').attr('name').split('-')[0];
-        export2svg(chart_id);
+        export2svg(chart_id, data, x_axis, y_axis);
     });
 
     $('#export-csv').off('click');
@@ -120,7 +120,7 @@ function update_chart(catalog_id, chart_id) {
 
     // check cache
     if (chart_data_urls[chart_id] == data_url) {
-        draw_chart(chart_id, chart_data[chart_id], x_axis, y_axis);
+        draw_chart(chart_id, null, chart_data[chart_id], x_axis, y_axis);
         return;
     }
 
@@ -134,8 +134,8 @@ function update_chart(catalog_id, chart_id) {
         if (requestnum == REQUESTNUMS[chart_id]) {
             chart_data[chart_id] = data;
             chart_data_urls[chart_id] = data_url;
-            register_export_buttons(chart_id);
-            draw_chart(chart_id, data, x_axis, y_axis);
+            register_export_buttons(chart_id, data, x_axis, y_axis);
+            draw_chart(chart_id, null, data, x_axis, y_axis);
         }
     };
     var fail_fn = function (jqXHR, status, error) {
@@ -335,9 +335,13 @@ function update_dcc_map() {
     });
 }
 
-function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
-    
-    $('#' + svg_id).empty();
+function draw_chart(svg_id, svg, stacked_data, x_axis, y_axis) {
+   let draw_detached = (svg != null)
+   if (!draw_detached) {
+       svg = d3.select('#' + svg_id)
+       $('#' + svg_id).empty();
+    }
+
     update_chart_title(svg_id);
     update_dcc_map();
 
@@ -447,23 +451,31 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
     });
 
     const top_margin = 35;
-    const bottom_margin = 80;
+    const bottom_margin = draw_detached ? 320 : 80;
     var left_margin = 60;
     var right_margin = 10;
 
     // svg_width determined by enclosing div
-    var svg = d3.select('#' + svg_id);
     var svg_style = window.getComputedStyle(svg.node());
-    var svg_height = parseInt(svg_style.height);
-    var svg_width = parseInt(svg_style.width);
-    
-    let grandparent_width = $('#' + svg_id).parent().parent().width();
+    var svg_height;
+    var svg_width;
+    var grandparent_width;
+
+    if (svg_style.height == "") {
+        svg_height = 800;
+        svg_width = 1200;
+        grandparent_width = svg_width;
+    } else {
+        svg_height = parseInt(svg_style.height);
+        svg_width = parseInt(svg_style.width);
+        grandparent_width = $('#' + svg_id).parent().parent().width();
+    }
 
     svg_width = stacked_data.length * 40;
     if (svg_width < grandparent_width) {
         svg_width = grandparent_width;
     }
-    svg.attr("width", svg_width);
+    svg.attr('width', svg_width);
 
     if (svg_width < 200) svg_width = 200;
     if (svg_height < 200) svg_height = 300;
@@ -530,7 +542,7 @@ function draw_chart(svg_id, stacked_data, x_axis, y_axis) {
             var node = d3.select(this);
             var label = node.text();
             var ml = maxlen_fn(label, tlc++);
-            if (label.length > (ml - 3)) {
+            if (!draw_detached && (label.length > (ml - 3))) {
                 node.text(label.substring(0, ml - 3) + '...');
             }
             node.append('title').text(label);
@@ -841,21 +853,40 @@ function save_csv(filename, rows) {
     }
 }
 
-function export2png(chart_id) {
+function draw2svg(chart_id, data, x_axis, y_axis) {
+    // redraw chart with unlimited label length
+    let svg_obj = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    let svg = d3.select(svg_obj);
+    let svg_id = chart_id + '-export2svg';
+    svg.attr('id', svg_id);
+    draw_chart(chart_id, svg, data, x_axis, y_axis);
+    // hide and append new SVG element - ensures that CSS styles are propagated
+    svg.attr('hidden', true);
+    let attached_svg = d3.select('body').append(() => svg.node());
+    return { 'svg': svg, 'attached': attached_svg };
+}
+
+function export2png(chart_id, data, x_axis, y_axis) {
     // Hide the export button
     $('#' + chart_id + '-export-button').hide();
-    saveSvgAsPng(document.getElementById(chart_id), 'export.png').then(function () {
+    dsvg = draw2svg(chart_id, data, x_axis, y_axis);
+    let options = { backgroundColor: 'white' };
+  //    saveSvgAsPng(document.getElementById(chart_id), 'export.png', options).then(function () {
+    saveSvgAsPng(dsvg['svg'].node(), 'export.png', options).then(function () {
         // Re-display the export button
+        dsvg['attached'].remove();
         $('#' + chart_id + '-export-button').show();
     });
 }
 
-function export2svg(chart_id) {
+function export2svg(chart_id, data, x_axis, y_axis) {
     $('#' + chart_id + '-export-button').hide();
+    dsvg = draw2svg(chart_id, data, x_axis, y_axis);
     var config = {
         filename: 'chart'
     };
-    d3_save_svg.save(d3.select('#' + chart_id).node(), config);
+    d3_save_svg.save(dsvg['svg'].node(), config);
+    dsvg['attached'].remove();
     $('#' + chart_id + '-export-button').show();
 }
 

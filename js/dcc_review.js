@@ -33,7 +33,7 @@ function populate_chart(catalog_id, chart_id) {
     var data_fn = function(data) {
         $('#' + chart_id).replaceWith('<svg id="' + chart_id + '"/>');
         register_export_buttons(chart_id, data);
-        draw_chart(chart_id, data, group1, count);
+        draw_chart(chart_id, null, data, group1, count);
     };
 
     var fail_fn = function(jqXHR, status, error) {

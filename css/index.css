@@ -67,16 +67,25 @@ main {
   justify-content: space-evenly;
   max-width: 400px;
   margin: 0 auto;
-  padding: 10px 0;
+  padding: 0px;
 }
 
 #search-by-container {
   text-align: center;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   max-width: 400px;
   margin: 0 auto;
-  padding: 20px 20px;
+  padding: 0px 20px 0px 20px;
+}
+
+#search-by-misc {
+  text-align: center;
+  display: flex;
+  justify-content: space-around;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 0px 20px 0px 20px;
 }
 
 #sbc1-group-by-and-legend-container {
