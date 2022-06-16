@@ -140,7 +140,8 @@ navbar .navbar-nav .dropdown>.dropdown-toggle::after {
 }
 
 .cfde_noinfo::before, .cfde_pending::before, .cfde_success::before,
-.cfde_retired::before, .cfde_rejected::before, .cfde_error::before {
+.cfde_retired::before, .cfde_rejected::before, .cfde_error::before,
+.cfde_grey_disc::before, .cfde_yellow_disc::before, .cfde_green_disc::before {
   content: "";
   left: 0px;
   top: -1px;
@@ -148,6 +149,13 @@ navbar .navbar-nav .dropdown>.dropdown-toggle::after {
   height: 14px;
   position: absolute;
   font-family: "Font Awesome 5 Free";
+}
+
+.cfde_grey_disc::before,
+.cfde_yellow_disc::before,
+.cfde_green_disc::before {
+    top: 2px;
+    border-radius: 50%;
 }
 
 .cfde_noinfo::before {
@@ -198,6 +206,18 @@ navbar .navbar-nav .dropdown>.dropdown-toggle::after {
   font-weight: 900;
 }
 
+.cfde_grey_disc::before {
+    background-color: #AAAAAA;
+}
+
+.cfde_green_disc::before {
+    background-color: #008000;
+}
+
+.cfde_yellow_disc::before {
+    background-color: yellow;
+}
+
 #form-controls .container,
 #sbc1-form-controls .container,
 #sbc2-form-controls .container,
@@ -232,35 +252,4 @@ navbar .navbar-nav .dropdown>.dropdown-toggle::after {
 .s_CFDE.t_release .c_RID,
 .s_CFDE.t_release .c_status {
     min-width: 500px;
-}
-
-.markdown_container .cfde_grey_disc,
-.markdown_container .cfde_yellow_disc,
-.markdown_container .cfde_green_disc {
-    padding-left: 17px;
-    position: relative;
-}
-
-.markdown_container .cfde_grey_disc::before,
-.markdown_container .cfde_yellow_disc::before,
-.markdown_container .cfde_green_disc::before {
-    content: "";
-    left: 0px;
-    top: 2px;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    position: absolute;
-}
-
-.markdown_container .cfde_grey_disc::before {
-    background-color: #AAAAAA;
-}
-
-.markdown_container .cfde_green_disc::before {
-    background-color: #008000;
-}
-
-.markdown_container .cfde_yellow_disc::before {
-    background-color: yellow;
 }
