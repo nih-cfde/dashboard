@@ -133,13 +133,15 @@ navbar .navbar-nav .dropdown>.dropdown-toggle::after {
 /* ===== Styles and colors for status icons ===== */
 
 .cfde_noinfo, .cfde_pending, .cfde_success,
-.cfde_retired, .cfde_rejected, .cfde_error {
+.cfde_retired, .cfde_rejected, .cfde_error
+.cfde_grey_disc, .cfde_green_disc, .cfde_yellow_disc {
   padding-left: 17px;
   position: relative;
 }
 
 .cfde_noinfo::before, .cfde_pending::before, .cfde_success::before,
-.cfde_retired::before, .cfde_rejected::before, .cfde_error::before {
+.cfde_retired::before, .cfde_rejected::before, .cfde_error::before,
+.cfde_grey_disc::before, .cfde_yellow_disc::before, .cfde_green_disc::before {
   content: "";
   left: 0px;
   top: -1px;
@@ -147,6 +149,13 @@ navbar .navbar-nav .dropdown>.dropdown-toggle::after {
   height: 14px;
   position: absolute;
   font-family: "Font Awesome 5 Free";
+}
+
+.cfde_grey_disc::before,
+.cfde_yellow_disc::before,
+.cfde_green_disc::before {
+    top: 2px;
+    border-radius: 50%;
 }
 
 .cfde_noinfo::before {
@@ -195,6 +204,18 @@ navbar .navbar-nav .dropdown>.dropdown-toggle::after {
   content: "\f06a";
   color: orange;
   font-weight: 900;
+}
+
+.cfde_grey_disc::before {
+    background-color: #AAAAAA;
+}
+
+.cfde_green_disc::before {
+    background-color: #008000;
+}
+
+.cfde_yellow_disc::before {
+    background-color: yellow;
 }
 
 #form-controls .container,
