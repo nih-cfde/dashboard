@@ -133,7 +133,7 @@ navbar .navbar-nav .dropdown>.dropdown-toggle::after {
 /* ===== Styles and colors for status icons ===== */
 
 .cfde_noinfo, .cfde_pending, .cfde_success,
-.cfde_retired, .cfde_rejected, .cfde_error
+.cfde_retired, .cfde_rejected, .cfde_error,
 .cfde_grey_disc, .cfde_green_disc, .cfde_yellow_disc {
   padding-left: 17px;
   position: relative;
