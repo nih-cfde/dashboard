@@ -859,11 +859,17 @@ function draw2svg(chart_id, data, x_axis, y_axis) {
     let svg = d3.select(svg_obj);
     let svg_id = chart_id + '-export2svg';
     svg.attr('id', svg_id);
+    svg.attr('style', 'height: 800px;');
     draw_chart(chart_id, svg, data, x_axis, y_axis);
-    // hide and append new SVG element - ensures that CSS styles are propagated
-    svg.attr('hidden', true);
-    let attached_svg = d3.select('body').append(() => svg.node());
-    return { 'svg': svg, 'attached': attached_svg };
+    // append new SVG element to document - ensures that CSS styles are propagated
+    let newdiv = document.createElement('div');
+    let nd = d3.select(newdiv);
+    nd.attr('id', 'div_' + svg_id);
+    // use 1x1 div to hide the SVG element
+    nd.attr('style', 'width: 1px; height: 1px; overflow: hidden;');
+    let attached_svg = d3.select('body').append(() => nd.node());
+    nd.append(() => svg.node());
+    return { 'svg': svg, 'attached': attached_svg, 'div': newdiv };
 }
 
 function export2png(chart_id, data, x_axis, y_axis) {
@@ -871,10 +877,9 @@ function export2png(chart_id, data, x_axis, y_axis) {
     $('#' + chart_id + '-export-button').hide();
     dsvg = draw2svg(chart_id, data, x_axis, y_axis);
     let options = { backgroundColor: 'white' };
-  //    saveSvgAsPng(document.getElementById(chart_id), 'export.png', options).then(function () {
-    saveSvgAsPng(dsvg['svg'].node(), 'export.png', options).then(function () {
-        // Re-display the export button
-        dsvg['attached'].remove();
+    saveSvgAsPng(dsvg['svg'].node(), 'chart.png', options).then(function () {
+        // redisplay the export button
+        dsvg['div'].remove();
         $('#' + chart_id + '-export-button').show();
     });
 }
@@ -886,7 +891,8 @@ function export2svg(chart_id, data, x_axis, y_axis) {
         filename: 'chart'
     };
     d3_save_svg.save(dsvg['svg'].node(), config);
-    dsvg['attached'].remove();
+    // redisplay the export button
+    dsvg['div'].remove();
     $('#' + chart_id + '-export-button').show();
 }
 
