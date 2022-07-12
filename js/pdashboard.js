@@ -174,7 +174,7 @@ function update_saved_queries() {
     var saved_queries_url = DASHBOARD_API_URL + '/user/saved_queries';
     
     var dataset = []
-    
+
     get_json_retry(saved_queries_url, function(data) {
         if (data.length == 0) {
             var dt = $('#saved_query_table');
@@ -227,6 +227,7 @@ function update_saved_queries() {
                     { title: "Search"} // col 4 which is invisible
                 ]
             });
+            dt.column('2').order('desc');
             dt.columns.adjust().draw();
             equalize_table_heights();
         }
