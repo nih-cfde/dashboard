@@ -298,65 +298,48 @@ var fav_dccs = [];
 
 function update_favorites() {
     var favorites_url = DASHBOARD_API_URL + '/user/favorites';
-    
+
     get_json_retry(favorites_url, function(data) {
-    
-        // favorite is a json object with keys "dcc", "anatomy", and "assay"
-        // and values are a arrays of objects with keys "name", "description"
-        // e.g. {"anatomy": [{"name": "blood", "description": "A fluid that is composed of blood plasma and erythrocytes."}, 
-        //                   {"name": "lung", "description": "Respiration organ that develops as an oupocketing of the esophagus."}]}
         Object.keys(data).forEach(favorite_type => {
-            let ul;
-            if (favorite_type == "anatomy") 
-                ul = $('#favorite-anatomies');
-            else if (favorite_type == "dcc") 
-                ul = $('#favorite-dccs');
-            else if (favorite_type == "assay")
-                ul = $('#favorite-assays');
-            else if (favorite_type == "disease")
-                ul = $('#favorite-diseases');
-            else if (favorite_type == "taxon")
-                ul = $('#favorite-taxon');
-            else if (favorite_type == "data_type")
-                ul = $('#favorite-data-type');
-            else if (favorite_type == "file_format")
-                ul = $('#favorite-file-format');
-            else if (favorite_type == "gene")
-                ul = $('#favorite-gene');
-            else if (favorite_type == "compound")
-                ul = $('#favorite-compound');
-            else if (favorite_type == "analysis_type")
-                ul = $('#favorite-analysis-type');
-            else if (favorite_type == "phenotype")
-                ul = $('#favorite-phenotype');
-            else if (favorite_type == "protein")
-                ul = $('#favorite-protein');
-            else {
-                console.log("Invalid favorite type");
-                return; //continue
-            }
+          let tbl = $('#favorite-' + favorite_type);
+          let favs = data[favorite_type];
+          let tbl_data = [];
 
-            if (data[favorite_type].length == 0) {
-                ul.append($("<li class='favorite'>To add a favorite, browse the data portal and click on the star associated with a facet.</li>"));  
+          favs.forEach(fav => {
+            if (favorite_type == "dcc") {
+              fav_dccs.push(fav.id);
             }
-            
-            Object.keys(data[favorite_type]).forEach(key => {
-                list_index = key;
-                favorite_list = data[favorite_type][list_index];
-                
-                if (favorite_type == "dcc") {
-                    fav_dccs.push(favorite_list["id"]);
-                    ul.append($("<li class='favorite'><a href='" + favorite_list["url"] + "' target='chaise'>" + favorite_list["abbreviation"] + ": " + favorite_list["name"] + "</a></li>"));
-                }
-                else {
-                    ul.append($("<li class='favorite'><a href='" + favorite_list["url"] + "' target='chaise'>" + favorite_list["name"] + "</a></li>"));
-                }
-            });
-        });
+            tbl_data.push([fav.id, fav.abbreviation, fav.name, fav.description, fav.url]);
+          });
 
-        // now that favorites are loaded, load chart
-        var catalog_id = get_catalog_id();
-        update_dcc_list(catalog_id, 'sbc1');
+          //              tbl.append($("<li class='favorite'><a href='" + favorite_list["url"] + "' target='chaise'>" + favorite_list["abbreviation"] + ": " + favorite_list["name"] + "</a></li>"));
+
+          var dt = tbl.DataTable({
+            "language": {
+              "emptyTable": "To add a favorite, browse the data portal and click on the star associated with a facet."
+            },
+            data: tbl_data,
+            columnDefs: [
+              {
+                targets: [ 0 ],
+                width: "100%",
+                render: function ( data, type, row ) {
+                  let value = row[1] != null ? row[1] + ": " + row[2] : row[2];
+                  let title = row[2] != row[3] ? row[2] + ' - ' + row[3] : row[2];
+                  return '<span class="row_hover" title="' + title + '"><a href="' + row[4] + '" target="chaise">'+ value +'</a></span>';
+                }
+              },
+            ],
+            columns: [
+              { title: "&nbsp;" },
+            ]
+          });
+          dt.columns.adjust().draw();
+      });
+          
+      // now that favorites are loaded, load chart
+      var catalog_id = get_catalog_id();
+      update_dcc_list(catalog_id, 'sbc1');
     });
 }
 
