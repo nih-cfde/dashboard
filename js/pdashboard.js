@@ -312,8 +312,6 @@ function update_favorites() {
             tbl_data.push([fav.id, fav.abbreviation, fav.name, fav.description, fav.url]);
           });
 
-          //              tbl.append($("<li class='favorite'><a href='" + favorite_list["url"] + "' target='chaise'>" + favorite_list["abbreviation"] + ": " + favorite_list["name"] + "</a></li>"));
-
           var dt = tbl.DataTable({
             "language": {
               "emptyTable": "To add a favorite, browse the data portal and click on the star associated with a facet."
@@ -325,22 +323,22 @@ function update_favorites() {
                 width: "100%",
                 render: function ( data, type, row ) {
                   let value = row[1] != null ? row[1] + ": " + row[2] : row[2];
-                  let title = row[2] != row[3] ? row[2] + ' - ' + row[3] : row[2];
+                  let title = ((row[2] != row[3]) && (row[3] != null)) ? row[2] + ' - ' + row[3] : row[2];
                   return '<span class="row_hover" title="' + title + '"><a href="' + row[4] + '" target="chaise">'+ value +'</a></span>';
                 }
-              },
+              }
             ],
             columns: [
               { title: "&nbsp;" },
             ]
           });
           dt.columns.adjust().draw();
-      });
+        });
+    }); // get_json_retry
           
-      // now that favorites are loaded, load chart
-      var catalog_id = get_catalog_id();
-      update_dcc_list(catalog_id, 'sbc1');
-    });
+  // now that favorites are loaded, load chart
+  var catalog_id = get_catalog_id();
+  update_dcc_list(catalog_id, 'sbc1');
 }
 
 function update_dcc_list(catalog_id, chart_id) {
