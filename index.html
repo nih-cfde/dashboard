@@ -12,7 +12,28 @@
     <link rel="shortcut icon" type="image/png" href="./images/icons/CFDE-icon-1.png?v=2"/>
     <link rel="stylesheet" href="./css/fonts.css" type="text/css"/>
     <link rel="stylesheet" href="./css/components/all.min.css"/>
-    
+    <style>
+      /* customize carousel */
+      .carousel-item > div {
+          background-color: #ffffff;
+      }
+      .carousel-caption h5, p {
+          color: black;
+      }
+      .carousel-caption h5, p {
+          text-shadow: none;
+      }
+      .carousel-control-next,
+      .carousel-control-prev /*, .carousel-indicators */ {
+          filter: invert(100%);
+          align-items: flex-middle;
+          bottom: 0%;
+          top: 60%;
+      }
+      .carousel-indicators li {
+          filter: invert(100%);
+      }
+    </style>
   </head>
   <body>
     <div id="wrap-navbar">
@@ -219,7 +240,9 @@
               <a class="twitter-timeline" data-height="400" href="https://twitter.com/CfdeNih?ref_src=twsrc%5Etfw">Tweets by CfdeNih</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 	    </div>
           </div>
-          <div class="content__col right">
+          <div class="content__col right" style="border: none;">
+
+            <div style='border: 1px solid #cccccc;'>
               <div class="data_header">
                 <p>Funding</p>
               </div>
@@ -227,6 +250,153 @@
                 <!--insert NIH logo-->
                 <a href="http://nih.gov" target="_blank"><img width="380px" src="images/nih.png" title="NIH"></a>
               </div>
+            </div>
+
+            <div style='border: 1px solid #cccccc; margin-top: 1em;'>
+              <div class="data_header">
+                <p>Highlighted videos</p>
+              </div>
+              <div class="data_content">
+
+                <div id="carouselExampleCaptions" class="carousel slide">
+                  <ol class="carousel-indicators">
+                    <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
+                    <li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
+                    <li data-target="#carouselExampleCaptions" data-slide-to="2"></li>
+                    <li data-target="#carouselExampleCaptions" data-slide-to="3"></li>
+                    <li data-target="#carouselExampleCaptions" data-slide-to="4"></li>
+                    <li data-target="#carouselExampleCaptions" data-slide-to="5"></li>
+                    <li data-target="#carouselExampleCaptions" data-slide-to="6"></li>
+                    <li data-target="#carouselExampleCaptions" data-slide-to="7"></li>
+                    <li data-target="#carouselExampleCaptions" data-slide-to="8"></li>
+                    <li data-target="#carouselExampleCaptions" data-slide-to="9"></li>
+                    <li data-target="#carouselExampleCaptions" data-slide-to="10"></li>
+                  </ol>
+                  <div class="carousel-inner" pause="hover">
+                    
+                    <div class="carousel-item active">
+                      <div class="d-block w-100" style="width: 480px; height: 460px; text-align: center;">
+                        <iframe style="width:480px; height: 240px; margin: 0 auto;" src="https://www.youtube.com/embed/cWZPTjG5_Us" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                      </div>
+                      <div class="carousel-caption d-none d-md-block">
+                        <h5>CFDE Overview</h5>
+                        <p>Learn how the Common Fund Data Ecosystem is developing an online portal that will allow researchers to access and work across multiple NIH Common Fund program data sets within a digital cloud environment.</p>
+                      </div>
+                    </div>
+                    
+                    <div class="carousel-item">
+                      <div class="d-block w-100" style="width: 480px; height: 460px; text-align: center;">
+                        <iframe style="width:480px; height: 240px; margin: 0 auto;" src="https://www.youtube.com/embed/aN8n2I1pROk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                      </div>
+                      <div class="carousel-caption d-none d-md-block">
+                        <h5>Portal Overview</h5>
+                        <p>A overview of the portal for navigation of cross-project data using a flexible metadata standard for describing experimental resources in biomedicine and related fields.</p>
+                      </div>
+                    </div>
+                    
+                    <div class="carousel-item">
+                      <div class="d-block w-100" style="width: 480px; height: 460px; text-align: center;">
+                        <iframe style="width:480px; height: 240px; margin: 0 auto;" src="https://www.youtube.com/embed/i0qWaa8chNQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                      </div>
+                      <div class="carousel-caption d-none d-md-block">
+                        <h5>Data Submission Tools and Processes</h5>
+                        <p>This video covers the process of submitting data to the Common Fund Data Ecosystem portal.</p>
+                      </div>
+                    </div>
+                    
+                    <div class="carousel-item">
+                      <div class="d-block w-100" style="width: 480px; height: 460px; text-align: center;">
+                        <iframe style="width:480px; height: 240px; margin: 0 auto;" src="https://www.youtube.com/embed/QST9HtwzwjE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                      </div>
+                      <div class="carousel-caption d-none d-md-block">
+                        <h5>C2M2 Compatibility Test</h5>
+                        <p>The CFDE C2M2 FAIR Datapackage Assessment Appyter enables DCCs to test the FAIRness of their C2M2 compatible data packages before uploading to the CFDE portal for ingestion.</p>
+                      </div>
+                    </div>
+                    
+                    <div class="carousel-item">
+                      <div class="d-block w-100" style="width: 480px; height: 460px; text-align: center;">
+                        <iframe style="width:480px; height: 240px; margin: 0 auto;" src="https://www.youtube.com/embed/3ePYK1YvwQU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                      </div>
+                      <div class="carousel-caption d-none d-md-block">
+                        <h5>Content Registry and Knowledge Base</h5>
+                        <p>The Knowledge Base in the Common Fund Data Ecosystem's search portal hosts additional information on pages.</p>
+                      </div>
+                    </div>
+                    
+                    <div class="carousel-item">
+                      <div class="d-block w-100" style="width: 480px; height: 460px; text-align: center;">
+                        <iframe style="width:480px; height: 240px; margin: 0 auto;" src="https://www.youtube.com/embed/bNoZ47QoRWc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                      </div>
+                      <div class="carousel-caption d-none d-md-block">
+                        <h5>A re-usable Solution for Knowledge Management C2M2</h5>
+                        <p>An overview of the Knowledge Management C2M2 model for finding biomedical data using the Common Fund Data Ecosystem portal.</p>
+                      </div>
+                    </div>
+
+                    <div class="carousel-item">
+                      <div class="d-block w-100" style="width: 480px; height: 460px; text-align: center;">
+                        <iframe style="width:480px; height: 240px; margin: 0 auto;" src="https://www.youtube.com/embed/ijrivk3G9-Y" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                      </div>
+                      <div class="carousel-caption d-none d-md-block">
+                        <h5>Knowledge Graph</h5>
+                        <p>The ability to access, via a human interface or an API, a vast, semantically-coherent knowledge graph integrated from data and relationships generated from different Common Fund projects.</p>
+                      </div>
+                    </div>
+                    
+                    <div class="carousel-item">
+                      <div class="d-block w-100" style="width: 480px; height: 460px; text-align: center;">
+                        <iframe style="width:480px; height: 240px; margin: 0 auto;" src="https://www.youtube.com/embed/3eIBdcNngrA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                      </div>
+                      <div class="carousel-caption d-none d-md-block">
+                        <h5>Genes and Variants</h5>
+                        <p>Researchers can use the Gene-Centric Appyter to query a gene or variant of interest across all Common Fund Data Ecosystem groups for information returned in a summary report.</p>
+                      </div>
+                    </div>
+                    
+                    <div class="carousel-item">
+                      <div class="d-block w-100" style="width: 480px; height: 460px; text-align: center;">
+                        <iframe style="width:480px; height: 240px; margin: 0 auto;" src="https://www.youtube.com/embed/w7IKp4wQ1VM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                      </div>
+                      <div class="carousel-caption d-none d-md-block">
+                        <h5>Drugs and Birth Defects</h5>
+                        <p>This video demonstrates ways for researchers to easily assemble collated and organized information on genes of interest using the ReproTox Knowledge Graph.</p>
+                      </div>
+                    </div>
+
+                    <div class="carousel-item">
+                      <div class="d-block w-100" style="width: 480px; height: 460px; text-align: center;">
+                        <iframe style="width:480px; height: 240px; margin: 0 auto;" src="https://www.youtube.com/embed/Z1hybV-V6ck" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                      </div>
+                      <div class="carousel-caption d-none d-md-block">
+                        <h5>Cancer Research</h5>
+                        <p>This video describes a precision therapy use case focused on pediatric cancer using RNA-seq data from Kids First and GTEx.</p>
+                      </div>
+                    </div>
+
+                    <div class="carousel-item">
+                      <div class="d-block w-100" style="width: 480px; height: 460px; text-align: center;">
+                        <iframe style="width:480px; height: 240px; margin: 0 auto;" src="https://www.youtube.com/embed/_6KQZ6eUHAE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                      </div>
+                      <div class="carousel-caption d-none d-md-block">
+                        <h5>Assessment of Genetic Variants in Human Disease</h5>
+                        <p>This video illustrates how CFDE resources are used to analyze whole genome sequencing data for the study of regulatory non-coding variants in congenital heart disease.</p>
+                      </div>
+                    </div>
+
+                  </div>
+                  <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                  </a>
+                  <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                  </a>
+                </div>
+                
+              </div>
+            </div>
           </div>
         </div>
       </div>
