@@ -41,7 +41,7 @@ function update_donut_chart_title(chart_id, dropdown) {
 
 function register_donut_dropdown(chart_id, data, dropdown, units) {
     var field = dropdown;
-    if (field == 'data_type') field = 'assay';
+    if (field == 'data_type') field = 'assay_type';
     
     // populate dropdown menu with observed values from data
     var sel = $('#' + chart_id + '-' + dropdown);
@@ -110,9 +110,9 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
     var rf_data = {};
     if (dropdown == 'data_type') {
         data.forEach(d => {
-            if (d['assay'] == dropdown_value) {
+            if (d['assay_type'] == dropdown_value) {
                 Object.keys(d).forEach(k => {
-                    if ((k != 'assay') && (d[k] > 0)) {
+                    if ((k != 'assay_type') && (d[k] > 0)) {
                         rf_data[k] = d[k];
                     }
                 });

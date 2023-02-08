@@ -420,7 +420,7 @@ $(document).ready(function() {
     // chart 3 - donut graph
     var dc1_data = null;
     var count = 'subjects';
-    var group1 = 'assay';
+    var group1 = 'assay_type';
     var group2 = 'anatomy';
     var dc1_url = DASHBOARD_API_URL + '/stats/' + [count, group1, MAX_DONUT_GROUP1, group2, MAX_DONUT_GROUP2].join('/');
     if (catalog_id != null) dc1_url += '?catalogId=' + catalog_id;

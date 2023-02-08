@@ -1,7 +1,7 @@
 /* global d3 saveSvgAsPng d3_save_svg */
 
-var XVALS = ['dcc', 'data_type', 'disease', 'assay', 'species', 'anatomy', 'sex', 'race', 'ethnicity'];
-var YVALS = ['files', 'volume', 'samples', 'subjects'];
+var XVALS = ['dcc', 'data_type', 'disease', 'assay_type', 'species', 'anatomy', 'sex', 'race', 'ethnicity'];
+var YVALS = ['volume', 'files', 'collections', 'samples', 'subjects'];
 var REQUESTNUMS = {};
 
 var chart_data = {};
@@ -350,8 +350,9 @@ function draw_chart(svg_id, svg, stacked_data, x_axis, y_axis) {
     var x_axis_label_dy = '.5em';
 
     const y_map = {
-        'files': 'File Count',
         'volume': 'Data Volume (bytes)',
+        'files': 'File Count',
+        'collections': 'Collection Count',
         'samples': 'Sample Count',
         'subjects': 'Subject Count'
     };
