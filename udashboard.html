@@ -91,7 +91,7 @@
                   <label for="group-by" class="form-label">Group by</label>
                   <select class="custom-select" id="sbc1-group-by" name="groupby">
                     <option value="anatomy">Anatomy</option>
-                    <option value="assay">Assay</option>
+                    <option value="assay_type">Assay</option>
                     <option selected value="dcc">CF Program</option>
                     <option value="data_type">Data Type</option>
                     <option value="disease">Disease</option>
@@ -113,6 +113,7 @@
                         <label for="y-axis" class="form-label">Y-axis</label>
                         <select class="custom-select" id="sbc1-y-axis" name="y-axis">
                           <option value="volume">Data volume</option>
+                          <option value="collections">Collection count</option>
                           <option value="files">File count</option>
                           <option value="samples">Sample count</option>
                           <option selected value="subjects">Subject count</option>
@@ -122,7 +123,7 @@
                         <label for="x-axis" class="form-label">X-axis</label>
                         <select class="custom-select" id="sbc1-x-axis" name="x-axis">
                           <option value="anatomy">Anatomy</option>
-                          <option value="assay">Assay</option>
+                          <option value="assay_type">Assay</option>
                           <option value="dcc">CF Program</option>
                           <option selected value="data_type">Data Type</option>
                           <option value="disease">Disease</option>
@@ -161,7 +162,7 @@
                 <label for="group-by" class="form-label">Group by</label>
                 <select class="custom-select" id="sbc2-group-by" name="groupby">
                   <option value="anatomy">Anatomy</option>
-                  <option selected value="assay">Assay</option>
+                  <option selected value="assay_type">Assay</option>
                   <option value="dcc">CF Program</option>
                   <option value="data_type">Data Type</option>
                   <option value="disease">Disease</option>
@@ -181,9 +182,10 @@
                     <div class="col-md-4" id="sbc2-y-axis-container">
                       <label for="sbc2-y-axis" class="form-label">Y-axis</label>
                       <select class="custom-select" id="sbc2-y-axis"
-                        name="y-axis">
-                        <option selected value="files">File count</option>
+                              name="y-axis">
                         <option value="volume">Data volume</option>
+                        <option value="collections">Collection count</option>
+                        <option selected value="files">File count</option>
                         <option value="samples">Sample count</option>
                         <option value="subjects">Subject count</option>
                       </select>
@@ -193,9 +195,8 @@
                       <select class="custom-select" id="sbc2-x-axis"
                         name="x-axis">
                         <option value="anatomy">Anatomy</option>
-                        <option value="assay">Assay</option>
+                        <option value="assay_type">Assay</option>
                         <option selected value="dcc">CF Program</option>
-                        <option value="data_type">Data Type</option>
                         <option value="data_type">Data Type</option>
                         <option value="disease">Disease</option>
                         <option value="ethnicity">Ethnicity</option>

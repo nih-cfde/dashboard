@@ -24,7 +24,7 @@ function populate_chart(catalog_id, chart_id) {
 
     // summary info to display
     var count = 'files';
-    var group1 = 'assay';
+    var group1 = 'assay_type';
     var group2 = 'anatomy';
 
     var data_url = DASHBOARD_API_URL + '/stats/' + [count, group1, MAX_GRAPH_GROUP1, group2, MAX_GRAPH_GROUP2].join('/');
