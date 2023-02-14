@@ -68,7 +68,16 @@ body {
 #review_bc1-group-by-and-legend-container {
     width:28%;
     display: inline-block;
-    padding-left: 0px;
+    padding-left: 1em;
+}
+
+.export-button {
+    display: flex;
+    justify-content: center;
+    padding: 0px;
+    margin: 0px;
+    height: 100%;
+    align-items: end;
 }
 
 #review_bc1_container {

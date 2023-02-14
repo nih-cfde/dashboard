@@ -8,20 +8,20 @@ var chart_data = {};
 var chart_data_urls = {};
 var dcc_map = {};
 
-function register_export_buttons(chart_id, data, x_axis, y_axis) {
+function register_export_buttons(chart_id, data, x_axis, y_axis, scale) {
     // Prevent accumulations of click handlers by clearing any past
     // registrations of 'click' to the buttons by using jquery's off()
     // function.
     $('#export-png').off('click');
     $('#export-png').click(function () {
         var chart_id = $('#export-modal').attr('name').split('-')[0];
-        export2png(chart_id, data, x_axis, y_axis);
+        export2png(chart_id, data, x_axis, y_axis, scale);
     });
 
     $('#export-svg').off('click');
     $('#export-svg').click(function () {
         var chart_id = $('#export-modal').attr('name').split('-')[0];
-        export2svg(chart_id, data, x_axis, y_axis);
+        export2svg(chart_id, data, x_axis, y_axis, scale);
     });
 
     $('#export-csv').off('click');
@@ -87,7 +87,7 @@ function update_dropdowns(chart_id) {
 }
 
 function register_dropdowns(catalog_id, chart_id) {
-    $.each(['x-axis', 'y-axis', 'group-by'], function (i, id) {
+    $.each(['x-axis', 'y-axis', 'group-by', 'scale'], function (i, id) {
         $('#' + chart_id + '-' + id).change(function () {
             update_chart(catalog_id, chart_id);
         });
@@ -112,15 +112,17 @@ function update_chart(catalog_id, chart_id) {
     var x_axis = $('#' + chart_id + '-x-axis option:checked').val();
     var y_axis = $('#' + chart_id + '-y-axis option:checked').val();
     var group_by = $('#' + chart_id + '-group-by option:checked').val();
+    var scale = $('#' + chart_id + '-scale option:checked').val();
 
     // Given the x, y and group by information, we formulate the URL
     // to retrieve data from.
-    var data_url = DASHBOARD_API_URL + '/stats/' + [y_axis, x_axis, group_by].join('/') + "?includeDCC=true";
+  //    var data_url = DASHBOARD_API_URL + '/stats/' + [y_axis, x_axis, group_by].join('/') + "?includeDCC=true";
+    var data_url = DASHBOARD_API_URL + '/stats/' + [y_axis, x_axis].join('/') + "?includeDCC=true";
     if (catalog_id != null) data_url += '&catalogId=' + catalog_id;
 
     // check cache
     if (chart_data_urls[chart_id] == data_url) {
-        draw_chart(chart_id, null, chart_data[chart_id], x_axis, y_axis);
+        draw_chart(chart_id, null, chart_data[chart_id], x_axis, y_axis, scale);
         return;
     }
 
@@ -134,8 +136,8 @@ function update_chart(catalog_id, chart_id) {
         if (requestnum == REQUESTNUMS[chart_id]) {
             chart_data[chart_id] = data;
             chart_data_urls[chart_id] = data_url;
-            register_export_buttons(chart_id, data, x_axis, y_axis);
-            draw_chart(chart_id, null, data, x_axis, y_axis);
+            register_export_buttons(chart_id, data, x_axis, y_axis, scale);
+            draw_chart(chart_id, null, data, x_axis, y_axis, scale);
         }
     };
     var fail_fn = function (jqXHR, status, error) {
@@ -300,7 +302,7 @@ function add_tooltip(chart_id, svg) {
 
     let rect = tooltip.append('rect')
         .attr('width', 190)
-        .attr('height', 65)
+        .attr('height', 40)
         .attr('class', 'chart_tooltip_rect');
 
     let text1 = tooltip.append('text')
@@ -313,16 +315,9 @@ function add_tooltip(chart_id, svg) {
     tooltip.append('text')
         .attr('x', 5)
         .attr('dy', '3.2em')
-        .attr('id', chart_id + '-z-category')
-        .attr('class', 'chart_tooltip_value');
-
-    tooltip.append('text')
-        .attr('x', 5)
-        .attr('dy', '4.6em')
         .attr('id', chart_id + '-y-category')
         .attr('class', 'chart_tooltip_value');
     // .attr('class', 'chart_tooltip_value');
-
 
 }
 
@@ -335,8 +330,9 @@ function update_dcc_map() {
     });
 }
 
-function draw_chart(svg_id, svg, stacked_data, x_axis, y_axis) {
-   let draw_detached = (svg != null)
+function draw_chart(svg_id, svg, stacked_data, x_axis, y_axis, scale) {
+  var logScale = (scale == "log");
+  let draw_detached = (svg != null)
    if (!draw_detached) {
        svg = d3.select('#' + svg_id)
        $('#' + svg_id).empty();
@@ -483,7 +479,7 @@ function draw_chart(svg_id, svg, stacked_data, x_axis, y_axis) {
 
     var legend_width = svg_width * 0.3;
     var show_bar_totals = true;
-
+  
     if (legend_width > 350) {
         legend_width = 350;
     }
@@ -523,13 +519,24 @@ function draw_chart(svg_id, svg, stacked_data, x_axis, y_axis) {
         show_bar_totals = false;
     }
 
+    if (logScale) {
+      y_title = "log10 (" + y_title +")";
+    }
+  
     // Configure the y-axis scale. It goes from 0 to the maximum
     // value (the height of the tallest stacked bar). We have already
     // computed this and stored the total in each objects "total" key.
-    const yScale = d3.scaleLinear()
+    var yScale = null;
+    if (logScale) {
+      yScale = d3.scaleLog()
         .range([height, 0])
-        .domain([0, 1.2 * d3.max(stacked_data.map((s) => s.total))]);
-
+        .domain([1, d3.max(stacked_data.map((s) => s.total))]).nice();
+    } else {
+      yScale = d3.scaleLinear()
+        .range([height, 0])
+        .domain([0, d3.max(stacked_data.map((s) => s.total))]).nice();
+    }
+  
     var num_bars = stacked_data.length;
     function maxlen_fn(text, index) {
         // final bar has less space due to color key
@@ -569,8 +576,8 @@ function draw_chart(svg_id, svg, stacked_data, x_axis, y_axis) {
     // Add the y-axis
     chart.append('g')
         .call(
-            d3.axisLeft(yScale)
-                .tickFormat(function (d) { return y_formatter(d); })
+          d3.axisLeft(yScale)
+            .tickFormat(function (d) { return y_formatter(d); }).ticks(5)
         );
 
     chart.append('g')
@@ -579,7 +586,7 @@ function draw_chart(svg_id, svg, stacked_data, x_axis, y_axis) {
         .call(d3.axisLeft()
             .scale(yScale)
             .tickSize(-width, 0, 0)
-            .tickFormat('')
+            .tickFormat('').ticks(5)
         );
 
     var groups = chart.selectAll()
@@ -597,7 +604,11 @@ function draw_chart(svg_id, svg, stacked_data, x_axis, y_axis) {
         .append('text')
         .attr('class', 'bar-total')
         .attr('x', (a) => xScale(a[x_axis]) + xScale.bandwidth() / 2)
-        .attr('y', (a) => yScale(a.total) - 5)
+        .attr('y', function(a) {
+	  var t = a.total;
+	  if (logScale && (t < 1)) t = 1;
+	  return yScale(t) - 5;
+	})
         .attr('text-anchor', 'middle')
         .attr('fill', '#000')
         .text((a) => {
@@ -621,22 +632,21 @@ function draw_chart(svg_id, svg, stacked_data, x_axis, y_axis) {
     // var max_categories = 14;
     add_tooltip(svg_id, svg);
     var tooltip = d3.select('#' + svg_id + '-tooltip');
-    var title_fn = function (d) { return d; };
-    var text_fn = function (d) { return d; };
+    var title_fn = function (d) { return d[x_axis]; };
+    var text_fn = function (d) { return 'what?'; };
 
     if (legend_width > 0) {
-        legend_height = categories.length * 20;
+        legend_height = stacked_data.length * 20;
         $('#' + svg_id + '_container').empty();
         var legendSVG = d3.select('#' + svg_id + '_container')
             .append('svg')
             .attr('height', legend_height)
             .attr('width', '100%')
             .attr('preserveAspectRatio', 'xMinYMin');
-        add_legend(svg_id, 0, legend_width, legendSVG, categories, null, title_fn, text_fn, left_margin, 0);
+      add_legend(svg_id, stacked_data, x_axis, 0, legend_width, legendSVG, categories, null, title_fn, text_fn, left_margin, 0);
     }
 
-    groups.attr('fill', function (a, b) { return colorizer(b); })
-        .selectAll('rect')
+    groups.selectAll('rect')
         .data(function (d, i) { return series[i]; })
         .enter()
         .filter(function (s, j) { return !isNaN(s[0]) && !isNaN(s[1]); })
@@ -645,6 +655,7 @@ function draw_chart(svg_id, svg, stacked_data, x_axis, y_axis) {
         .attr('y', (s) => yScale(s[1]))
         .attr('width', xScale.bandwidth())
         .attr('height', (s) => height - yScale(s[1] - s[0]))
+        .attr('fill', function (a, b) { return colorizer(b); })
         .on('mouseenter', function (actual, i) {
             d3.select(this)
                 .transition()
@@ -729,12 +740,11 @@ function draw_chart(svg_id, svg, stacked_data, x_axis, y_axis) {
         });
 }
 
-function add_legend(svg_id, chart_width, legend_width, chart, categories, tooltip, title_fn, text_fn, x_offset, y_offset, mouseover_fn, mouseout_fn) {
+function add_legend(svg_id, stacked_data, x_axis, chart_width, legend_width, chart, categories, tooltip, title_fn, text_fn, x_offset, y_offset, mouseover_fn, mouseout_fn) {
     var top = 0;
-
     // Create the legend
     var legend = chart.append('g').selectAll('.legend')
-        .data(categories)
+        .data(stacked_data)
         .enter()
         .append('g')
         .attr('class', 'legend')
@@ -754,7 +764,7 @@ function add_legend(svg_id, chart_width, legend_width, chart, categories, toolti
             var tooltip_title = title_fn(d);
             var tooltip_text = text_fn(d);
 
-            var brick_name = d.data.key;
+          var brick_name = d[x_axis];
             $('#' + svg_id + '-brick-value').text(tooltip_text);
             let text = $('#' + svg_id + '-brick-category');
             text.append('tspan').text(brick_name).each(ellipsize(190, 5));
@@ -794,7 +804,7 @@ function add_legend(svg_id, chart_width, legend_width, chart, categories, toolti
         .attr('font-family', 'sans-serif')
         .style('font-size', '0.7rem')
         .text(title_fn) //.each(ellipsize(legend_width - 15, 5))
-        .append('title').text(title_fn);
+    .append('title').text(title_fn);
 }
 
 function export_chart_data(svg_id) {
@@ -854,14 +864,14 @@ function save_csv(filename, rows) {
     }
 }
 
-function draw2svg(chart_id, data, x_axis, y_axis) {
+function draw2svg(chart_id, data, x_axis, y_axis, scale) {
     // redraw chart with unlimited label length
     let svg_obj = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     let svg = d3.select(svg_obj);
     let svg_id = chart_id + '-export2svg';
     svg.attr('id', svg_id);
     svg.attr('style', 'height: 800px;');
-    draw_chart(chart_id, svg, data, x_axis, y_axis);
+    draw_chart(chart_id, svg, data, x_axis, y_axis, scale);
     // append new SVG element to document - ensures that CSS styles are propagated
     let newdiv = document.createElement('div');
     let nd = d3.select(newdiv);
@@ -873,10 +883,10 @@ function draw2svg(chart_id, data, x_axis, y_axis) {
     return { 'svg': svg, 'attached': attached_svg, 'div': newdiv };
 }
 
-function export2png(chart_id, data, x_axis, y_axis) {
+function export2png(chart_id, data, x_axis, y_axis, scale) {
     // Hide the export button
     $('#' + chart_id + '-export-button').hide();
-    dsvg = draw2svg(chart_id, data, x_axis, y_axis);
+    dsvg = draw2svg(chart_id, data, x_axis, y_axis, scale);
     let options = { backgroundColor: 'white' };
     saveSvgAsPng(dsvg['svg'].node(), 'chart.png', options).then(function () {
         // redisplay the export button
@@ -885,9 +895,9 @@ function export2png(chart_id, data, x_axis, y_axis) {
     });
 }
 
-function export2svg(chart_id, data, x_axis, y_axis) {
+function export2svg(chart_id, data, x_axis, y_axis, scale) {
     $('#' + chart_id + '-export-button').hide();
-    dsvg = draw2svg(chart_id, data, x_axis, y_axis);
+    dsvg = draw2svg(chart_id, data, x_axis, y_axis, scale);
     var config = {
         filename: 'chart'
     };

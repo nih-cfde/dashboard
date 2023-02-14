@@ -30,8 +30,8 @@
 
       <div id="sbc1-group-by-and-legend-container">
         <div id="sbc1-group-by-container">
-          <label for="group-by" class="form-label">Group by</label>
-          <select class="custom-select" id="sbc1-group-by" name="groupby">
+          <label for="group-by" class="form-label">Color key:</label>
+          <select class="custom-select" id="sbc1-group-by" name="groupby" style="display: none;">
             <option value="anatomy">Anatomy</option>
             <option selected value="assay_type">Assay</option>
             <option value="dcc">CF Program</option>
@@ -74,7 +74,13 @@
                   <option value="species">Species</option>
                 </select>
               </div>
-                          
+              <div class="col-md-4" id="sbc1-scale-container">
+		<label for="scale" class="form-label">Scale</label>
+		<select class="custom-select" id="sbc1-scale" name="scale">
+		  <option value="Linear">Linear</option>
+		  <option selected value="log">Logarithmic</option>
+		</select>
+	      </div>
             </div>
           </div>
         </form>
