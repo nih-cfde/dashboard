@@ -74,10 +74,10 @@ function update_dropdowns(chart_id) {
     }
 
     // enable x_axis choices that are valid given current group_by
-    for (x_idx = 0; x_idx < x_opts.length; ++x_idx) {
-        is_ok = (x_opts[x_idx].value != group_by_val);
-        x_opts[x_idx].disabled = !is_ok;
-    }
+//    for (x_idx = 0; x_idx < x_opts.length; ++x_idx) {
+//        is_ok = (x_opts[x_idx].value != group_by_val);
+//        x_opts[x_idx].disabled = !is_ok;
+//    }
 
     // enable group_by choices that are valid given current x_axis
     for (gb_idx = 0; gb_idx < gb_opts.length; ++gb_idx) {
