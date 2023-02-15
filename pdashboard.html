@@ -169,7 +169,7 @@
               </div>
             </div>
 
-            <div id="sbc1-group-by-and-legend-container">
+            <div id="sbc1-group-by-and-legend-container" style="display: none;">
               <div id="sbc1-group-by-container">
                 <label for="group-by" class="form-label">Group by</label>
                 <select class="custom-select" id="sbc1-group-by" name="groupby">
@@ -201,7 +201,7 @@
             <form>
               <div class="container">
                 <div class="row">
-                  <div class="col-md-4" id="sbc1-y-axis-container">
+                  <div class="col-md-3" id="sbc1-y-axis-container">
                     <label for="y-axis" class="form-label">Y-axis</label>
                     <select class="custom-select" id="sbc1-y-axis" name="y-axis">
                       <option value="volume">Data volume</option>
@@ -211,7 +211,7 @@
                       <option selected value="subjects">Subject count</option>
                     </select>
                   </div>
-                  <div class="col-md-4" id="sbc1-x-axis-container">
+                  <div class="col-md-3" id="sbc1-x-axis-container">
                     <label for="x-axis" class="form-label">X-axis</label>
                     <select class="custom-select" id="sbc1-x-axis" name="x-axis">
                       <option value="anatomy">Anatomy</option>
@@ -225,7 +225,14 @@
                       <option value="species">Species</option>
                     </select>
                   </div>
-                  <div class="col-md-4" id="sbc1-download-button-container">
+                  <div class="col-md-3" id="sbc1-scale-container">
+		    <label for="scale" class="form-label">Scale</label>
+		    <select class="custom-select" id="sbc1-scale" name="scale">
+		      <option value="Linear">Linear</option>
+		      <option selected value="log">Logarithmic</option>
+		    </select>
+		  </div>
+                  <div class="col-md-3" id="sbc1-download-button-container">
                     <p id="sbc1-export" class="export-button"><a href="javascript: export_chart_data('sbc1')"><img
                           src='images/download_button.png' style='width: 125px; height: 32px;' title='Export chart'></a>
                     </p>
