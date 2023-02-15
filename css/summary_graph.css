@@ -68,7 +68,7 @@ main {
 
 #chart-container {
   display: inline-block;
-  width: 65%;
+  width: 100%;
   vertical-align: top;
   height:350px;
   overflow-x: scroll;
