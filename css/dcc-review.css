@@ -47,7 +47,7 @@ body {
 
 #chart-container-1 {
     display: inline-block;
-    width: 70%;
+    width: 100%;
     vertical-align: top;
 	height: 450px; 
 	overflow-x: scroll;
@@ -73,7 +73,7 @@ body {
 
 .export-button {
     display: flex;
-    justify-content: center;
+    justify-content: right;
     padding: 0px;
     margin: 0px;
     height: 100%;
