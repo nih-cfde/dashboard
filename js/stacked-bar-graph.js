@@ -122,6 +122,7 @@ function update_chart(catalog_id, chart_id) {
 
     // check cache
     if (chart_data_urls[chart_id] == data_url) {
+        register_export_buttons(chart_id, chart_data[chart_id], x_axis, y_axis, scale);
         draw_chart(chart_id, null, chart_data[chart_id], x_axis, y_axis, scale);
         return;
     }
