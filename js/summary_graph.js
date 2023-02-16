@@ -1,4 +1,4 @@
-/* global register_dropdowns update_chart */
+/* global register_dropdowns update_chart register_export_buttons */
 
 // TODO - copied from dcc_review.js; put into a cental location
 function pad_zeroes(number) {
@@ -70,7 +70,9 @@ function window_resized(catalog_id, chart_id) {
 
 $(document).ready(function() {
     var catalog_id = get_catalog_id();
-  
+
+    register_export_buttons();
+
     // chart 1 - stacked bar graph
     register_dropdowns(catalog_id, 'sbc1');
 

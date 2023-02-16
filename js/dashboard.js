@@ -96,7 +96,9 @@ function redirect_auth_user() {
 $(document).ready(function() {
     redirect_auth_user();
     var catalog_id = get_catalog_id();
-    
+
+    register_export_buttons();
+  
     // chart 1 - stacked bar graph
     register_dropdowns(catalog_id, 'sbc1');
     update_chart(catalog_id, 'sbc1');

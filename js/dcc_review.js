@@ -32,7 +32,6 @@ function populate_chart(catalog_id, chart_id) {
 
     var data_fn = function(data) {
         $('#' + chart_id).replaceWith('<svg id="' + chart_id + '"/>');
-        register_export_buttons(chart_id, data);
         draw_chart(chart_id, null, data, group1, count);
     };
 
@@ -443,6 +442,7 @@ $(document).ready(function() {
 
     loadScript("/chaise/lib/navbar/navbar.app.js");
 
+    register_export_buttons();
     register_dropdowns(catalog_id, 'review_bc1');
     update_chart(catalog_id, 'review_bc1');
 
@@ -450,7 +450,6 @@ $(document).ready(function() {
         if (data.length != 1) {
 	        console.log('WARNING: DERIVA CATALOG_ID  ' + catalog_id + ' contains ' + ((data.length > 1) ? 'data from multiple DCsC' : 'no data'));
         }
-  console.log("Data length is: " + data.length);
 	if (data.length > 0) {
 	    dcc = data[0];
 	    add_summary_data(catalog_id, dcc, data.length);

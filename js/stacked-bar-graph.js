@@ -8,25 +8,34 @@ var chart_data = {};
 var chart_data_urls = {};
 var dcc_map = {};
 
-function register_export_buttons(chart_id, data, x_axis, y_axis, scale) {
+function register_export_buttons() {
     // Prevent accumulations of click handlers by clearing any past
     // registrations of 'click' to the buttons by using jquery's off()
     // function.
     $('#export-png').off('click');
     $('#export-png').click(function () {
         var chart_id = $('#export-modal').attr('name').split('-')[0];
-        export2png(chart_id, data, x_axis, y_axis, scale);
+        var x_axis = $('#' + chart_id + '-x-axis option:checked').val();
+        var y_axis = $('#' + chart_id + '-y-axis option:checked').val();
+        var scale = $('#' + chart_id + '-scale option:checked').val();
+        export2png(chart_id, chart_data[chart_id], x_axis, y_axis, scale);
     });
 
     $('#export-svg').off('click');
     $('#export-svg').click(function () {
         var chart_id = $('#export-modal').attr('name').split('-')[0];
-        export2svg(chart_id, data, x_axis, y_axis, scale);
+        var x_axis = $('#' + chart_id + '-x-axis option:checked').val();
+        var y_axis = $('#' + chart_id + '-y-axis option:checked').val();
+        var scale = $('#' + chart_id + '-scale option:checked').val();
+        export2svg(chart_id, chart_data[chart_id], x_axis, y_axis, scale);
     });
 
     $('#export-csv').off('click');
     $('#export-csv').click(function () {
         var chart_id = $('#export-modal').attr('name').split('-')[0];
+        var x_axis = $('#' + chart_id + '-x-axis option:checked').val();
+        var y_axis = $('#' + chart_id + '-y-axis option:checked').val();
+        var scale = $('#' + chart_id + '-scale option:checked').val();
         export2csv(chart_id);
     });
 }
@@ -107,8 +116,6 @@ function update_chart_title(chart_id) {
 }
 
 function update_chart(catalog_id, chart_id) {
-//    update_dropdowns(chart_id);
-
     var x_axis = $('#' + chart_id + '-x-axis option:checked').val();
     var y_axis = $('#' + chart_id + '-y-axis option:checked').val();
     var group_by = $('#' + chart_id + '-group-by option:checked').val();
@@ -122,7 +129,6 @@ function update_chart(catalog_id, chart_id) {
 
     // check cache
     if (chart_data_urls[chart_id] == data_url) {
-        register_export_buttons(chart_id, chart_data[chart_id], x_axis, y_axis, scale);
         draw_chart(chart_id, null, chart_data[chart_id], x_axis, y_axis, scale);
         return;
     }
@@ -137,7 +143,6 @@ function update_chart(catalog_id, chart_id) {
         if (requestnum == REQUESTNUMS[chart_id]) {
             chart_data[chart_id] = data;
             chart_data_urls[chart_id] = data_url;
-            register_export_buttons(chart_id, data, x_axis, y_axis, scale);
             draw_chart(chart_id, null, data, x_axis, y_axis, scale);
         }
     };
