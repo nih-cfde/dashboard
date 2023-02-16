@@ -1,4 +1,4 @@
-/* global d3 add_legend colorizer ellipsize */
+/* global d3 colorizer ellipsize */
 
 function add_donut_tooltip(chart_id, svg) {
     // Prep the tooltip bits, initial display is hidden
@@ -63,6 +63,74 @@ function register_donut_dropdown(chart_id, data, dropdown, units) {
             update_donut_chart(chart_id, data, id, units);
         });
     });
+}
+
+function add_donut_legend(svg_id, chart_width, legend_width, chart, categories, tooltip, title_fn, text_fn, x_offset, y_offset, mouseover_fn, mouseout_fn) {
+    var top = 0;
+
+    // Create the legend
+    var legend = chart.append('g').selectAll('.legend')
+        .data(categories)
+        .enter()
+        .append('g')
+        .attr('class', 'legend')
+        .attr('transform', function (d, i) {
+            return 'translate(0,' + (top + i * 20) + ')';
+        })
+        .on('mouseover', function (d, e) {
+            if (tooltip != null) tooltip.style('display', null);
+            if (mouseover_fn != null) mouseover_fn(d, e);
+        })
+        .on('mouseout', function (d, e) {
+            if (tooltip != null) tooltip.style('display', 'none');
+            if (mouseout_fn != null) mouseout_fn(d, e);
+        })
+        .on('mousemove', function (d, e) {
+            if (tooltip == null) return;
+            var tooltip_title = title_fn(d);
+            var tooltip_text = text_fn(d);
+
+            var brick_name = d.data.key;
+            $('#' + svg_id + '-brick-value').text(tooltip_text);
+            let text = $('#' + svg_id + '-brick-category');
+            text.append('tspan').text(brick_name).each(ellipsize(190, 5));
+
+            let coords = d3.mouse(this);
+            let xPosition = coords[0];  // distance from y-axis on chart
+            let yPosition = coords[1];  // distance from top of chart
+
+            let tooltip_width = $('.chart_tooltip_rect').width();
+            let tooltipX = xPosition + x_offset - tooltip_width;
+            let tooltipY = yPosition + y_offset - 50;  // Get the tooltip above the mouse position
+            tooltipY += (top + e * 20);
+
+            // Prevent the tooltip from starting from out-of-bounds
+            if (tooltipX < 1) {
+                tooltipX = 1;
+            }
+
+            if (tooltipY < 1) {
+                tooltipY = 1;
+            }
+
+            tooltip.attr('transform', 'translate(' + tooltipX + ',' + tooltipY + ')');
+        });
+
+    legend.append('rect')
+        // .attr('x', chart_width + 28)
+        .attr('x', chart_width)
+        .attr('width', 18)
+        .attr('height', 18)
+        .attr('fill', function (d, i) { return colorizer(i); });
+
+    legend.append('text')
+        .attr('x', chart_width + 25)
+        .attr('y', 8)
+        .attr('dy', '.35em')
+        .attr('font-family', 'sans-serif')
+        .style('font-size', '0.7rem')
+        .text(title_fn) //.each(ellipsize(legend_width - 15, 5))
+        .append('title').text(title_fn);
 }
 
 function update_donut_chart(chart_id, data, dropdown, units) {
@@ -341,8 +409,10 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
     var x_offset = 0;
     var y_offset = 0;
     var chart_width = svg_width - legend_width - (2 * margin);
-    add_legend(svg_id, chart_width, legend_width, legend, categories, tooltip, title_fn, text_fn, x_offset, y_offset, mouseover_fn, mouseout_fn);
+    add_donut_legend(svg_id, chart_width, legend_width, legend, categories, tooltip, title_fn, text_fn, x_offset, y_offset, mouseover_fn, mouseout_fn);
 }
+
+
 
 function export_donut_chart_data(svg_id) {
     $('#export-modal').attr('name', svg_id + '-modal');
