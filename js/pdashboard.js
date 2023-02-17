@@ -1,4 +1,4 @@
-/* global register_dropdowns update_chart */
+/* global register_dropdowns register_donut_dropdown update_chart register_export_buttons register_donut_export_buttons */
 
 const UPDATE_DELAY_SECS = 0.05;
 var scrolling = false;
@@ -412,6 +412,8 @@ $(document).ready(function() {
     redirect_unauth_user();
     // chart 1 - stacked bar graph
     register_dropdowns(catalog_id, 'sbc1');
+    register_export_buttons();
+    register_donut_export_buttons();
     update_favorites();
     update_saved_queries();
     update_personal_collections();
@@ -428,15 +430,13 @@ $(document).ready(function() {
     var dc1_data_fn =  function(data) {
         dc1_data = data;
         register_donut_dropdown('dc1', data, 'data_type', count);
-        register_export_buttons('dc1', data);
-        draw_donut_chart('dc1', data, 'data_type', count);
+        draw_donut_chart('dc1', null, data, 'data_type', count);
     };
     var dc1_fail_fn = function() {
         // TODO: Show something where the SVG would be.
     };
 
     get_json_retry(dc1_url,dc1_data_fn,dc1_fail_fn);
-
 
     // chart 4 - donut graph
     count = 'samples';
@@ -448,8 +448,7 @@ $(document).ready(function() {
     var dc2_data_fn = function(data) {
         dc2_data = data;
         register_donut_dropdown('dc2', data, 'dcc', 'samples');
-        register_export_buttons('dc2', data);
-        draw_donut_chart('dc2', data, 'dcc', 'samples');
+        draw_donut_chart('dc2', null, data, 'dcc', 'samples');
     };
     var dc2_fail_fn = function() {
         // TODO: Show something where the SVG would be.
@@ -491,7 +490,6 @@ $(document).ready(function() {
             showChart(cnum);
         });
     }
-
 
     window.addEventListener('resize', function() { window_resized(catalog_id, 'sbc1'); reAdjust(); });
     //window.addEventListener('resize', function() { window_resized(catalog_id, 'dc1'); });

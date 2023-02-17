@@ -235,7 +235,7 @@
           <div class="data_header">
 	    <p id="dc1-title">Chart 3</p>
 	    <p id="dc1-last_updated" class="last-updated"></p>
-	    <p id="dc1-export" class="export"><a href="javascript: export_chart_data('dc1')"><img src='images/download_button.png' style='width: 125px; height: 32px;' title='Export chart'></a></p>
+	    <p id="dc1-export" class="export"><a href="javascript: export_donut_chart_data('dc1')"><img src='images/download_button.png' style='width: 125px; height: 32px;' title='Export chart'></a></p>
           </div>
           <div class="data_content">
           <div id="chart-container-3" class="chart-container">
@@ -265,7 +265,7 @@
             <div class="data_header">
 	      <p id="dc2-title">Chart 4</p>
 	      <p id="dc2-last_updated" class="last-updated"></p>
-	      <p id="dc2-export" class="export"><a href="javascript: export_chart_data('dc2')"><img src='images/download_button.png' style='width: 125px; height: 32px;' title='Export chart'></a></p>
+	      <p id="dc2-export" class="export"><a href="javascript: export_donut_chart_data('dc2')"><img src='images/download_button.png' style='width: 125px; height: 32px;' title='Export chart'></a></p>
             </div>
             <div class="data_content">
 
@@ -314,6 +314,34 @@
             </div>
             <div class="row justify-content-center export-row">
               <button id="export-csv" type="button" class="btn
+                btn-primary">Export data as CSV</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="export-modal-donut" class="modal">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5>Choose how you wish to export this chart</h5>
+            <button type="button" class="close" data-dismiss="modal"
+              aria-label="close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="row justify-content-center export-row">
+              <button id="donut-export-png" type="button" class="btn
+                btn-primary">Export as PNG</button>
+            </div>
+            <div class="row justify-content-center export-row">
+              <button id="donut-export-svg" type="button" class="btn
+                btn-primary">Export as SVG</button>
+            </div>
+            <div class="row justify-content-center export-row">
+              <button id="donut-export-csv" type="button" class="btn
                 btn-primary">Export data as CSV</button>
             </div>
           </div>

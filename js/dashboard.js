@@ -1,4 +1,4 @@
-/* global draw_donut_chart register_dropdowns register_donut_dropdown register_export_buttons update_chart update_donut_chart */
+/* global draw_donut_chart register_dropdowns register_donut_dropdown register_export_buttons register_donut_export_buttons update_chart update_donut_chart */
 
 const UPDATE_DELAY_SECS = 0.05;
 var update_pending = false;
@@ -98,6 +98,7 @@ $(document).ready(function() {
     var catalog_id = get_catalog_id();
 
     register_export_buttons();
+    register_donut_export_buttons();
   
     // chart 1 - stacked bar graph
     register_dropdowns(catalog_id, 'sbc1');
@@ -120,8 +121,7 @@ $(document).ready(function() {
     var dc1_data_fn =  function(data) {
         dc1_data = data;
         register_donut_dropdown('dc1', data, 'data_type', count);
-        register_export_buttons('dc1', data);
-        draw_donut_chart('dc1', data, 'data_type', count);
+        draw_donut_chart('dc1', null, data, 'data_type', count);
     };
     var dc1_fail_fn = function() {
         // TODO: Show something where the SVG would be.
@@ -139,8 +139,7 @@ $(document).ready(function() {
     var dc2_data_fn = function(data) {
         dc2_data = data;
         register_donut_dropdown('dc2', data, 'dcc', 'samples');
-        register_export_buttons('dc2', data);
-        draw_donut_chart('dc2', data, 'dcc', 'samples');
+        draw_donut_chart('dc2', null, data, 'dcc', 'samples');
     };
     var dc2_fail_fn = function() {
         // TODO: Show something where the SVG would be.

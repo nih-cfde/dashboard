@@ -1,4 +1,37 @@
-/* global d3 colorizer ellipsize */
+/* global d3 saveSvgAsPng d3_save_svg colorizer ellipsize */
+
+var chart_data = {};
+var chart_id_to_dropdown = {};
+var chart_id_to_units = {};
+
+function register_donut_export_buttons() {
+    // Prevent accumulations of click handlers by clearing any past
+    // registrations of 'click' to the buttons by using jquery's off()
+    // function.
+    $('#donut-export-png').off('click');
+    $('#donut-export-png').click(function () {
+        var chart_id = $('#export-modal-donut').attr('name').split('-')[0];
+        var dropdown = chart_id_to_dropdown[chart_id];
+        var units = chart_id_to_units[chart_id];
+        var data = chart_data[chart_id];
+        donut_export2png(chart_id, chart_data[chart_id], dropdown, units);
+    });
+
+    $('#donut-export-svg').off('click');
+    $('#donut-export-svg').click(function () {
+        var chart_id = $('#export-modal-donut').attr('name').split('-')[0];
+        var dropdown = chart_id_to_dropdown[chart_id];
+        var units = chart_id_to_units[chart_id];
+        var data = chart_data[chart_id];
+        donut_export2svg(chart_id, chart_data[chart_id], dropdown, units);
+    });
+
+    $('#donut-export-csv').off('click');
+    $('#donut-export-csv').click(function () {
+        var chart_id = $('#export-modal-donut').attr('name').split('-')[0];
+        donut_export2csv(chart_id);
+    });
+}
 
 function add_donut_tooltip(chart_id, svg) {
     // Prep the tooltip bits, initial display is hidden
@@ -42,7 +75,9 @@ function update_donut_chart_title(chart_id, dropdown) {
 function register_donut_dropdown(chart_id, data, dropdown, units) {
     var field = dropdown;
     if (field == 'data_type') field = 'assay_type';
-    
+    chart_data[chart_id] = data;
+    chart_id_to_dropdown[chart_id] = dropdown;
+  
     // populate dropdown menu with observed values from data
     var sel = $('#' + chart_id + '-' + dropdown);
     data.forEach(d => {
@@ -134,17 +169,30 @@ function add_donut_legend(svg_id, chart_width, legend_width, chart, categories, 
 }
 
 function update_donut_chart(chart_id, data, dropdown, units) {
-    $('#' + chart_id).replaceWith('<svg id="' + chart_id + '"/>');
-    draw_donut_chart(chart_id, data, dropdown, units, false);
+   $('#' + chart_id).replaceWith('<svg id="' + chart_id + '"/>');
+   draw_donut_chart(chart_id, null, data, dropdown, units, false);
 }
 
-function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
+function draw_donut_chart(svg_id, svg, data, dropdown, units, show_labels) {
+   let draw_detached = (svg != null)
+   if (!draw_detached) {
+       svg = d3.select('#' + svg_id)
+       $('#' + svg_id).empty();
+    }
     var dropdown_value = $('#' + svg_id + '-' + dropdown).val();
     update_donut_chart_title(svg_id, dropdown);
-    const svg = d3.select('#' + svg_id);
+
+    var svg_height;
+    var svg_width;
     var svg_style = window.getComputedStyle(svg.node());
-    var svg_height = parseInt(svg_style.height);
-    var svg_width = parseInt(svg_style.width);
+
+    if (svg_style.height == "") {
+      svg_height = 600;
+      svg_width = 1200;
+    } else {
+      svg_height = parseInt(svg_style.height);
+      svg_width = parseInt(svg_style.width);
+    }
 
     if (svg_width < 300) svg_width = 300;
     if (svg_height < 200) svg_height = 200;
@@ -412,9 +460,145 @@ function draw_donut_chart(svg_id, data, dropdown, units, show_labels) {
     add_donut_legend(svg_id, chart_width, legend_width, legend, categories, tooltip, title_fn, text_fn, x_offset, y_offset, mouseover_fn, mouseout_fn);
 }
 
-
-
 function export_donut_chart_data(svg_id) {
-    $('#export-modal').attr('name', svg_id + '-modal');
-    $('#export-modal').modal();
+    $('#export-modal-donut').attr('name', svg_id + '-modal-donut');
+    $('#export-modal-donut').modal();
+}
+
+function donut_draw2svg(chart_id, data, dropdown, units) {
+    let svg_obj = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    let svg = d3.select(svg_obj);
+    let svg_id = chart_id + '-export2svg';
+    svg.attr('id', svg_id);
+    svg.attr('style', 'height: 800px;');
+    draw_donut_chart(chart_id, svg, data, dropdown, units);
+    // append new SVG element to document - ensures that CSS styles are propagated
+    let newdiv = document.createElement('div');
+    let nd = d3.select(newdiv);
+    nd.attr('id', 'div_' + svg_id);
+    // use 1x1 div to hide the SVG element
+    nd.attr('style', 'width: 1px; height: 1px; overflow: hidden;');
+    let attached_svg = d3.select('body').append(() => nd.node());
+    nd.append(() => svg.node());
+    return { 'svg': svg, 'attached': attached_svg, 'div': newdiv };
+}
+
+function donut_export2png(chart_id, data, dropdown, units) {
+  // Hide the export button
+    $('#' + chart_id + '-export-button').hide();
+    dsvg = donut_draw2svg(chart_id, data, dropdown, units);
+    let options = { backgroundColor: 'white' };
+    saveSvgAsPng(dsvg['svg'].node(), 'donut-chart.png', options).then(function () {
+        // redisplay the export button
+        dsvg['div'].remove();
+        $('#' + chart_id + '-export-button').show();
+    });
+}
+
+function donut_export2svg(chart_id, data, dropdown, units) {
+    $('#' + chart_id + '-export-button').hide();
+    dsvg = donut_draw2svg(chart_id, data, dropdown, units);
+    var config = {
+        filename: 'donut-chart'
+    };
+    d3_save_svg.save(dsvg['svg'].node(), config);
+    // redisplay the export button
+    dsvg['div'].remove();
+    $('#' + chart_id + '-export-button').show();
+}
+
+function donut_save_csv(filename, rows) {
+    var processRow = function (row) {
+        var finalVal = '';
+        for (var j = 0; j < row.length; j++) {
+            var innerValue = row[j] == null ? '' : row[j].toString();
+
+            if (row[j] instanceof Date) {
+                innerValue = row[j].toLocaleString();
+            }
+
+            var result = innerValue.replace(/"/g, '""');
+
+            if (result.search(/("|,|\n)/g) >= 0) {
+                result = '"' + result + '"';
+            }
+
+            if (j > 0) {
+                finalVal += ',';
+            }
+
+            finalVal += result;
+        }
+        return finalVal + '\n';
+    };
+
+    var csvFile = '';
+
+    for (var i = 0; i < rows.length; i++) {
+        csvFile += processRow(rows[i]);
+    }
+
+    var blob = new Blob([csvFile], { type: 'text/csv;charset=utf-8;' });
+
+    if (navigator.msSaveBlob) { // IE 10+
+        navigator.msSaveBlob(blob, filename);
+    } else {
+        var link = document.createElement('a');
+
+        // Feature detection
+        if (link.download !== undefined) {
+            // Browsers that support the HTML5 download attribute
+            var url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', filename);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    }
+}
+
+function donut_export2csv(chart_id) {
+    var chdata = chart_data[chart_id];
+    var filename = 'donut-chart.csv';
+
+    var data = [];
+    var all_fields_d = {};
+    var all_fields = [];
+    var total_field = null;
+
+    chdata.forEach(function (obj_row) {
+        d3.keys(obj_row).forEach(function (field) {
+            if ((field == 'total') || (field == 'Total')) {
+                total_field = field;
+            }
+            else if (!(field in all_fields_d)) {
+                all_fields_d[field] = true;
+                all_fields.push(field);
+            }
+        });
+    });
+
+    // place total last
+    if (total_field != null) all_fields.push(total_field);
+
+    data[0] = all_fields;
+    var index = 1;
+
+    chdata.forEach(function (obj_row) {
+        data[index] = [];
+
+        all_fields.forEach(function (field) {
+            if ((field in obj_row) && (obj_row[field] != null)) {
+                data[index].push(obj_row[field]);
+            } else {
+                data[index].push(0);
+            }
+        });
+
+        index++;
+    });
+
+    donut_save_csv(filename, data);
 }
