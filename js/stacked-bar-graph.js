@@ -109,8 +109,7 @@ function update_chart_title(chart_id) {
         const heading = d3.select('#' + chart_id + '-title');
         var y_axis = d3.select('#' + chart_id + '-y-axis option:checked').text();
         var x_axis = d3.select('#' + chart_id + '-x-axis option:checked').text();
-        var group_by = d3.select('#' + chart_id + '-group-by option:checked').text();
-        var new_title = y_axis + ' by ' + x_axis + ' and ' + group_by;
+        var new_title = y_axis + ' by ' + x_axis;
         heading.text(new_title);
     }
 }

@@ -64,7 +64,7 @@ function update_donut_chart_title(chart_id, dropdown) {
     var new_title;
 
     if (dropdown == 'data_type') {
-        new_title = 'Subjects by Assay and Anatomy across Programs';
+        new_title = 'Subjects by Assay and Anatomy';
     } else if (dropdown == 'dcc') {
         new_title = 'Samples by Anatomy and CF Program';
     }
