@@ -14,6 +14,13 @@ var chaiseConfig = {
     shareCiteAcls: {
         show: []
     },
+    navbarBanner: [
+        {
+            markdownPattern: 'IMPORTANT NOTICE:\nThe CFDE program is undergoing a reorganization of coordination activities.  As a result, this portal is being discontinued as of June 30th. It is being replaced by a new resource - the [CFDE Workbench](https://info.cfde.cloud/). Please visit the new portal to learn more.',
+            dismissible: true,
+            key: 'redirect-banner'
+        }
+    ],
     internalHosts: [
         "g-c7e94.f19a4.5898.data.globus.org",   // dev
         "app-dev.nih-cfde.org",
